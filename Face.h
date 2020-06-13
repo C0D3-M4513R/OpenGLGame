@@ -1,14 +1,14 @@
 #pragma once
-#ifndef GAME_MESH_H
-#define GAME_MESH_H
+#ifndef GAME_FACE_H
+#define GAME_FACE_H
 
 #include <utility>
 #include "Vertex.h"
 
 template<typename T>
-class Mesh{
+class Face{
     public:
-        Mesh(Vertex<T>* data,unsigned int size,Vertex<T> origin = {0,0,0});
+        Face(Vertex<T>* data, unsigned int size, Vertex<T> origin = {0, 0, 0});
 
         T* getData();
         void moveX(T amount) {move(0,amount);};
@@ -27,6 +27,6 @@ class Mesh{
         Vertex<T> origin;
 
 };
-#include "Mesh.tpp"
+#include "Face.tpp"
 
-#endif //GAME_MESH_H
+#endif //GAME_FACE_H

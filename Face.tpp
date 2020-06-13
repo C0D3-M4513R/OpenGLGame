@@ -8,12 +8,12 @@
  * @param origin Middle point of object. MUST LIE INSIDE THE OBJECT. Otherwise the behavior is unpredictable and unreliable;
  */
 template<typename T>
-Mesh<T>::Mesh(Vertex<T> *data, const unsigned int size, Vertex<T> origin) : data(data), size(size), origin(origin) {
+Face<T>::Face(Vertex<T> *data, const unsigned int size, Vertex<T> origin) : data(data), size(size), origin(origin) {
     recalculateOffset();
 }
 
 template<typename T>
-T* Mesh<T>::getData() {
+T* Face<T>::getData() {
     //size of the array is size*3, because each size object holds 3 Values(x,y,z)
     T* outData=new T[size * 3];
     for (unsigned int i=0;i < size; i++) {
@@ -26,7 +26,7 @@ T* Mesh<T>::getData() {
 }
 
 template<typename T>
-void Mesh<T>::move(const uint8_t direction, T amount) {
+void Face<T>::move(const uint8_t direction, T amount) {
     T& val = offset[direction*2 + (amount>0?0:1)];
     //I make the assumption here, that all values are between -1.f and 1.f
     if (val == 1.f||val==-1.f) amount=0;
@@ -53,7 +53,7 @@ void Mesh<T>::move(const uint8_t direction, T amount) {
 }
 
 template<typename T>
-void Mesh<T>::recalculateOffset() {
+void Face<T>::recalculateOffset() {
     SDL_LogDebug(SDL_LOG_CATEGORY_APPLICATION,"Recalculating Offsets");
     for(unsigned int i =0;i < 3;i++){
         T min=origin[i];

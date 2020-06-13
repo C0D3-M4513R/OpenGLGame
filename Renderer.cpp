@@ -72,7 +72,7 @@ bool Renderer::setup() {
     vertices[2]={-0.5f, 0.5f,  0.0f};
     vertices[3]={0.5f, 0.5f,  0.0f};
 
-    triangle_vertices = new Mesh<float>(vertices,4);
+    triangle_vertices = new Face<float>(vertices, 4);
 
     // Create vertex array from triangle vertices.
     triangle = new VertexArray(triangle_vertices->getData(), 12);
@@ -182,6 +182,3 @@ void Renderer::Present()
 const std::pair<Sint32, Sint32> &Renderer::getResolution() const {
     return resolution;
 }
-
-
-
