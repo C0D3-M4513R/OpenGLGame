@@ -5,7 +5,6 @@
 #include <SDL2/SDL.h>
 #include <utility>
 #include "Shader.h"
-#include "VertexArray.h"
 #include "Face.h"
 
 class Renderer{
@@ -34,10 +33,11 @@ private:
         Face<float>* triangle_vertices;
 
         SDL_Window* win;
-        Shader* shader;
-        VertexArray* triangle;
-
         SDL_GLContext GL_Context;
+
+        Shader* shader;
+
+
         /**
          * Stores the current size of the window
          */

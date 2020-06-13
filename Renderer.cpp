@@ -90,13 +90,6 @@ bool Renderer::setup() {
 
     triangle_vertices = new Face<float>(vertices, n,color);
 
-    // Create vertex array from triangle vertices.
-    triangle = new VertexArray(
-            triangle_vertices->getData(),
-            triangle_vertices->getDataSize(),
-            true,
-            true);
-
     // Init succeeded!
     return true;
 }
@@ -139,19 +132,15 @@ void Renderer::loop(){
 
         if(keyboard_state_array[SDL_SCANCODE_W]||keyboard_state_array[SDL_SCANCODE_UP]){
             triangle_vertices->moveY(0.0325f);
-            triangle->updateData(triangle_vertices->getData(),12*sizeof(float),0);
         }
         if(keyboard_state_array[SDL_SCANCODE_S]||keyboard_state_array[SDL_SCANCODE_DOWN]){
             triangle_vertices->moveY(-0.0325f);
-            triangle->updateData(triangle_vertices->getData(),12*sizeof(float),0);
         }
         if(keyboard_state_array[SDL_SCANCODE_A]||keyboard_state_array[SDL_SCANCODE_LEFT]){
             triangle_vertices->moveX(-0.0325f);
-            triangle->updateData(triangle_vertices->getData(),12*sizeof(float),0);
         }
         if(keyboard_state_array[SDL_SCANCODE_D]||keyboard_state_array[SDL_SCANCODE_RIGHT]){
             triangle_vertices->moveX(0.0325f);
-            triangle->updateData(triangle_vertices->getData(),12*sizeof(float),0);
         }
 
         nextFrame();
@@ -191,7 +180,7 @@ void Renderer::Clear()
 void Renderer::Render()
 {
     shader->Activate();
-    triangle->Draw(GL_TRIANGLE_STRIP);
+    triangle_vertices->Draw(GL_TRIANGLE_STRIP);
 }
 
 void Renderer::Present()
