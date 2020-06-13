@@ -1,12 +1,12 @@
 #include "VertexArray.h"
 
-VertexArray::VertexArray(const float* vertPositions, unsigned int vertPositionsCount, bool dynamic)
+VertexArray::VertexArray(const float* vertPositions, unsigned int vertPositionsCount, bool colorData ,bool dynamic)
 {
     //Create VBO
 
     // Each vertex position is 3 elements, so divide by 3 to get vertex count.
     //Note this assumes a 3D space
-    vertexCount = vertPositionsCount / 3;
+    vertexCount = vertPositionsCount/3;
 
     // Generate a buffer and bind it for use.
     glGenBuffers(1, &mVBO);
@@ -14,7 +14,7 @@ VertexArray::VertexArray(const float* vertPositions, unsigned int vertPositionsC
 
     // Allocate buffer of a certain size and copy vertex data into it.
     // Arguments are TARGET, SIZE, DATA, USAGE
-    glBufferData(GL_ARRAY_BUFFER, vertPositionsCount * sizeof(float), vertPositions, dynamic?GL_DYNAMIC_DRAW:GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, vertPositionsCount * sizeof(float) * (colorData?2:1), vertPositions, dynamic?GL_DYNAMIC_DRAW:GL_STATIC_DRAW);
 
 
     // Generate and bind our VAO.
@@ -23,6 +23,7 @@ VertexArray::VertexArray(const float* vertPositions, unsigned int vertPositionsC
 
     // Enable vertex attribute 0 (vertex position data).
     glEnableVertexAttribArray(0);
+    if(colorData)glEnableVertexAttribArray(1);
 
     // Make sure VBO is bound, so the VAO knows what buffer to use in conjunction with the VAO.
     glBindBuffer(GL_ARRAY_BUFFER, mVBO);
@@ -35,7 +36,8 @@ VertexArray::VertexArray(const float* vertPositions, unsigned int vertPositionsC
     //[V1Pos][V2Pos][V3Pos][V1Color][V2Color][V3Color]
     // Option 2 (interleaved data)
     //[V1Pos][V1Color][V2Pos][V2Color][V3Pos][V3Color]
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
+    if(colorData)glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0,(void*)(vertPositionsCount*sizeof(float)));
 }
 
 void VertexArray::updateData(const float* data,int size,int offset){

@@ -22,6 +22,10 @@ bool Renderer::init() {
     SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_DEBUG);
     SDL_Log("Hello World!");
 
+    //set default logging level to verbose
+    SDL_LogSetAllPriority(SDL_LOG_PRIORITY_VERBOSE);
+
+
     // Tell SDL we want to use OpenGL 3.3
     // These attributes must be set before creating the window.
     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
@@ -55,6 +59,11 @@ bool Renderer::init() {
     glewExperimental = GL_TRUE;
     if(glewInit() != GLEW_OK) return false;
 
+    //confirm
+    int nrAttributes;
+    glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
+    SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION,"Maximum nr of vertex attributes supported: %i",nrAttributes);
+
     return true;
 }
 
@@ -66,16 +75,27 @@ bool Renderer::setup() {
     shader = new Shader("resources/Simple.vert", "resources/Simple.frag");
     if(!shader->IsGood()) { return false; }
 
-    auto* vertices = new Vertex<float>[4];
+
+    const unsigned int n = 4;
+    auto* vertices = new Vertex<float>[n];
     vertices[0]={-0.5f,  -0.5f,  0.0f};
     vertices[1]={0.5f, -0.5f,  0.0f};
     vertices[2]={-0.5f, 0.5f,  0.0f};
     vertices[3]={0.5f, 0.5f,  0.0f};
+    auto* color = new Vertex<float>[n];
+    color[0]={0.f,  1.f,  0.0f};
+    color[1]={0.f, 0.f,  1.0f};
+    color[2]={1.f, 0.f,  0.0f};
+    color[3]={0.f, 1.f,  0.0f};
 
-    triangle_vertices = new Face<float>(vertices, 4);
+    triangle_vertices = new Face<float>(vertices, n,color);
 
     // Create vertex array from triangle vertices.
-    triangle = new VertexArray(triangle_vertices->getData(), 12);
+    triangle = new VertexArray(
+            triangle_vertices->getData(),
+            triangle_vertices->getDataSize(),
+            true,
+            true);
 
     // Init succeeded!
     return true;
