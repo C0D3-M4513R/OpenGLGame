@@ -1,6 +1,3 @@
-//
-// Created by Timon Kayser on 12.06.2020.
-//
 #pragma once
 #ifndef GAME_VERTEXARRAY_H
 #define GAME_VERTEXARRAY_H

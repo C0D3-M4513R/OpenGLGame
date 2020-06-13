@@ -1,7 +1,3 @@
-//
-// Created by Timon Kayser on 12.06.2020.
-//
-
 #include "VertexArray.h"
 
 VertexArray::VertexArray(const float* vertPositions, unsigned int vertPositionsCount, bool dynamic)
