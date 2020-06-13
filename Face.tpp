@@ -6,7 +6,7 @@
 template<typename T>
 T* Face<T>::getData() {
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
-    T* outData=new T[getDataSize()+colorSize*3];
+    T* outData=new T[vertexSize*3+colorSize*3];
     for (unsigned int i=0; i < vertexSize; i++) {
         Vertex<T> src = vertexData[i];
         outData[i * 3]=src[0];
@@ -20,11 +20,6 @@ T* Face<T>::getData() {
         outData[i * 3 + 2]=src[2];
     }
     return outData;
-}
-
-template<typename T>
-unsigned int Face<T>::getDataSize() {
-    return vertexSize*3;
 }
 
 template<typename T>
@@ -44,6 +39,8 @@ void Face<T>::move(const uint8_t direction, T amount) {
     val+=amount;
     val2+=amount;
 
+    //TODO: Do I want to do this here or in Draw?
+    updateVA(0);
 }
 
 template<typename T>
@@ -74,14 +71,35 @@ template<typename T>
 Face<T>::Face(Vertex<T> *vertexData, unsigned int vertexSize, Vertex<T> *colorData, unsigned int colorSize,
               Vertex<T> origin): vertexData(vertexData),vertexSize(vertexSize),colorData(colorData),colorSize(colorSize),origin(origin) {
     recalculateOffset();
+    triangle=new VertexArray(getData(),vertexSize*3, true,true);
 }
 template<typename T>
 Face<T>::Face(Vertex<T> *vertexData, unsigned int size, Vertex<T> *colorData,Vertex<T> origin)
     :vertexData(vertexData),vertexSize(size),colorData(colorData),colorSize(size),origin(origin) {
     recalculateOffset();
+    triangle=new VertexArray(getData(),vertexSize*3, true,true);
 }
 template<typename T>
 Face<T>::Face(Vertex<T> *vertexData, unsigned int vertexSize,
               Vertex<T> origin): vertexData(vertexData),vertexSize(vertexSize),colorData(nullptr),colorSize(0),origin(origin) {
     recalculateOffset();
+    triangle=new VertexArray(getData(),vertexSize*3,false,true);
+}
+
+template<typename T>
+void Face<T>::updateVA(int mode) {
+    switch (mode) {
+        case 1:
+            triangle->updateData(getData(),vertexSize*3*sizeof(T),colorSize*3*sizeof(T));
+        case 0:
+            [[fallthrough]];
+        default:
+            triangle->updateData(getData(),vertexSize*3*sizeof(T),0);
+            break;
+    }
+}
+
+template<typename T>
+void Face<T>::Draw(GLenum mode) {
+    triangle->Draw(mode);
 }

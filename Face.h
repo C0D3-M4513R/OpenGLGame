@@ -3,6 +3,7 @@
 #define GAME_FACE_H
 
 #include <utility>
+#include "VertexArray.h"
 #include "Vertex.h"
 
 template<typename T>
@@ -12,12 +13,10 @@ class Face{
         Face(Vertex<T>* vertexData, unsigned int size, Vertex<T>* colorData,Vertex<T> origin = {0, 0, 0});
         Face(Vertex<T>* vertexData, unsigned int vertexSize, Vertex<T>* colorData,unsigned int colorSize,Vertex<T> origin = {0, 0, 0});
 
-        T* getData();
-        unsigned int getDataSize();
-
         void moveX(T amount) {move(0,amount);};
         void moveY(T amount) {move(1,amount);};
         void moveZ(T amount) {move(2,amount);};
+        void Draw(GLenum mode = GL_TRIANGLES);
     private:
         //you shouldn't need those methods
 
@@ -25,6 +24,11 @@ class Face{
         void move(uint8_t direction,T amount);
         //why manually request a Offset recalculation
         void recalculateOffset();
+        //why expose data? individual vertices shouldn't be needed to be manipulated
+        T* getData();
+
+        VertexArray* triangle;
+        void updateVA(int mode);
 
         const unsigned int vertexSize;
         Vertex<T>* vertexData;
