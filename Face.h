@@ -19,7 +19,11 @@ class Face{
         void moveY(T amount) {move(1,amount);};
         void moveZ(T amount) {move(2,amount);};
     private:
+        //you shouldn't need those methods
+
+        //all directions accessible from public methods
         void move(uint8_t direction,T amount);
+        //why manually request a Offset recalculation
         void recalculateOffset();
 
         const unsigned int vertexSize;
