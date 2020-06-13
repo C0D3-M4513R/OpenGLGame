@@ -7,9 +7,9 @@
 
 template<typename T>
 struct Vertex{
-    T x;
-    T y;
-    T z;
+    T x;//r
+    T y;//g
+    T z;//b
     T* getData();
     T& operator[](unsigned int index);
 };

@@ -10,7 +10,7 @@
 class VertexArray
 {
 public:
-    VertexArray(const float* vertPositions, unsigned int vertPositionsCount, bool dynamic = false);
+    VertexArray(const float* vertPositions, unsigned int vertPositionsCount, bool color = false,bool dynamic = false);
     ~VertexArray();
 
     void Draw(GLenum mode = GL_TRIANGLES);
