@@ -29,7 +29,9 @@ unsigned int Face<T>::getDataSize() {
 
 template<typename T>
 void Face<T>::move(const uint8_t direction, T amount) {
-    T& val = offset[direction*2 + (amount>0?0:1)];
+    const bool pos = amount>0;
+    T& val = offset[direction*2 + (pos?0:1)];
+    T& val2 = offset[direction*2 + (pos?1:0)];
     //I make the assumption here, that all values are between -1.f and 1.f
     if (val == 1.f||val==-1.f) amount=0;
     else if(amount+val>1.f) amount = 1.f-val;
@@ -37,21 +39,11 @@ void Face<T>::move(const uint8_t direction, T amount) {
     for (unsigned int i=0; i < vertexSize; i++) {
         T& localDir = vertexData[i][direction];
         localDir += amount;
-
-        if (localDir > 1.f) {
-            amount-=localDir-1.f;
-            localDir = 1.f;
-        }
-        if (localDir < -1.f){
-            amount-=localDir+1.f;
-            localDir = -1.f;
-        }
     }
     origin[direction]+=amount;
     val+=amount;
-    //we shouldn't need to recalculate offsets everytime
-    //but there are some errors with the offset array being wrong, so I am
-    recalculateOffset();
+    val2+=amount;
+
 }
 
 template<typename T>
