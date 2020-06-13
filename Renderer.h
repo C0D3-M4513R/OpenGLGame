@@ -6,7 +6,7 @@
 #include <utility>
 #include "Shader.h"
 #include "VertexArray.h"
-#include "Mesh.h"
+#include "Face.h"
 
 class Renderer{
     public:
@@ -31,7 +31,7 @@ private:
             Present();
         };
 
-        Mesh<float>* triangle_vertices;
+        Face<float>* triangle_vertices;
 
         SDL_Window* win;
         Shader* shader;
