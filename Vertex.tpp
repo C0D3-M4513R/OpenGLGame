@@ -29,3 +29,20 @@ template<typename T>
 
     return out->c_str();
 }
+
+template<typename T>
+Vertex<T>::Vertex(std::initializer_list<T> c){
+    switch (c.size()) {
+        case 3:
+            z=c.begin()[2];
+            [[fallthrough]];
+        case 2:
+            y=c.begin()[1];
+            [[fallthrough]];
+        case 1:
+            x=c.begin()[0];
+            break;
+        default:
+            x=0,y=0,z=0;
+    }
+}
