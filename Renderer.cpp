@@ -48,7 +48,7 @@ bool Renderer::init() {
     win = SDL_CreateWindow("GAME", // creates a window
                                        SDL_WINDOWPOS_CENTERED,
                                        SDL_WINDOWPOS_CENTERED,
-                                       resolution.first, resolution.second, SDL_WINDOW_RESIZABLE|SDL_WINDOW_OPENGL);
+                                       1000, 1000, SDL_WINDOW_RESIZABLE|SDL_WINDOW_OPENGL);
     if(win==nullptr) return false;
 
     // Create OpenGL context.
@@ -118,8 +118,6 @@ void Renderer::loop(){
                     switch (event.window.event){
                         case SDL_WINDOWEVENT_RESIZED:
                             //window was resized
-                            resolution.first = event.window.data1;
-                            resolution.second = event.window.data2;
                             SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_DEBUG);
                             SDL_Log("Window was resized. Size should be %ix%i",event.window.data1,event.window.data2);
                             break;
@@ -180,14 +178,10 @@ void Renderer::Clear()
 void Renderer::Render()
 {
     shader->Activate();
-    triangle_vertices->Draw(GL_TRIANGLE_STRIP);
+    triangle_vertices->Draw();
 }
 
 void Renderer::Present()
 {
     SDL_GL_SwapWindow(win);
-}
-
-const std::pair<Sint32, Sint32> &Renderer::getResolution() const {
-    return resolution;
 }
