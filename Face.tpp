@@ -25,9 +25,11 @@ T* Face<T>::getData() {
 
 template<typename T>
 void Face<T>::move(const uint8_t direction, T amount) {
+    SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Moving from %s by probably %s in direction %u, where 0=x,1=y,2=z",std::to_string(origin[direction]).c_str(),std::to_string(amount).c_str(),direction);
     if (amount>0) amount = fminf(amount,offset[direction*2]-origin[direction]);
     else amount = fmaxf(amount,offset[direction*2+1]-origin[direction]);
     origin[direction]+=amount;
+    SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Moved to %s by a total of %s in direction %u, where 0=x,1=y,2=z",std::to_string(origin[direction]).c_str(),std::to_string(amount).c_str(),direction);
     if (!dynamic) updateVA();
 }
 
@@ -60,6 +62,7 @@ template<typename T>
 Face<T>::Face(const Vertex<T>* vertexData, unsigned int vertexSize,Vertex<T> *colorData, unsigned int colorSize, bool dynamic,Vertex<T> origin)
 :vertexData(vertexData),vertexSize(vertexSize),colorData(colorData),colorSize(colorSize),dynamic(dynamic),origin(origin){
     recalculateOffset();
+    SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",colorSize!=0?"yes":"no");
     triangle=new VertexArray(getData(),vertexSize*3, colorSize!=0,dynamic);
 }
 

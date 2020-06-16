@@ -86,7 +86,8 @@ bool Renderer::setup() {
     color[0]={0.f,  1.f,  0.0f};
     color[1]={0.f, 0.f,  1.0f};
     color[2]={1.f, 0.f,  0.0f};
-    color[3]={0.f, 1.f,  0.0f};
+    color[3]={1.f, 1.f,  1.0f};
+
 
     triangle_vertices = new Face<float>(vertices, n,color);
 

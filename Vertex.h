@@ -2,8 +2,7 @@
 #ifndef GAME_VERTEX_H
 #define GAME_VERTEX_H
 
-#include <cstdio>
-#include <cstdlib>
+#include <string>
 
 template<typename T>
 struct Vertex{
@@ -12,6 +11,8 @@ struct Vertex{
     T z;//b
     const T operator[](unsigned int index) const;
     T& operator[](unsigned int index);
+
+    [[maybe_unused]] [[nodiscard]] const char* toString() const;
 };
 
 #include "Vertex.tpp"
