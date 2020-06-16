@@ -47,6 +47,7 @@ void Face<T>::recalculateOffset() {
     }
     SDL_LogVerbose(SDL_LOG_CATEGORY_SYSTEM,"Offsets are: x:%f,-x: %f y:%f,-y:%f z:%f,-z:%f",offset[0],offset[1],offset[2],offset[3],offset[4],offset[5]);
 }
+
 /**
  *
  * @tparam T Type of vertexData
@@ -56,23 +57,21 @@ void Face<T>::recalculateOffset() {
  */
 
 template<typename T>
-Face<T>::Face(Vertex<T> *vertexData, unsigned int vertexSize, Vertex<T> *colorData, unsigned int colorSize, bool dynamic,
-              Vertex<T> origin): vertexData(vertexData),vertexSize(vertexSize),colorData(colorData),colorSize(colorSize),dynamic(dynamic),origin(origin) {
+Face<T>::Face(const Vertex<T>* vertexData, unsigned int vertexSize,Vertex<T> *colorData, unsigned int colorSize, bool dynamic,Vertex<T> origin)
+:vertexData(vertexData),vertexSize(vertexSize),colorData(colorData),colorSize(colorSize),dynamic(dynamic),origin(origin){
     recalculateOffset();
-    triangle=new VertexArray(getData(),vertexSize*3, true,dynamic);
+    triangle=new VertexArray(getData(),vertexSize*3, colorSize!=0,dynamic);
 }
+
 template<typename T>
-Face<T>::Face(Vertex<T> *vertexData, unsigned int size, Vertex<T> *colorData, bool dynamic,Vertex<T> origin)
-    :vertexData(vertexData),vertexSize(size),colorData(colorData),colorSize(size),dynamic(dynamic),origin(origin) {
-    recalculateOffset();
-    triangle=new VertexArray(getData(),vertexSize*3, true,dynamic);
-}
+Face<T>::Face(const Vertex<T>* vertexData, unsigned int size,Vertex<T> *colorData, bool dynamic,Vertex<T> origin)
+:Face(vertexData,size,colorData,size,dynamic,origin)
+{}
+
 template<typename T>
-Face<T>::Face(Vertex<T> *vertexData, unsigned int vertexSize, bool dynamic,
-              Vertex<T> origin): vertexData(vertexData),vertexSize(vertexSize),colorData(nullptr),colorSize(0),dynamic(dynamic),origin(origin) {
-    recalculateOffset();
-    triangle=new VertexArray(getData(),vertexSize*3,false,dynamic);
-}
+Face<T>::Face(const Vertex<T>* vertexData, unsigned int vertexSize, bool dynamic, Vertex<T> origin)
+:Face(vertexData,vertexSize, nullptr,0,dynamic,origin)
+{}
 
 template<typename T>
 void Face<T>::updateVA(int mode) {
