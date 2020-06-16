@@ -16,7 +16,7 @@ class Face{
         void moveX(T amount) {move(0,amount);};
         void moveY(T amount) {move(1,amount);};
         void moveZ(T amount) {move(2,amount);};
-        void Draw(GLenum mode = GL_TRIANGLES);
+        void Draw(GLenum mode = GL_TRIANGLE_STRIP);
     private:
         //you shouldn't need those methods
 
@@ -28,10 +28,10 @@ class Face{
         T* getData();
 
         VertexArray* triangle;
-        void updateVA(int mode);
+        void updateVA(int mode=0);
 
         const unsigned int vertexSize;
-        Vertex<T>* vertexData;
+        const Vertex<T>* vertexData;
 
         const unsigned int colorSize;
         Vertex<T>* colorData;
