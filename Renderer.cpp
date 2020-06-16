@@ -121,6 +121,7 @@ void Renderer::loop(){
                             //window was resized
                             SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_DEBUG);
                             SDL_Log("Window was resized. Size should be %ix%i",event.window.data1,event.window.data2);
+                            glViewport(0,0,event.window.data1,event.window.data2);
                             break;
                     }
                     break;
