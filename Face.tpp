@@ -28,7 +28,7 @@ void Face<T>::move(const uint8_t direction, T amount) {
     if (amount>0) amount = fminf(amount,offset[direction*2]-origin[direction]);
     else amount = fmaxf(amount,offset[direction*2+1]-origin[direction]);
     origin[direction]+=amount;
-    updateVA();
+    if (!dynamic) updateVA();
 }
 
 template<typename T>
@@ -56,22 +56,22 @@ void Face<T>::recalculateOffset() {
  */
 
 template<typename T>
-Face<T>::Face(Vertex<T> *vertexData, unsigned int vertexSize, Vertex<T> *colorData, unsigned int colorSize,
-              Vertex<T> origin): vertexData(vertexData),vertexSize(vertexSize),colorData(colorData),colorSize(colorSize),origin(origin) {
+Face<T>::Face(Vertex<T> *vertexData, unsigned int vertexSize, Vertex<T> *colorData, unsigned int colorSize, bool dynamic,
+              Vertex<T> origin): vertexData(vertexData),vertexSize(vertexSize),colorData(colorData),colorSize(colorSize),dynamic(dynamic),origin(origin) {
     recalculateOffset();
-    triangle=new VertexArray(getData(),vertexSize*3, true,true);
+    triangle=new VertexArray(getData(),vertexSize*3, true,dynamic);
 }
 template<typename T>
-Face<T>::Face(Vertex<T> *vertexData, unsigned int size, Vertex<T> *colorData,Vertex<T> origin)
-    :vertexData(vertexData),vertexSize(size),colorData(colorData),colorSize(size),origin(origin) {
+Face<T>::Face(Vertex<T> *vertexData, unsigned int size, Vertex<T> *colorData, bool dynamic,Vertex<T> origin)
+    :vertexData(vertexData),vertexSize(size),colorData(colorData),colorSize(size),dynamic(dynamic),origin(origin) {
     recalculateOffset();
-    triangle=new VertexArray(getData(),vertexSize*3, true,true);
+    triangle=new VertexArray(getData(),vertexSize*3, true,dynamic);
 }
 template<typename T>
-Face<T>::Face(Vertex<T> *vertexData, unsigned int vertexSize,
-              Vertex<T> origin): vertexData(vertexData),vertexSize(vertexSize),colorData(nullptr),colorSize(0),origin(origin) {
+Face<T>::Face(Vertex<T> *vertexData, unsigned int vertexSize, bool dynamic,
+              Vertex<T> origin): vertexData(vertexData),vertexSize(vertexSize),colorData(nullptr),colorSize(0),dynamic(dynamic),origin(origin) {
     recalculateOffset();
-    triangle=new VertexArray(getData(),vertexSize*3,false,true);
+    triangle=new VertexArray(getData(),vertexSize*3,false,dynamic);
 }
 
 template<typename T>
@@ -89,5 +89,7 @@ void Face<T>::updateVA(int mode) {
 
 template<typename T>
 void Face<T>::Draw(GLenum mode) {
+    //i'm gonna update the vertices here, if the object is dynamic
+    if(dynamic) updateVA();
     triangle->Draw(mode);
 }
