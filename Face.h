@@ -9,9 +9,9 @@
 template<typename T>
 class Face{
     public:
-        Face(Vertex<T>* vertexData, unsigned int vertexSize, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
-        Face(Vertex<T>* vertexData, unsigned int size, Vertex<T>* colorData, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
-        Face(Vertex<T>* vertexData, unsigned int vertexSize, Vertex<T>* colorData,unsigned int colorSize, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
+        Face(const Vertex<T>* vertexData, unsigned int vertexSize, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
+        Face(const Vertex<T>* vertexData, unsigned int size,Vertex<T>* colorData, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
+        Face(const Vertex<T>* vertexData, unsigned int vertexSize,Vertex<T>* colorData,unsigned int colorSize, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
 
         void moveX(T amount) {move(0,amount);};
         void moveY(T amount) {move(1,amount);};
