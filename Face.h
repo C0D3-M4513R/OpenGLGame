@@ -31,10 +31,10 @@ class Face{
         void updateVA(int mode=0);
 
         const unsigned int vertexSize;
-        const Vertex<T>* vertexData;
+        const Vertex<T>*const vertexData;
 
         const unsigned int colorSize;
-        Vertex<T>* colorData;
+        Vertex<T>*const colorData;
 
         //Max value in a direction
         //Direction is in the following order x,-x,y,-y,z,-z
