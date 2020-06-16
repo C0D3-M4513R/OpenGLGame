@@ -1,4 +1,5 @@
 #include <string>
+#include <cmath>
 #include "Face.h"
 
 
@@ -9,9 +10,9 @@ T* Face<T>::getData() {
     T* outData=new T[vertexSize*3+colorSize*3];
     for (unsigned int i=0; i < vertexSize; i++) {
         Vertex<T> src = vertexData[i];
-        outData[i * 3]=src[0];
-        outData[i * 3 + 1]=src[1];
-        outData[i * 3 + 2]=src[2];
+        outData[i * 3]=src[0]+origin.x;
+        outData[i * 3 + 1]=src[1]+origin.y;
+        outData[i * 3 + 2]=src[2]+origin.z;
     }
     for (unsigned int i=vertexSize; i < vertexSize+colorSize; i++) {
         Vertex<T> src = colorData[i-vertexSize];
@@ -24,23 +25,10 @@ T* Face<T>::getData() {
 
 template<typename T>
 void Face<T>::move(const uint8_t direction, T amount) {
-    const bool pos = amount>0;
-    T& val = offset[direction*2 + (pos?0:1)];
-    T& val2 = offset[direction*2 + (pos?1:0)];
-    //I make the assumption here, that all values are between -1.f and 1.f
-    if (val == 1.f||val==-1.f) amount=0;
-    else if(amount+val>1.f) amount = 1.f-val;
-    else if(amount+val<-1.f) amount = -(1.f+val);
-    for (unsigned int i=0; i < vertexSize; i++) {
-        T& localDir = vertexData[i][direction];
-        localDir += amount;
-    }
+    if (amount>0) amount = fminf(amount,offset[direction*2]-origin[direction]);
+    else amount = fmaxf(amount,offset[direction*2+1]-origin[direction]);
     origin[direction]+=amount;
-    val+=amount;
-    val2+=amount;
-
-    //TODO: Do I want to do this here or in Draw?
-    updateVA(0);
+    updateVA();
 }
 
 template<typename T>
@@ -50,7 +38,7 @@ void Face<T>::recalculateOffset() {
         T min=origin[i];
         T max=origin[i];
         for(unsigned int j = 0; j < vertexSize; j++){
-            T value = vertexData[j][i];
+            const T value = vertexData[j][i];
             min=value<min?value:min;
             max=value>max?value:max;
         }

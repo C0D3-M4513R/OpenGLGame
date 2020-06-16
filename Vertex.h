@@ -10,7 +10,7 @@ struct Vertex{
     T x;//r
     T y;//g
     T z;//b
-    T* getData();
+    const T operator[](unsigned int index) const;
     T& operator[](unsigned int index);
 };
 
