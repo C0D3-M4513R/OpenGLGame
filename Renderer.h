@@ -12,7 +12,6 @@ class Renderer{
         Renderer();
         ~Renderer();
 
-        const std::pair<Sint32, Sint32> &getResolution() const;
 private:
         bool init();
 
@@ -36,12 +35,6 @@ private:
         SDL_GLContext GL_Context;
 
         Shader* shader;
-
-
-        /**
-         * Stores the current size of the window
-         */
-        std::pair<Sint32, Sint32> resolution{1000, 1000};
 
 
 };
