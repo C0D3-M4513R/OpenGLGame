@@ -3,7 +3,7 @@ project(game)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(game main.cpp Renderer.cpp Renderer.h VertexArray.cpp VertexArray.h Shader.cpp Shader.h Face.tpp Face.h Vertex.h Vertex.tpp)
+add_executable(game main.cpp Renderer.cpp Renderer.h VertexArray.cpp VertexArray.h Shader.cpp Shader.h Face.tpp Face.h Vertex.h Vertex.tpp Matrix.tpp Matrix.h)
 #Add Libraries
 find_package(PkgConfig REQUIRED)
 

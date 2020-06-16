@@ -3,7 +3,6 @@
 #include "Face.h"
 
 
-
 template<typename T>
 T* Face<T>::getData() {
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
@@ -75,6 +74,12 @@ template<typename T>
 Face<T>::Face(const Vertex<T>* vertexData, unsigned int vertexSize, bool dynamic, Vertex<T> origin)
 :Face(vertexData,vertexSize, nullptr,0,dynamic,origin)
 {}
+
+template<typename T>
+Face<T>::~Face(){
+    delete vertexData;
+    delete colorData;
+}
 
 template<typename T>
 void Face<T>::updateVA(int mode) {
