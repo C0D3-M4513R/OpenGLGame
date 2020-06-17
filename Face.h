@@ -17,12 +17,21 @@ class Face{
         void moveX(T amount) {move(0,amount);};
         void moveY(T amount) {move(1,amount);};
         void moveZ(T amount) {move(2,amount);};
+
+        void rotateX(T amount) {rotate(0,amount);};
+        void rotateY(T amount) {rotate(1,amount);};
+        void rotateZ(T amount) {rotate(2,amount);};
+
         void Draw(GLenum mode = GL_TRIANGLE_STRIP);
     private:
         //you shouldn't need those methods
 
         //all directions accessible from public methods
         void move(uint8_t direction,T amount);
+
+        //amount is in radians. It is easier to work with
+        void rotate(uint8_t direction,T amount);
+
         //why manually request a Offset recalculation
         void recalculateOffset();
         //why expose data? individual vertices shouldn't be needed to be manipulated
@@ -40,10 +49,12 @@ class Face{
 
         //Max value in a direction
         //Direction is in the following order x,-x,y,-y,z,-z
-        T offset[6] ;
+        T offset[6];
+        Vertex<T> rotateData={0,0,0};
         Vertex<T> origin;
 
 };
+
 #include "Face.tpp"
 
 #endif //GAME_FACE_H

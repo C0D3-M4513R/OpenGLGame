@@ -8,7 +8,9 @@ I currently have no idea, about, what this is Game is going to be.
 
 I do know these things:
 - [x] I want 3D support
-- [ ] Movement should be allowed in all 3 Dimensions (maybe 5 depending on the Game?)
+- [x] Rotation in x,y and z
+- [ ] Movement should be allowed in all 3 Dimensions
+- [ ] maybe 5 depending on the Game?
 - [ ] There should be different objects
 - [ ] There should be a way to color Objects in ANY way (using Texture maps)
 - [ ] There should be collision between Objects
