@@ -23,8 +23,8 @@ struct Vertex{
     const T operator[](unsigned int index) const;
     T& operator[](unsigned int index);
 
-
-    [[maybe_unused]] [[nodiscard]] const char* toString() const;
+    Vertex<T> operator+(Vertex<T>& vertex) const;
+    void operator+=(Vertex<T>& vertex);
 };
 
 #include "Vertex.tpp"
