@@ -1,3 +1,6 @@
+
+#include "Vertex.h"
+
 template<typename T>
 const T Vertex<T>::operator[](unsigned int index) const{
     switch (index) {
