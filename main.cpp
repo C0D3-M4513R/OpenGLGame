@@ -34,7 +34,7 @@ uint8_t verbose = 0; //verbosity level
  */
 
  [[maybe_unused]]
- int SDL_main(int argc, char *argv[]) {
+ int main(int argc, char *argv[]) {
 //    arginit(argc, argv);
 
     auto render = new Renderer();
