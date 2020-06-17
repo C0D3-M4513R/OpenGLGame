@@ -7,11 +7,22 @@ template<typename T>
 T* Face<T>::getData() {
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
     T* outData=new T[vertexSize*3+colorSize*3];
+    outData[0]=0;
     for (unsigned int i=0; i < vertexSize; i++) {
         Vertex<T> src = vertexData[i];
-        outData[i * 3]=src[0]+origin.x;
-        outData[i * 3 + 1]=src[1]+origin.y;
-        outData[i * 3 + 2]=src[2]+origin.z;
+//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data: %s",src.toString());
+//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Rotate-Data: %s",rotateData.toString().c_str());
+        src = Matrix<T>::rx(rotateData.x) * src;
+//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate on x:%s",(std::string)src);
+        src = Matrix<T>::ry(rotateData.y) * src;
+//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate on x and y: %s",src.toString().c_str());
+        src = Matrix<T>::rz(rotateData.z) * src;
+//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate on x,y and z: %s",src.toString().c_str());
+        src+=origin;
+//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate and on global coordinate system: %s",src.toString().c_str());
+        outData[i * 3]=src[0];
+        outData[i * 3 + 1]=src[1];
+        outData[i * 3 + 2]=src[2];
     }
     for (unsigned int i=vertexSize; i < vertexSize+colorSize; i++) {
         Vertex<T> src = colorData[i-vertexSize];
@@ -19,6 +30,7 @@ T* Face<T>::getData() {
         outData[i * 3 + 1]=src[1];
         outData[i * 3 + 2]=src[2];
     }
+
     return outData;
 }
 
@@ -29,6 +41,13 @@ void Face<T>::move(const uint8_t direction, T amount) {
     else amount = fmaxf(amount,offset[direction*2+1]-origin[direction]);
     origin[direction]+=amount;
     SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Moved to %s by a total of %s in direction %u, where 0=x,1=y,2=z",std::to_string(origin[direction]).c_str(),std::to_string(amount).c_str(),direction);
+    if (!dynamic) updateVA();
+}
+
+template<typename T>
+void Face<T>::rotate(uint8_t direction, T amount) {
+    rotateData[direction]+=amount;
+    rotateData[direction]=fmod(rotateData[direction],2*M_PI);
     if (!dynamic) updateVA();
 }
 

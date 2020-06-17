@@ -143,6 +143,10 @@ void Renderer::loop(){
             triangle_vertices->moveX(0.0325f);
         }
 
+        triangle_vertices->rotateZ(0.01f);
+        triangle_vertices->rotateY(0.01f);
+        triangle_vertices->rotateX(0.01f);
+
         nextFrame();
 
         // calculates to 60 fps
