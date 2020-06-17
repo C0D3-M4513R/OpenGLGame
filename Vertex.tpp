@@ -25,13 +25,6 @@ T& Vertex<T>::operator[](unsigned int index){
     }
 }
 
-template<typename T>
-[[maybe_unused]] const char* Vertex<T>::toString() const {
-    auto* out = new std::string();
-    sprintf(out->data(),"x:%s ,y:%s ,z:%s",std::to_string(x).c_str(),std::to_string(y).c_str(),std::to_string(z).c_str());
-
-    return out->c_str();
-}
 
 template<typename T>
 Vertex<T>::Vertex(std::initializer_list<T> c){
@@ -48,4 +41,16 @@ Vertex<T>::Vertex(std::initializer_list<T> c){
         default:
             x=0,y=0,z=0;
     }
+}
+
+template<typename T>
+Vertex<T> Vertex<T>::operator+(Vertex<T> &vertex) const {
+    return Vertex<T>(x+vertex.x,y+vertex.y,z+vertex.z);
+}
+
+template<typename T>
+void Vertex<T>::operator+=(Vertex<T> &vertex) {
+    x+=vertex.x;
+    y+=vertex.y;
+    z+=vertex.z;
 }
