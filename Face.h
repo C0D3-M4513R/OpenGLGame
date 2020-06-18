@@ -8,6 +8,7 @@
 template<typename T>
 class Face{
     public:
+        //TODO: scaling, apply move/rotate/scale
         Face(const Vertex<T>* vertexData, unsigned int vertexSize, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
         Face(const Vertex<T>* vertexData, unsigned int size,Vertex<T>* colorData, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
         Face(const Vertex<T>* vertexData, unsigned int vertexSize,Vertex<T>* colorData,unsigned int colorSize, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
@@ -36,7 +37,7 @@ class Face{
         //why expose data? individual vertices shouldn't be needed to be manipulated
         T* getData();
 
-        VertexArray* triangle;
+        VertexArray<T>* triangle;
         void updateVA(int mode=0);
         bool dynamic;
 

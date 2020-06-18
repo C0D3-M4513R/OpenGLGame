@@ -3,10 +3,12 @@
 
 #include <GL/glew.h>
 
+template <typename T>
 class VertexArray
 {
 public:
-    VertexArray(const float* vertPositions, unsigned int vertPositionsCount, bool color = false,bool dynamic = false);
+    VertexArray(const T* vertPositions,unsigned int vertPositionsCount,GLenum type=GL_FLOAT, bool color = false,bool dynamic = false);
+    VertexArray(const float* vertPositions,unsigned int vertPositionsCount, bool color = false,bool dynamic = false):VertexArray(vertPositions,vertPositionsCount,GL_FLOAT,color,dynamic){};
     ~VertexArray();
 
     void Draw(GLenum mode = GL_TRIANGLES);
@@ -22,5 +24,6 @@ private:
 
 
 };
+#include "VertexArray.tpp"
 
 #endif //GAME_VERTEXARRAY_H

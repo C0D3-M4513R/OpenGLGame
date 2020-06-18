@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g")
 
-add_executable(game main.cpp Renderer.cpp Renderer.h VertexArray.cpp VertexArray.h Shader.cpp Shader.h Face.tpp Face.h Vertex.h Vertex.tpp Matrix.tpp Matrix.h)
+add_executable(game main.cpp Renderer.cpp Renderer.h VertexArray.tpp VertexArray.h Shader.cpp Shader.h Face.tpp Face.h Vertex.h Vertex.tpp Matrix.tpp Matrix.h)
 #Add Libraries
 find_package(PkgConfig REQUIRED)
 
