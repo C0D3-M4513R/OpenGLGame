@@ -1,7 +1,3 @@
-//
-// Created by Timon Kayser on 16.06.2020.
-//
-#pragma once
 #ifndef GAME_MATRIX_H
 #define GAME_MATRIX_H
 

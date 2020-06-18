@@ -1,4 +1,3 @@
-#pragma once
 #ifndef GAME_RENDERER_H
 #define GAME_RENDERER_H
 

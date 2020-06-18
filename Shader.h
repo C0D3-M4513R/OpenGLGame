@@ -1,4 +1,3 @@
-#pragma once
 #ifndef GAME_SHADER_H
 #define GAME_SHADER_H
 

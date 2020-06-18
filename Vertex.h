@@ -1,4 +1,3 @@
-#pragma once
 #ifndef GAME_VERTEX_H
 #define GAME_VERTEX_H
 

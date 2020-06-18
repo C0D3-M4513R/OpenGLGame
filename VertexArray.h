@@ -1,4 +1,3 @@
-#pragma once
 #ifndef GAME_VERTEXARRAY_H
 #define GAME_VERTEXARRAY_H
 

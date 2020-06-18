@@ -1,4 +1,3 @@
-#pragma once
 #ifndef GAME_FACE_H
 #define GAME_FACE_H
 
