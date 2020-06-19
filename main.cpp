@@ -36,8 +36,6 @@ uint8_t verbose = 0; //verbosity level
  [[maybe_unused]]
  int main(int argc, char *argv[]) {
 //    arginit(argc, argv);
-
-    auto render = new Renderer();
-
+    Renderer::run();
     return 0;
 };

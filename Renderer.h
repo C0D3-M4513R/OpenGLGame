@@ -4,37 +4,12 @@
 #include <SDL2/SDL.h>
 #include <utility>
 #include "Shader.h"
-#include "Face.h"
 
-class Renderer{
-    public:
-        Renderer();
-        ~Renderer();
+template <typename T>
+class Face;
 
-private:
-        bool init();
-
-        bool setup();
-        void loop();
-        void destruct();
-
-        void Clear();
-        void Render();
-        void Present();
-
-        void nextFrame(){
-            Clear();
-            Render();
-            Present();
-        };
-
-        Face<float>* triangle_vertices;
-
-        SDL_Window* win;
-        SDL_GLContext GL_Context;
-
-        Shader* shader;
-
-
+namespace Renderer{
+    bool run();
+    const Shader*const getShader();
 };
 #endif //GAME_RENDERER_H
