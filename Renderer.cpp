@@ -76,12 +76,12 @@ bool Renderer::setup() {
 
 
     const unsigned int n = 4;
-    auto* vertices = new Vertex<float>[n];
+    auto* vertices = new glm::vec3[n];
     vertices[0]={-0.5f,  -0.5f,  0.0f};
     vertices[1]={0.5f, -0.5f,  0.0f};
     vertices[2]={-0.5f, 0.5f,  0.0f};
     vertices[3]={0.5f, 0.5f,  0.0f};
-    auto* color = new Vertex<float>[n];
+    auto* color = new glm::vec3[n];
     color[0]={0.f,  1.f,  0.0f};
     color[1]={0.f, 0.f,  1.0f};
     color[2]={1.f, 0.f,  0.0f};

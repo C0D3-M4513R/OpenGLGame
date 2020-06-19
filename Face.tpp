@@ -1,5 +1,7 @@
 #include <string>
 #include <cmath>
+#include <glm/glm.hpp>
+#include <glm/gtx/transform.hpp>
 #include "Face.h"
 
 
@@ -9,23 +11,23 @@ T* Face<T>::getData() {
     T* outData=new T[vertexSize*3+colorSize*3];
     outData[0]=0;
     for (unsigned int i=0; i < vertexSize; i++) {
-        Vertex<T> src = vertexData[i];
+        glm::vec3 src = vertexData[i];
 //        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data: %s",src.toString());
 //        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Rotate-Data: %s",rotateData.toString().c_str());
-        src = Matrix<T>::rx(rotateData.x) * src;
+//        src = Matrix<T>::rx(rotateData.x) * src;
 //        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate on x:%s",(std::string)src);
-        src = Matrix<T>::ry(rotateData.y) * src;
+//        src = Matrix<T>::ry(rotateData.y) * src;
 //        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate on x and y: %s",src.toString().c_str());
-        src = Matrix<T>::rz(rotateData.z) * src;
+//        src = Matrix<T>::rz(rotateData.z) * src;
 //        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate on x,y and z: %s",src.toString().c_str());
-        src+=origin;
+//        src+=origin;
 //        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate and on global coordinate system: %s",src.toString().c_str());
         outData[i * 3]=src[0];
         outData[i * 3 + 1]=src[1];
         outData[i * 3 + 2]=src[2];
     }
     for (unsigned int i=vertexSize; i < vertexSize+colorSize; i++) {
-        Vertex<T> src = colorData[i-vertexSize];
+        glm::vec3 src = colorData[i-vertexSize];
         outData[i * 3]=src[0];
         outData[i * 3 + 1]=src[1];
         outData[i * 3 + 2]=src[2];
@@ -77,7 +79,7 @@ void Face<T>::recalculateOffset() {
  */
 
 template<typename T>
-Face<T>::Face(const Vertex<T>* vertexData, unsigned int vertexSize,Vertex<T> *colorData, unsigned int colorSize, bool dynamic,Vertex<T> origin)
+Face<T>::Face(const glm::vec3* vertexData, unsigned int vertexSize,glm::vec3 *colorData, unsigned int colorSize, bool dynamic,glm::vec3 origin)
 :vertexData(vertexData),vertexSize(vertexSize),colorData(colorData),colorSize(colorSize),dynamic(dynamic),origin(origin){
     recalculateOffset();
     SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",colorSize!=0?"yes":"no");
@@ -85,12 +87,11 @@ Face<T>::Face(const Vertex<T>* vertexData, unsigned int vertexSize,Vertex<T> *co
 }
 
 template<typename T>
-Face<T>::Face(const Vertex<T>* vertexData, unsigned int size,Vertex<T> *colorData, bool dynamic,Vertex<T> origin)
+Face<T>::Face(const glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, bool dynamic,glm::vec3 origin)
 :Face(vertexData,size,colorData,size,dynamic,origin)
 {}
-
 template<typename T>
-Face<T>::Face(const Vertex<T>* vertexData, unsigned int vertexSize, bool dynamic, Vertex<T> origin)
+Face<T>::Face(const glm::vec3* vertexData, unsigned int vertexSize, bool dynamic, glm::vec3 origin)
 :Face(vertexData,vertexSize, nullptr,0,dynamic,origin)
 {}
 

@@ -2,16 +2,16 @@
 #define GAME_FACE_H
 
 #include <utility>
+#include <glm/glm.hpp>
 #include "VertexArray.h"
-#include "Vertex.h"
 
 template<typename T>
 class Face{
     public:
         //TODO: scaling, apply move/rotate/scale
-        Face(const Vertex<T>* vertexData, unsigned int vertexSize, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
-        Face(const Vertex<T>* vertexData, unsigned int size,Vertex<T>* colorData, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
-        Face(const Vertex<T>* vertexData, unsigned int vertexSize,Vertex<T>* colorData,unsigned int colorSize, bool dynamic = false, Vertex<T> origin = {0, 0, 0});
+        Face(const glm::vec3* vertexData, unsigned int vertexSize, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
+        Face(const glm::vec3* vertexData, unsigned int size,glm::vec3* colorData, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
+        Face(const glm::vec3* vertexData, unsigned int vertexSize,glm::vec3* colorData,unsigned int colorSize, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
         ~Face();
 
         void moveX(T amount) {move(0,amount);};
@@ -42,16 +42,16 @@ class Face{
         bool dynamic;
 
         const unsigned int vertexSize;
-        const Vertex<T>*const vertexData;
+        const glm::vec3*const vertexData;
 
         const unsigned int colorSize;
-        Vertex<T>*const colorData;
+        glm::vec3*const colorData;
 
         //Max value in a direction
         //Direction is in the following order x,-x,y,-y,z,-z
         T offset[6];
-        Vertex<T> rotateData={0,0,0};
-        Vertex<T> origin;
+        glm::vec3 rotateData={0,0,0};
+        glm::vec3 origin;
 
 };
 
