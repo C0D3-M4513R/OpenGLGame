@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g -Wall")
 
-add_executable(game main.cpp Renderer.cpp Renderer.h VertexArray.cpp VertexArray.h Shader.cpp Shader.h Face.cpp Face.h)
+add_executable(game main.cpp Renderer.cpp Renderer.h VertexArray.cpp VertexArray.h Shader.cpp Shader.h Face.cpp Face.h  Camera.cpp Camera.h)
 #Add Libraries
 find_package(PkgConfig REQUIRED)
 
@@ -26,18 +26,6 @@ else()
     target_include_directories(game PUBLIC ${SDL2_INCLUDE_DIRS})
     target_compile_options(game PUBLIC ${SDL2_CFLAGS_OTHER})
 endif(sdl2_FOUND)
-
-find_package(sdl2_image)
-if(SDL2_IMAGE_FOUND)
-    target_link_libraries(game sdl2_image)
-    target_include_directories(game PUBLIC ${sdl2_image_INCLUDE_DIRS})
-    target_compile_options(game PUBLIC ${sdl2_image_CFLAGS_OTHER})
-else()
-    pkg_check_modules(sdl2_image REQUIRED SDL2_image)
-    target_link_libraries(game ${sdl2_image_LIBRARIES})
-    target_include_directories(game PUBLIC ${sdl2_image_INCLUDE_DIRS})
-    target_compile_options(game PUBLIC ${sdl2_image_CFLAGS_OTHER})
-endif()
 
 
 find_package(glew)

@@ -1,4 +1,5 @@
 #include "Renderer.h"
+#include "Camera.h"
 #include "Shader.h"
 #include "Face.h"
 
@@ -12,6 +13,7 @@ namespace Renderer {
         bool hasInit = false;
 
         Shader* shader;
+        Camera* cam;
 
         SDL_Window* win;
         SDL_GLContext GL_Context;
@@ -85,6 +87,7 @@ namespace Renderer {
          */
         bool setup() {
             // Load shader.
+            cam=new Camera({0,0,0},{0,0,1});
             shader = new Shader("resources/Simple.vert", "resources/Simple.frag");
             if (!shader->IsGood()) { return false; }
 
@@ -196,6 +199,7 @@ namespace Renderer {
             SDL_QuitSubSystem(SDL_INIT_VIDEO);
 
             delete triangle_vertices;
+            delete cam;
             delete shader;
         }
     };
@@ -210,4 +214,10 @@ namespace Renderer {
         }
         return false;
     }
-};
+    const Shader*const getShader(){
+        return shader;
+    }
+    const Camera*const getCamera(){
+        return cam;
+    }
+}
