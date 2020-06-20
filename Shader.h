@@ -2,6 +2,7 @@
 #define GAME_SHADER_H
 
 #include <GL/glew.h>
+#include <glm/mat4x4.hpp>
 
 class Shader
 {
@@ -12,6 +13,7 @@ public:
     bool IsGood();
     void Activate();
 
+    void applyMVP(glm::mat4 model) const;
 private:
     // Handle to the compiled and linked GL shader program.
     GLuint program = GL_NONE;

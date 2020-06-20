@@ -2,6 +2,8 @@
 #include <iostream>
 #include <sstream>
 #include "Shader.h"
+#include "Renderer.h"
+
 
 GLuint Shader::LoadAndCompileShaderFromFile(const char* filePath, GLuint shaderType)
 {
@@ -126,4 +128,12 @@ bool Shader::IsGood()
 void Shader::Activate()
 {
     glUseProgram(program);
+}
+
+void Shader::applyMVP(glm::mat4 model) const {
+    //TODO::Projection Matrix
+    glm::mat4 mvp = Renderer::getCamera()->view() * model;
+
+    GLuint MatrixID = glGetUniformLocation(program, "mvp");
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
 }
