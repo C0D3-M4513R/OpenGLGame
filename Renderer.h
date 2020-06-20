@@ -5,11 +5,8 @@
 #include <utility>
 #include "Shader.h"
 
-template <typename T>
-class Face;
-
 namespace Renderer{
     bool run();
-    const Shader*const getShader();
+    [[nodiscard]] const Shader*const getShader();
 };
 #endif //GAME_RENDERER_H

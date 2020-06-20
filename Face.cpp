@@ -1,27 +1,15 @@
 #include <string>
-#include <cmath>
-#include <glm/glm.hpp>
-#include <glm/gtx/transform.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <SDL2/SDL_log.h>
 #include "Face.h"
+#include "Renderer.h"
 
-
-template<typename T>
-T* Face<T>::getData() {
+float* Face::getData() {
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
-    T* outData=new T[vertexSize*3+colorSize*3];
-    outData[0]=0;
+    float* outData=new float[vertexSize*3+colorSize*3];
     for (unsigned int i=0; i < vertexSize; i++) {
         glm::vec3 src = vertexData[i];
-//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data: %s",src.toString());
-//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Rotate-Data: %s",rotateData.toString().c_str());
-//        src = Matrix<T>::rx(rotateData.x) * src;
-//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate on x:%s",(std::string)src);
-//        src = Matrix<T>::ry(rotateData.y) * src;
-//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate on x and y: %s",src.toString().c_str());
-//        src = Matrix<T>::rz(rotateData.z) * src;
-//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate on x,y and z: %s",src.toString().c_str());
-//        src+=origin;
-//        SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Vertex-Data with applied rotate and on global coordinate system: %s",src.toString().c_str());
         outData[i * 3]=src[0];
         outData[i * 3 + 1]=src[1];
         outData[i * 3 + 2]=src[2];
@@ -32,12 +20,11 @@ T* Face<T>::getData() {
         outData[i * 3 + 1]=src[1];
         outData[i * 3 + 2]=src[2];
     }
-
     return outData;
 }
 
-template<typename T>
-void Face<T>::move(const uint8_t direction, T amount) {
+
+void Face::move(const uint8_t direction,float amount) {
     SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Moving from %s by probably %s in direction %u, where 0=x,1=y,2=z",std::to_string(origin[direction]).c_str(),std::to_string(amount).c_str(),direction);
     if (amount>0) amount = fminf(amount,offset[direction*2]-origin[direction]);
     else amount = fmaxf(amount,offset[direction*2+1]-origin[direction]);
@@ -46,21 +33,21 @@ void Face<T>::move(const uint8_t direction, T amount) {
     if (!dynamic) updateVA();
 }
 
-template<typename T>
-void Face<T>::rotate(uint8_t direction, T amount) {
-    rotateData[direction]+=amount;
-    rotateData[direction]=fmod(rotateData[direction],2*M_PI);
-    if (!dynamic) updateVA();
+
+void Face::rotate(glm::vec3 amount) {
+    glm::vec3 current;
+    glm::extractEulerAngleXYZ(rotation,current.x,current.y,current.z);
+    rotation=glm::orientate4(amount);
 }
 
-template<typename T>
-void Face<T>::recalculateOffset() {
+
+void Face::recalculateOffset() {
     SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Recalculating Offsets");
     for(unsigned int i =0;i < 3;i++){
-        T min=origin[i];
-        T max=origin[i];
+        float min=origin[i];
+        float max=origin[i];
         for(unsigned int j = 0; j < vertexSize; j++){
-            const T value = vertexData[j][i];
+            const float value = vertexData[j][i];
             min=value<min?value:min;
             max=value>max?value:max;
         }
@@ -72,51 +59,50 @@ void Face<T>::recalculateOffset() {
 
 /**
  *
- * @tparam T Type of vertexData
  * @param vertexData Vertex vertexData
  * @param vertexSize vertexSize of vertexData
  * @param origin Middle point of object. MUST LIE INSIDE THE OBJECT. Otherwise the behavior is unpredictable and unreliable;
  */
 
-template<typename T>
-Face<T>::Face(const glm::vec3* vertexData, unsigned int vertexSize,glm::vec3 *colorData, unsigned int colorSize, bool dynamic,glm::vec3 origin)
+
+Face::Face(const glm::vec3* vertexData, unsigned int vertexSize,glm::vec3 *colorData, unsigned int colorSize, bool dynamic,glm::vec3 origin)
 :vertexData(vertexData),vertexSize(vertexSize),colorData(colorData),colorSize(colorSize),dynamic(dynamic),origin(origin){
     recalculateOffset();
     SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",colorSize!=0?"yes":"no");
-    triangle=new VertexArray(getData(),vertexSize*3, colorSize!=0,dynamic);
+    vertexArray=new VertexArray(getData(), vertexSize * 3, colorSize != 0, dynamic);
 }
 
-template<typename T>
-Face<T>::Face(const glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, bool dynamic,glm::vec3 origin)
+
+Face::Face(const glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, bool dynamic,glm::vec3 origin)
 :Face(vertexData,size,colorData,size,dynamic,origin)
 {}
-template<typename T>
-Face<T>::Face(const glm::vec3* vertexData, unsigned int vertexSize, bool dynamic, glm::vec3 origin)
+
+Face::Face(const glm::vec3* vertexData, unsigned int vertexSize, bool dynamic, glm::vec3 origin)
 :Face(vertexData,vertexSize, nullptr,0,dynamic,origin)
 {}
 
-template<typename T>
-Face<T>::~Face(){
+
+Face::~Face(){
     delete vertexData;
     delete colorData;
+    delete vertexArray;
 }
 
-template<typename T>
-void Face<T>::updateVA(int mode) {
+
+void Face::updateVA(int mode) {
     switch (mode) {
         case 1:
-            triangle->updateData(getData(),vertexSize*3*sizeof(T),colorSize*3*sizeof(T));
+            vertexArray->updateData(getData(), vertexSize * 3 * sizeof(float), colorSize * 3 * sizeof(float));
         case 0:
             [[fallthrough]];
         default:
-            triangle->updateData(getData(),vertexSize*3*sizeof(T),0);
+            vertexArray->updateData(getData(), vertexSize * 3 * sizeof(float), 0);
             break;
     }
 }
 
-template<typename T>
-void Face<T>::Draw(GLenum mode) {
+void Face::Draw(GLenum mode) {
     //i'm gonna update the vertices here, if the object is dynamic
     if(dynamic) updateVA();
-    triangle->Draw(mode);
+    vertexArray->Draw(mode);
 }

@@ -2,7 +2,8 @@
 #include "Shader.h"
 #include "Face.h"
 
-#include <SDL2/SDL_image.h>
+
+#include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <cstdlib>
 
@@ -10,13 +11,12 @@ namespace Renderer {
     namespace {
         bool hasInit = false;
 
-        Camera* cam;
         Shader* shader;
 
         SDL_Window* win;
         SDL_GLContext GL_Context;
 
-        Face<float>* triangle_vertices;
+        Face* triangle_vertices;
 
 
         /**
@@ -89,6 +89,7 @@ namespace Renderer {
             if (!shader->IsGood()) { return false; }
 
 
+            //Those arrays should be deleted by Face!
             const unsigned int n = 4;
             auto *vertices = new glm::vec3[n];
             vertices[0] = {-0.5f, -0.5f, 0.0f};
@@ -101,8 +102,7 @@ namespace Renderer {
             color[2] = {1.f, 0.f, 0.0f};
             color[3] = {1.f, 1.f, 1.0f};
 
-
-            triangle_vertices = new Face<float>(vertices, n, color);
+            triangle_vertices = new Face(vertices, n, color);
 
             // Init succeeded!
             return true;
@@ -133,6 +133,8 @@ namespace Renderer {
         void loop() {
             // controls annimation loop
             bool close = false;
+
+            glm::vec3 rotate = {0.f,0.f,0.f};
 
             // annimation loop
             while (!close) {
@@ -176,9 +178,8 @@ namespace Renderer {
                     triangle_vertices->moveX(0.0325f);
                 }
 
-                triangle_vertices->rotateZ(0.01f);
-                triangle_vertices->rotateY(0.01f);
-                triangle_vertices->rotateX(0.01f);
+                triangle_vertices->rotate(rotate);
+                rotate+=glm::vec3(0.1f,0.1f,0.1f);
 
                 nextFrame();
 

@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -O0 -g -Wall")
 
-add_executable(game main.cpp Renderer.cpp Renderer.h VertexArray.tpp VertexArray.h Shader.cpp Shader.h Face.tpp Face.h)
+add_executable(game main.cpp Renderer.cpp Renderer.h VertexArray.cpp VertexArray.h Shader.cpp Shader.h Face.cpp Face.h)
 #Add Libraries
 find_package(PkgConfig REQUIRED)
 
@@ -64,14 +64,4 @@ add_custom_command(
         COMMAND ${CMAKE_COMMAND} -E copy_directory ${source} ${destination}
         DEPENDS ${destination}
         COMMENT "copy resources folder from ${source} => ${destination}"
-)
-#copy libraries during build
-#TODO: symlink would be better, but is not supported on windows
-set (source "${CMAKE_SOURCE_DIR}/libs/")
-set (destination "${CMAKE_CURRENT_BINARY_DIR}")
-add_custom_command(
-        TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_directory ${source} ${destination}
-        DEPENDS ${destination}
-        COMMENT "copy libraries from ${source} => ${destination}"
 )

@@ -1,6 +1,5 @@
 #include "VertexArray.h"
-template <typename T>
-VertexArray<T>::VertexArray(const T* vertPositions, unsigned int vertPositionsCount, GLenum type,bool colorData ,bool dynamic)
+VertexArray::VertexArray(const float* vertPositions, unsigned int vertPositionsCount,bool colorData ,bool dynamic)
 {
     //Create VBO
 
@@ -36,26 +35,23 @@ VertexArray<T>::VertexArray(const T* vertPositions, unsigned int vertPositionsCo
     //[V1Pos][V2Pos][V3Pos][V1Color][V2Color][V3Color]
     // Option 2 (interleaved data)
     //[V1Pos][V1Color][V2Pos][V2Color][V3Pos][V3Color]
-    glVertexAttribPointer(0, 3, type, GL_FALSE, 0, nullptr);
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, nullptr);
     if(colorData)glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 0,(void*)(vertPositionsCount*sizeof(float)));
 }
 
-template <typename T>
-void VertexArray<T>::updateData(const float* data,int size,int offset){
+void VertexArray::updateData(const float* data,int size,int offset){
     glBufferSubData(GL_ARRAY_BUFFER,offset,size,data);
 }
-template <typename T>
-unsigned int VertexArray<T>::getVertexCount() const {
+unsigned int VertexArray::getVertexCount() const {
     return vertexCount;
 }
-template <typename T>
-void VertexArray<T>::Draw(GLenum mode)
+void VertexArray::Draw(GLenum mode)
 {
     glBindVertexArray(mVAO);
     glDrawArrays(mode, 0, vertexCount);
 }
-template <typename T>
-VertexArray<T>::~VertexArray()
+
+VertexArray::~VertexArray()
 {
     if(mVBO != GL_NONE)
     {

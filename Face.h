@@ -3,9 +3,10 @@
 
 #include <utility>
 #include <glm/glm.hpp>
+#include <glm/gtx/euler_angles.hpp>
+#include <glm/detail/qualifier.hpp>
 #include "VertexArray.h"
 
-template<typename T>
 class Face{
     public:
         //TODO: scaling, apply move/rotate/scale
@@ -14,30 +15,28 @@ class Face{
         Face(const glm::vec3* vertexData, unsigned int vertexSize,glm::vec3* colorData,unsigned int colorSize, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
         ~Face();
 
-        void moveX(T amount) {move(0,amount);};
-        void moveY(T amount) {move(1,amount);};
-        void moveZ(T amount) {move(2,amount);};
+        void moveX(float amount) {move(0,amount);};
+        void moveY(float amount) {move(1,amount);};
+        void moveZ(float amount) {move(2,amount);};
 
-        void rotateX(T amount) {rotate(0,amount);};
-        void rotateY(T amount) {rotate(1,amount);};
-        void rotateZ(T amount) {rotate(2,amount);};
+        //amount is in radians. It is easier to work with
+        void rotate(glm::vec3 amount);
 
         void Draw(GLenum mode = GL_TRIANGLE_STRIP);
     private:
         //you shouldn't need those methods
 
         //all directions accessible from public methods
-        void move(uint8_t direction,T amount);
+        void move(uint8_t direction,float amount);
 
-        //amount is in radians. It is easier to work with
-        void rotate(uint8_t direction,T amount);
+
 
         //why manually request a Offset recalculation
         void recalculateOffset();
         //why expose data? individual vertices shouldn't be needed to be manipulated
-        T* getData();
+        float* getData();
 
-        VertexArray<T>* triangle;
+        VertexArray* vertexArray;
         void updateVA(int mode=0);
         bool dynamic;
 
@@ -49,12 +48,8 @@ class Face{
 
         //Max value in a direction
         //Direction is in the following order x,-x,y,-y,z,-z
-        T offset[6];
-        glm::vec3 rotateData={0,0,0};
+        float offset[6];
+        glm::mat4x4 rotation;
         glm::vec3 origin;
-
 };
-
-#include "Face.tpp"
-
 #endif //GAME_FACE_H
