@@ -104,5 +104,11 @@ void Face::updateVA(int mode) {
 void Face::Draw(GLenum mode) {
     //i'm gonna update the vertices here, if the object is dynamic
     if(dynamic) updateVA();
+    Renderer::getShader()->applyMVP(
+            glm::translate(//move
+                    glm::identity<glm::mat4>(),
+                    origin
+            )*rotation
+    );
     vertexArray->Draw(mode);
 }
