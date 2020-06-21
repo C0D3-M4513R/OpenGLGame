@@ -4,6 +4,7 @@
 #include <SDL2/SDL_log.h>
 #include "Face.h"
 #include "Renderer.h"
+#include "FileSTL/stlio.hpp"
 
 float* Face::getData() {
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
@@ -40,6 +41,11 @@ void Face::rotate(glm::vec3 amount) {
     rotation=glm::orientate4(amount);
 }
 
+void Face::scale(glm::vec3 amount) {
+    scaleVec=amount;
+}
+
+
 
 void Face::recalculateOffset() {
     SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Recalculating Offsets");
@@ -65,22 +71,54 @@ void Face::recalculateOffset() {
  */
 
 
-Face::Face(const glm::vec3* vertexData, unsigned int vertexSize,glm::vec3 *colorData, unsigned int colorSize, bool dynamic,glm::vec3 origin)
-:vertexData(vertexData),vertexSize(vertexSize),colorData(colorData),colorSize(colorSize),dynamic(dynamic),origin(origin){
+Face::Face(glm::vec3* vertexData, unsigned int vertexSize,glm::vec3 *colorData, unsigned int colorSize,GLenum modeParam, bool dynamic,glm::vec3 origin)
+:vertexData(vertexData),vertexSize(vertexSize),colorData(colorData),colorSize(colorSize),mode(modeParam),dynamic(dynamic),origin(origin){
     recalculateOffset();
     SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",colorSize!=0?"yes":"no");
     vertexArray=new VertexArray(getData(), vertexSize * 3, colorSize != 0, dynamic);
 }
 
 
-Face::Face(const glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, bool dynamic,glm::vec3 origin)
-:Face(vertexData,size,colorData,size,dynamic,origin)
+Face::Face(glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, GLenum modeParam,bool dynamic,glm::vec3 origin)
+:Face(vertexData,size,colorData,size,modeParam,dynamic,origin)
 {}
 
-Face::Face(const glm::vec3* vertexData, unsigned int vertexSize, bool dynamic, glm::vec3 origin)
-:Face(vertexData,vertexSize, nullptr,0,dynamic,origin)
+Face::Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modeParam,bool dynamic, glm::vec3 origin)
+:Face(vertexData,vertexSize, nullptr,0,modeParam,dynamic,origin)
 {}
 
+Face::Face(const char *filePath, FILE_TYPE type,bool dynamic) {
+    switch (type) {
+        case STL:
+            std::pair<tyti::stl::solid, bool> tmp = tyti::stl::read(filePath);
+            if(!tmp.second) exit(-2);
+            vertexSize = tmp.first.vertices.size();
+            SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"vertex size %u",vertexSize);
+            vertexData = new glm::vec3[vertexSize];
+            for(unsigned int i =0;i<vertexSize;i++){
+                tyti::stl::vec3& vecOrig = tmp.first.vertices[i];
+                glm::vec3& vec = vertexData[i];
+                vec[0]=vecOrig[0];
+                vec[1]=vecOrig[1];
+                vec[2]=vecOrig[2];
+            }
+            mode=GL_TRIANGLES;
+            recalculateOffset();
+
+            colorSize=tmp.first.normals.size();
+            colorData = new glm::vec3[colorSize];
+            for(unsigned int i =0;i<vertexSize;i++){
+                tyti::stl::vec3& vecOrig = tmp.first.normals[i];
+                glm::vec3& vec = colorData[i];
+                vec[0]=vecOrig[0];
+                vec[1]=vecOrig[1];
+                vec[2]=vecOrig[2];
+            }
+            SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",colorSize!=0?"yes":"no");
+            vertexArray=new VertexArray(getData(), vertexSize * 3, true, dynamic);
+            break;
+    }
+}
 
 Face::~Face(){
     delete vertexData;
@@ -101,7 +139,7 @@ void Face::updateVA(int mode) {
     }
 }
 
-void Face::Draw(GLenum mode) {
+void Face::Draw() {
     //i'm gonna update the vertices here, if the object is dynamic
     if(dynamic) updateVA();
     Renderer::getShader()->applyMVP(

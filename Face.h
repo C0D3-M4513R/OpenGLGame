@@ -6,13 +6,18 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/detail/qualifier.hpp>
 #include "VertexArray.h"
+enum FILE_TYPE{
+    STL
+};
 
 class Face{
     public:
+        constexpr static GLenum defaultMode = GL_TRIANGLE_STRIP;
         //TODO: scaling, apply move/rotate/scale
-        Face(const glm::vec3* vertexData, unsigned int vertexSize, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
-        Face(const glm::vec3* vertexData, unsigned int size,glm::vec3* colorData, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
-        Face(const glm::vec3* vertexData, unsigned int vertexSize,glm::vec3* colorData,unsigned int colorSize, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
+        Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modePar=defaultMode,bool dynamic = false, glm::vec3 origin = {0, 0, 0});
+        Face(glm::vec3* vertexData, unsigned int size,glm::vec3* colorData, GLenum modePar=defaultMode, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
+        Face(glm::vec3* vertexData, unsigned int vertexSize,glm::vec3* colorData,unsigned int colorSize, GLenum modePar=defaultMode, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
+        Face(const char* filePath,FILE_TYPE=STL,bool dynamic = false);
         ~Face();
 
         void moveX(float amount) {move(0,amount);};
@@ -21,8 +26,10 @@ class Face{
 
         //amount is in radians. It is easier to work with
         void rotate(glm::vec3 amount);
+        void scale(glm::vec3 amount);
 
-        void Draw(GLenum mode = GL_TRIANGLE_STRIP);
+        void Draw();
+        GLenum mode;
     private:
         //you shouldn't need those methods
 
@@ -40,16 +47,17 @@ class Face{
         void updateVA(int mode=0);
         bool dynamic;
 
-        const unsigned int vertexSize;
-        const glm::vec3*const vertexData;
+        unsigned int vertexSize;
+        glm::vec3* vertexData;
 
-        const unsigned int colorSize;
-        glm::vec3*const colorData;
+        unsigned int colorSize;
+        glm::vec3* colorData;
 
         //Max value in a direction
         //Direction is in the following order x,-x,y,-y,z,-z
         float offset[6];
         glm::mat4x4 rotation;
         glm::vec3 origin;
+        glm::vec3 scaleVec;
 };
 #endif //GAME_FACE_H
