@@ -56,12 +56,12 @@ namespace Renderer {
             // Require hardware acceleration.
             SDL_GL_SetAttribute(SDL_GL_ACCELERATED_VISUAL, 1);
 
-            // We request from OpenGL at least 8-bits per channel for the color buffer.
+            // We request from OpenGL at least 8-bits per channel for the color buffer and depth buffer
             SDL_GL_SetAttribute(SDL_GL_RED_SIZE, 8);
             SDL_GL_SetAttribute(SDL_GL_GREEN_SIZE, 8);
             SDL_GL_SetAttribute(SDL_GL_BLUE_SIZE, 8);
             SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
-
+            SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,8);
 
             win = SDL_CreateWindow("GAME", // creates a window
                                    SDL_WINDOWPOS_CENTERED,
@@ -81,6 +81,11 @@ namespace Renderer {
             int nrAttributes;
             glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
             SDL_LogInfo(SDL_LOG_CATEGORY_APPLICATION, "Maximum nr of vertex attributes supported: %i", nrAttributes);
+
+            glEnable (GL_DEPTH_TEST);
+            glDepthFunc(GL_LESS);
+
+            glEnable(GL_CULL_FACE);
 
             return true;
         }
