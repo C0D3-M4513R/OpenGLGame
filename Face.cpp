@@ -102,6 +102,7 @@ Face::Face(const char *filePath, FILE_TYPE type,bool dynamic) {
                 vec[1]=vecOrig[1];
                 vec[2]=vecOrig[2];
             }
+
             mode=GL_TRIANGLES;
             recalculateOffset();
 
