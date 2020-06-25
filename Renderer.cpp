@@ -12,6 +12,9 @@ namespace Renderer {
     namespace {
         bool hasInit = false;
 
+        auto resolution=std::pair<unsigned int,unsigned int>(1000,1000);
+
+
         Shader* shader;
         Camera* cam;
 
@@ -63,7 +66,7 @@ namespace Renderer {
             win = SDL_CreateWindow("GAME", // creates a window
                                    SDL_WINDOWPOS_CENTERED,
                                    SDL_WINDOWPOS_CENTERED,
-                                   1000, 1000, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
+                                   resolution.first, resolution.second, SDL_WINDOW_RESIZABLE | SDL_WINDOW_OPENGL);
             if (win == nullptr) return false;
 
             // Create OpenGL context.
@@ -137,7 +140,7 @@ namespace Renderer {
             // controls annimation loop
             bool close = false;
 
-            glm::vec3 rotate = {0.f,0.f,0.f};
+            glm::vec3 rotate = {0.1f,0.f,0.f};
 
             // annimation loop
             while (!close) {
@@ -168,26 +171,24 @@ namespace Renderer {
 
                 const Uint8 *keyboard_state_array = SDL_GetKeyboardState(NULL);
 
+
                 if (keyboard_state_array[SDL_SCANCODE_W] || keyboard_state_array[SDL_SCANCODE_UP]) {
-                    triangle_vertices->moveY(0.0325f);
+                    triangle_vertices->moveY(0.1f);
                 }
                 if (keyboard_state_array[SDL_SCANCODE_S] || keyboard_state_array[SDL_SCANCODE_DOWN]) {
-                    triangle_vertices->moveY(-0.0325f);
+                    triangle_vertices->moveY(-0.1f);
                 }
                 if (keyboard_state_array[SDL_SCANCODE_A] || keyboard_state_array[SDL_SCANCODE_LEFT]) {
-                    triangle_vertices->moveX(-0.0325f);
+                    triangle_vertices->moveX(0.1f);
                 }
                 if (keyboard_state_array[SDL_SCANCODE_D] || keyboard_state_array[SDL_SCANCODE_RIGHT]) {
-                    triangle_vertices->moveX(0.0325f);
+                    triangle_vertices->moveX(-0.1f);
                 }
 
                 triangle_vertices->rotate(rotate);
-                rotate+=glm::vec3(0.1f,0.1f,0.1f);
+                rotate+=glm::vec3(0.f,0.f,0.01f);
 
                 nextFrame();
-
-                // calculates to 60 fps
-                SDL_Delay(1000 / 60);
             }
         }
 
@@ -219,5 +220,14 @@ namespace Renderer {
     }
     const Camera*const getCamera(){
         return cam;
+    }
+    const std::pair<unsigned int,unsigned int>& getResolution(){
+        return resolution;
+    }
+    const unsigned int getResolutionX(){
+        return resolution.first;
+    }
+    const unsigned int getResolutionY(){
+        return resolution.second;
     }
 }
