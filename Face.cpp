@@ -103,6 +103,7 @@ Face::Face(glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, GLenum
     recalculateOffset();
     SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",hasColor?"yes":"no");
     vertexArray=new VertexArray(getVertData(), size * 3,type);
+    if(hasColor) vertexArray->addColor(getColorData(),size*3);
 }
 
 Face::Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modeParam,GLenum type, glm::vec3 origin)
@@ -140,6 +141,8 @@ Face::Face(const char *filePath, FILE_TYPE fileType,GLenum drawType) {
 
             SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",hasColor?"yes":"no");
             vertexArray=new VertexArray(getVertData(), size * 3, drawType);
+            vertexArray->addColor(getVertData(),size*3);
+            vertexArray->addNormals(getNormalData(),size*3);
             break;
     }
 }

@@ -2,6 +2,7 @@
 #define GAME_VERTEXARRAY_H
 
 #include <GL/glew.h>
+#include <vector>
 
 class VertexArray
 {
@@ -10,13 +11,17 @@ public:
     VertexArray(const float* vertPositions,unsigned int vertPositionsCount,GLenum type = GL_STATIC_DRAW);
     ~VertexArray();
 
+    void addNormals(const float* normalPositions,unsigned int normalPosCount){addComponent(2,normalPositions,normalPosCount);};
+    void addColor(const float* colorPositions,unsigned int colorPosCount){addComponent(1,colorPositions,colorPosCount);};
+
     void Draw(GLenum mode = GL_TRIANGLES);
     void updateData(const float* data, int size, int offset = 0);
 
     [[nodiscard]] unsigned int getVertexCount() const;
 private:
+    void addComponent(unsigned int attrib,const float* positions,unsigned int positionCount);
     // Handles to VBO and VAO.
-    GLuint mVBO = GL_NONE;
+    std::vector<GLuint> vbo{GL_NONE};
     GLuint mVAO = GL_NONE;
 
     unsigned int indecies;
