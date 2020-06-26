@@ -21,7 +21,7 @@ namespace Renderer {
         SDL_Window* win;
         SDL_GLContext GL_Context;
 
-        Face* triangle_vertices;
+        std::vector<Face*> meshes;
 
 
         /**
@@ -113,7 +113,9 @@ namespace Renderer {
             color[2] = {1.f, 0.f, 0.0f};
             color[3] = {1.f, 1.f, 1.0f};
 
-            triangle_vertices = new Face("resources/cube.stl",FILE_TYPE::STL,GL_STREAM_DRAW);
+            meshes.resize(2);
+            meshes[0] = new Face("resources/cube.stl",FILE_TYPE::STL,GL_STREAM_DRAW);
+            meshes[1] = new Face("resources/cube.stl",FILE_TYPE::STL,GL_STATIC_DRAW);
 
             // Init succeeded!
             return true;
@@ -124,8 +126,10 @@ namespace Renderer {
         }
 
         void Render() {
-            shader->Activate();
-            triangle_vertices->Draw();
+            for(Face* mesh:meshes){
+                shader->Activate();
+                mesh->Draw();
+            }
         }
 
         void Present() {
@@ -178,19 +182,19 @@ namespace Renderer {
 
 
                 if (keyboard_state_array[SDL_SCANCODE_W] || keyboard_state_array[SDL_SCANCODE_UP]) {
-                    triangle_vertices->moveY(0.1f);
+                    meshes[0]->moveY(0.1f);
                 }
                 if (keyboard_state_array[SDL_SCANCODE_S] || keyboard_state_array[SDL_SCANCODE_DOWN]) {
-                    triangle_vertices->moveY(-0.1f);
+                    meshes[0]->moveY(-0.1f);
                 }
                 if (keyboard_state_array[SDL_SCANCODE_A] || keyboard_state_array[SDL_SCANCODE_LEFT]) {
-                    triangle_vertices->moveX(0.1f);
+                    meshes[0]->moveX(0.1f);
                 }
                 if (keyboard_state_array[SDL_SCANCODE_D] || keyboard_state_array[SDL_SCANCODE_RIGHT]) {
-                    triangle_vertices->moveX(-0.1f);
+                    meshes[0]->moveX(-0.1f);
                 }
 
-                triangle_vertices->rotate(rotate);
+                meshes[0]->rotate(rotate);
                 rotate+=glm::vec3(0.f,0.f,0.01f);
 
                 nextFrame();
@@ -204,7 +208,9 @@ namespace Renderer {
             SDL_DestroyWindow(win);
             SDL_QuitSubSystem(SDL_INIT_VIDEO);
 
-            delete triangle_vertices;
+            for(Face* mesh : meshes){
+                delete mesh;
+            }
             delete cam;
             delete shader;
         }

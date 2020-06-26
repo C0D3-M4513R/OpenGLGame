@@ -150,6 +150,7 @@ Face::Face(const char *filePath, FILE_TYPE fileType,GLenum drawType) {
 Face::~Face(){
     delete vertexData;
     delete colorData;
+    delete normalData;
     delete vertexArray;
 }
 

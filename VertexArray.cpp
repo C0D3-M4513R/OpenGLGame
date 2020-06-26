@@ -26,6 +26,7 @@ VertexArray::VertexArray(const float* vertPositions, unsigned int vertPositionsC
     glEnableVertexAttribArray(0);
     delete[] vertPositions;
     glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
 }
 
 void VertexArray::addComponent(unsigned int attrib, const float *positions, unsigned int positionCount) {
@@ -46,6 +47,8 @@ void VertexArray::addComponent(unsigned int attrib, const float *positions, unsi
     glEnableVertexAttribArray(attrib);
 
     delete[] positions;
+    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER,0);
 }
 
 void VertexArray::updateData(const float* data,int size,int offset){
@@ -53,19 +56,21 @@ void VertexArray::updateData(const float* data,int size,int offset){
     glBindBuffer(GL_ARRAY_BUFFER, vbo[0]);
     glBufferSubData(GL_ARRAY_BUFFER,offset,size,data);
     delete[] data;
+
+    glBindBuffer(GL_ARRAY_BUFFER,0);
+    glBindVertexArray(0);
 }
 void VertexArray::Draw(GLenum mode)
 {
     glBindVertexArray(mVAO);
     glDrawArrays(mode, 0, indecies);
+    glBindVertexArray(0);
 }
 
 VertexArray::~VertexArray()
 {
-
     for(GLuint& vboo : vbo){
         glDeleteBuffers(1,&vboo);
     }
     glDeleteVertexArrays(1, &mVAO);
-
 }
