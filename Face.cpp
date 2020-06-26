@@ -4,7 +4,7 @@
 #include <SDL2/SDL_log.h>
 #include "Face.h"
 #include "Renderer.h"
-#include "FileSTL/stlio.hpp"
+#include "STLParser/parse_stl.h"
 
 float* Face::getVertData() {
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
@@ -97,42 +97,49 @@ void Face::recalculateOffset() {
  */
 
 
-Face::Face(glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, GLenum modeParam,bool dynamic,glm::vec3 origin)
-:vertexData(vertexData), size(size), hasColor(colorData!= nullptr), colorData(colorData), hasNormal(false), dynamic(dynamic), origin(origin)
+Face::Face(glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, GLenum modeParam,GLenum type,glm::vec3 origin)
+:vertexData(vertexData), size(size), hasColor(colorData!= nullptr), colorData(colorData), hasNormal(false), drawMode(modeParam), origin(origin)
 {
     recalculateOffset();
     SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",hasColor?"yes":"no");
-    vertexArray=new VertexArray(getVertData(), size * 3,modeParam);
-
+    vertexArray=new VertexArray(getVertData(), size * 3,type);
 }
 
-Face::Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modeParam,bool dynamic, glm::vec3 origin)
-:Face(vertexData,vertexSize, nullptr,modeParam,dynamic,origin)
+Face::Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modeParam,GLenum type, glm::vec3 origin)
+:Face(vertexData,vertexSize, nullptr,modeParam,type,origin)
 {}
 
-Face::Face(const char *filePath, FILE_TYPE type,bool dynamic) {
-    switch (type) {
+Face::Face(const char *filePath, FILE_TYPE fileType,GLenum drawType) {
+    switch (fileType) {
         case STL:
-            std::pair<tyti::stl::solid, bool> tmp = tyti::stl::read(filePath);
-            if(!tmp.second) exit(-2);
-            size = tmp.first.vertices.size();
-            SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"vertex size %u",size);
-            vertexData = new glm::vec3[size];
-            for(unsigned int i =0;i<size;i++){
-                tyti::stl::vec3& vecOrig = tmp.first.vertices[i];
-                glm::vec3& vec = vertexData[i];
-                vec[0]=vecOrig[0];
-                vec[1]=vecOrig[1];
-                vec[2]=vecOrig[2];
-            }
+            stl::stl_data data = stl::parse_stl(filePath);
 
+            size = data.triangles.size()*3;//3 verts in a triangle
+            SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"vertex size %u",size);
+            //create arrays
+            vertexData = new glm::vec3[size];
+            hasNormal=true;
+            normalData = new glm::vec3[size];
+            hasColor=false;
+            colorData= nullptr;
+            //copy data
+            for(unsigned int i =0;i<data.triangles.size();i++){
+                stl::triangle& triangle = data.triangles[i];
+
+                normalData[i*3] = {triangle.normal.x,triangle.normal.y,triangle.normal.z};
+                vertexData[i*3] = {triangle.v1.x,triangle.v1.y,triangle.v1.z};
+
+                normalData[i*3+1] = {triangle.normal.x,triangle.normal.y,triangle.normal.z};
+                vertexData[i*3+1] = {triangle.v2.x,triangle.v2.y,triangle.v2.z};
+
+                normalData[i*3+2] = {triangle.normal.x,triangle.normal.y,triangle.normal.z};
+                vertexData[i*3+2] = {triangle.v3.x,triangle.v3.y,triangle.v3.z};
+                }
             drawMode=GL_TRIANGLES;
             recalculateOffset();
 
-            hasColor=false;
-            colorData = nullptr;
             SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",hasColor?"yes":"no");
-            vertexArray=new VertexArray(getVertData(), size * 3, hasColor, dynamic);
+            vertexArray=new VertexArray(getVertData(), size * 3, drawType);
             break;
     }
 }
@@ -159,7 +166,7 @@ void Face::updateVA(int mode) {
 
 void Face::Draw() {
     //i'm gonna update the vertices here, if the object is dynamic
-    if(dynamic) updateVA();
+    updateVA();
     Renderer::getShader()->applyMVP(
             glm::translate(//move
                     glm::identity<glm::mat4>(),

@@ -14,9 +14,9 @@ class Face{
     public:
         constexpr static GLenum defaultMode = GL_TRIANGLE_STRIP;
         //TODO: scaling, apply move/rotate/scale
-        Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modePar=defaultMode,bool dynamic = false, glm::vec3 origin = {0, 0, 0});
-        Face(glm::vec3* vertexData, unsigned int size,glm::vec3* colorData, GLenum modePar=defaultMode, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
-        Face(const char* filePath,FILE_TYPE=STL,bool dynamic = false);
+        Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modePar=defaultMode,GLenum type = GL_STATIC_DRAW, glm::vec3 origin = {0, 0, 0});
+        Face(glm::vec3* vertexData, unsigned int size,glm::vec3* colorData, GLenum modePar=defaultMode,GLenum type = GL_STATIC_DRAW, glm::vec3 origin = {0, 0, 0});
+        Face(const char* filePath,FILE_TYPE=STL,GLenum drawType = GL_STATIC_DRAW);
         ~Face();
 
         void moveX(float amount) {move(0,amount);};
@@ -46,7 +46,6 @@ class Face{
 
         VertexArray* vertexArray;
         void updateVA(int mode=0);
-        bool dynamic;
 
         unsigned int size;
         glm::vec3* vertexData;

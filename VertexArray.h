@@ -7,7 +7,7 @@ class VertexArray
 {
 public:
 
-    VertexArray(const float* vertPositions,unsigned int vertPositionsCount, bool color = false,bool dynamic = false);
+    VertexArray(const float* vertPositions,unsigned int vertPositionsCount,GLenum type = GL_STATIC_DRAW);
     ~VertexArray();
 
     void Draw(GLenum mode = GL_TRIANGLES);
@@ -19,6 +19,9 @@ private:
     GLuint mVBO = GL_NONE;
     GLuint mVAO = GL_NONE;
 
-    unsigned int vertexCount = 0;
+    unsigned int indecies;
+
+    GLenum type;
+
 };
 #endif //GAME_VERTEXARRAY_H

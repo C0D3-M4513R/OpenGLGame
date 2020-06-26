@@ -113,8 +113,7 @@ namespace Renderer {
             color[2] = {1.f, 0.f, 0.0f};
             color[3] = {1.f, 1.f, 1.0f};
 
-            triangle_vertices = new Face("resources/cube.stl");
-            triangle_vertices->moveY(-1);
+            triangle_vertices = new Face("resources/cube.stl",FILE_TYPE::STL,GL_STREAM_DRAW);
 
             // Init succeeded!
             return true;
