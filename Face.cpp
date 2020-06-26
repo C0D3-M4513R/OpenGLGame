@@ -6,17 +6,44 @@
 #include "Renderer.h"
 #include "FileSTL/stlio.hpp"
 
-float* Face::getData() {
+float* Face::getVertData() {
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
-    float* outData=new float[vertexSize*3+colorSize*3];
-    for (unsigned int i=0; i < vertexSize; i++) {
+    float* outData=new float[size*3];
+    for (unsigned int i=0; i < size; i++) {
         glm::vec3 src = vertexData[i];
         outData[i * 3]=src[0];
         outData[i * 3 + 1]=src[1];
         outData[i * 3 + 2]=src[2];
     }
-    for (unsigned int i=vertexSize; i < vertexSize+colorSize; i++) {
-        glm::vec3 src = colorData[i-vertexSize];
+    return outData;
+}
+float* Face::getColorData() {
+    if(!hasColor) SDL_LogError(SDL_LOG_CATEGORY_SYSTEM,"Color data was requested, but there is reportedly none. I'm gonna return all white, to prevent illegal memory-access. hasColor:%s",hasColor?"true":"false");
+    //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
+    float* outData=new float[size*3];
+    for (unsigned int i=0; i < size; i++) {
+        if(hasColor) {
+            glm::vec3 src = colorData[i];
+            outData[i * 3] = src[0];
+            outData[i * 3 + 1] = src[1];
+            outData[i * 3 + 2] = src[2];
+        } else{
+            outData[i * 3] = 1.f;
+            outData[i * 3 + 1] = 1.f;
+            outData[i * 3 + 2] = 1.f;
+        }
+    }
+    return outData;
+}
+float* Face::getNormalData() {
+    if(!hasNormal) {
+        SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM,"Normal data was requested, but there is reportedly none. I'm gonna just return a nullptr, to prevent illegal memory-access. hasNormal:%s",hasNormal?"true":"false");
+        return nullptr;
+    }
+    //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
+    float* outData=new float[size*3];
+    for (unsigned int i=0; i < size; i++) {
+        glm::vec3 src = normalData[i];
         outData[i * 3]=src[0];
         outData[i * 3 + 1]=src[1];
         outData[i * 3 + 2]=src[2];
@@ -31,7 +58,6 @@ void Face::move(const uint8_t direction,float amount) {
     else amount = fmaxf(amount,offset[direction*2+1]-origin[direction]);
     origin[direction]+=amount;
     SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Moved to %s by a total of %s in direction %u, where 0=x,1=y,2=z",std::to_string(origin[direction]).c_str(),std::to_string(amount).c_str(),direction);
-    if (!dynamic) updateVA();
 }
 
 
@@ -52,7 +78,7 @@ void Face::recalculateOffset() {
     for(unsigned int i =0;i < 3;i++){
         float min=origin[i];
         float max=origin[i];
-        for(unsigned int j = 0; j < vertexSize; j++){
+        for(unsigned int j = 0; j < size; j++){
             const float value = vertexData[j][i];
             min=value<min?value:min;
             max=value>max?value:max;
@@ -71,20 +97,17 @@ void Face::recalculateOffset() {
  */
 
 
-Face::Face(glm::vec3* vertexData, unsigned int vertexSize,glm::vec3 *colorData, unsigned int colorSize,GLenum modeParam, bool dynamic,glm::vec3 origin)
-:vertexData(vertexData),vertexSize(vertexSize),colorData(colorData),colorSize(colorSize),mode(modeParam),dynamic(dynamic),origin(origin){
+Face::Face(glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, GLenum modeParam,bool dynamic,glm::vec3 origin)
+:vertexData(vertexData), size(size), hasColor(colorData!= nullptr), colorData(colorData), hasNormal(false), dynamic(dynamic), origin(origin)
+{
     recalculateOffset();
-    SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",colorSize!=0?"yes":"no");
-    vertexArray=new VertexArray(getData(), vertexSize * 3, colorSize != 0, dynamic);
+    SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",hasColor?"yes":"no");
+    vertexArray=new VertexArray(getVertData(), size * 3,modeParam);
+
 }
 
-
-Face::Face(glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, GLenum modeParam,bool dynamic,glm::vec3 origin)
-:Face(vertexData,size,colorData,size,modeParam,dynamic,origin)
-{}
-
 Face::Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modeParam,bool dynamic, glm::vec3 origin)
-:Face(vertexData,vertexSize, nullptr,0,modeParam,dynamic,origin)
+:Face(vertexData,vertexSize, nullptr,modeParam,dynamic,origin)
 {}
 
 Face::Face(const char *filePath, FILE_TYPE type,bool dynamic) {
@@ -92,10 +115,10 @@ Face::Face(const char *filePath, FILE_TYPE type,bool dynamic) {
         case STL:
             std::pair<tyti::stl::solid, bool> tmp = tyti::stl::read(filePath);
             if(!tmp.second) exit(-2);
-            vertexSize = tmp.first.vertices.size();
-            SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"vertex size %u",vertexSize);
-            vertexData = new glm::vec3[vertexSize];
-            for(unsigned int i =0;i<vertexSize;i++){
+            size = tmp.first.vertices.size();
+            SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"vertex size %u",size);
+            vertexData = new glm::vec3[size];
+            for(unsigned int i =0;i<size;i++){
                 tyti::stl::vec3& vecOrig = tmp.first.vertices[i];
                 glm::vec3& vec = vertexData[i];
                 vec[0]=vecOrig[0];
@@ -103,20 +126,13 @@ Face::Face(const char *filePath, FILE_TYPE type,bool dynamic) {
                 vec[2]=vecOrig[2];
             }
 
-            mode=GL_TRIANGLES;
+            drawMode=GL_TRIANGLES;
             recalculateOffset();
 
-            colorSize=tmp.first.normals.size();
-            colorData = new glm::vec3[colorSize];
-            for(unsigned int i =0;i<vertexSize;i++){
-                tyti::stl::vec3& vecOrig = tmp.first.normals[i];
-                glm::vec3& vec = colorData[i];
-                vec[0]=vecOrig[0];
-                vec[1]=vecOrig[1];
-                vec[2]=vecOrig[2];
-            }
-            SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",colorSize!=0?"yes":"no");
-            vertexArray=new VertexArray(getData(), vertexSize * 3, true, dynamic);
+            hasColor=false;
+            colorData = nullptr;
+            SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",hasColor?"yes":"no");
+            vertexArray=new VertexArray(getVertData(), size * 3, hasColor, dynamic);
             break;
     }
 }
@@ -131,11 +147,12 @@ Face::~Face(){
 void Face::updateVA(int mode) {
     switch (mode) {
         case 1:
-            vertexArray->updateData(getData(), vertexSize * 3 * sizeof(float), colorSize * 3 * sizeof(float));
+            //vertexArray->updateData(getColorData(), size * 3 * sizeof(float), size * 3 * sizeof(float));
+            break;
         case 0:
             [[fallthrough]];
         default:
-            vertexArray->updateData(getData(), vertexSize * 3 * sizeof(float), 0);
+            vertexArray->updateData(getVertData(), size * 3 * sizeof(float), 0);
             break;
     }
 }
@@ -149,5 +166,5 @@ void Face::Draw() {
                     origin
             )*rotation
     );
-    vertexArray->Draw(mode);
+    vertexArray->Draw(drawMode);
 }

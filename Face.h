@@ -16,7 +16,6 @@ class Face{
         //TODO: scaling, apply move/rotate/scale
         Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modePar=defaultMode,bool dynamic = false, glm::vec3 origin = {0, 0, 0});
         Face(glm::vec3* vertexData, unsigned int size,glm::vec3* colorData, GLenum modePar=defaultMode, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
-        Face(glm::vec3* vertexData, unsigned int vertexSize,glm::vec3* colorData,unsigned int colorSize, GLenum modePar=defaultMode, bool dynamic = false, glm::vec3 origin = {0, 0, 0});
         Face(const char* filePath,FILE_TYPE=STL,bool dynamic = false);
         ~Face();
 
@@ -29,7 +28,7 @@ class Face{
         void scale(glm::vec3 amount);
 
         void Draw();
-        GLenum mode;
+        GLenum drawMode;
     private:
         //you shouldn't need those methods
 
@@ -41,16 +40,19 @@ class Face{
         //why manually request a Offset recalculation
         void recalculateOffset();
         //why expose data? individual vertices shouldn't be needed to be manipulated
-        float* getData();
+        float* getVertData();
+        float* getColorData();
+        float* getNormalData();
 
         VertexArray* vertexArray;
         void updateVA(int mode=0);
         bool dynamic;
 
-        unsigned int vertexSize;
+        unsigned int size;
         glm::vec3* vertexData;
-
-        unsigned int colorSize;
+        bool hasNormal;
+        glm::vec3* normalData;
+        bool hasColor;
         glm::vec3* colorData;
 
         //Max value in a direction
