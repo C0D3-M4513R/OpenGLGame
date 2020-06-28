@@ -11,7 +11,7 @@ I do know these things:
 - [x] Rotation in x,y and z
 - [ ] Movement should be allowed in all 3 Dimensions
 - [ ] maybe 5 depending on the Game?
-- [ ] There should be different objects
+- [x] There should be different objects
 - [ ] There should be a way to color Objects in ANY way (using Texture maps)
 - [ ] There should be collision between Objects
 - [ ] There should be multiple Coordinate Systems (not just the OpenGL one)
