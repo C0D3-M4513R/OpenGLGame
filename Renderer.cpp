@@ -254,10 +254,18 @@ namespace Renderer {
                     meshes[0]->moveY(-0.1f);
                 }
                 if (keyboard_state_array[SDL_SCANCODE_A] || keyboard_state_array[SDL_SCANCODE_LEFT]) {
+#if defined(__MINGW32__)|| defined(__MINGW64__)
                     meshes[0]->moveX(0.1f);
+#else
+                    meshes[0]->moveX(-0.1f);
+#endif
                 }
                 if (keyboard_state_array[SDL_SCANCODE_D] || keyboard_state_array[SDL_SCANCODE_RIGHT]) {
+#if defined(__MINGW32__)|| defined(__MINGW64__)
                     meshes[0]->moveX(-0.1f);
+#else
+                    meshes[0]->moveX(0.1f);
+#endif
                 }
 
                 meshes[0]->rotate(rotate);
