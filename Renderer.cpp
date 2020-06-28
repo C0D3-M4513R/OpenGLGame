@@ -24,11 +24,63 @@ namespace Renderer {
         std::vector<Face*> meshes;
 
 
+
+        void GLAPIENTRY glDebugOutput(
+            [[maybe_unused]] GLenum source,
+            [[maybe_unused]] GLenum type,
+            [[maybe_unused]] unsigned int id,
+            [[maybe_unused]] GLenum severity,
+            [[maybe_unused]] GLsizei length,
+            [[maybe_unused]] const char *message,
+            [[maybe_unused]] const void *userParam
+            )
+        {
+            // ignore non-significant error/warning codes
+//            if(id == 131169 || id == 131185 || id == 131218 || id == 131204) return;
+            SDL_LogPriority prioPrior = SDL_LogGetPriority(SDL_LOG_CATEGORY_APPLICATION);
+            switch (severity){
+                case GL_DEBUG_SEVERITY_HIGH:         SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_CRITICAL); break;
+                case GL_DEBUG_SEVERITY_MEDIUM:       SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_ERROR); break;
+                case GL_DEBUG_SEVERITY_LOW:          SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_WARN); break;
+                case GL_DEBUG_SEVERITY_NOTIFICATION: SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION,SDL_LOG_PRIORITY_INFO); break;
+            }
+
+            SDL_Log("---------------");
+            SDL_Log("Debug message (%u): %s",id,message);
+
+            switch (source){
+                case GL_DEBUG_SOURCE_API:             SDL_Log("Source: API"); break;
+                case GL_DEBUG_SOURCE_WINDOW_SYSTEM:   SDL_Log("Source: Window System"); break;
+                case GL_DEBUG_SOURCE_SHADER_COMPILER: SDL_Log("Source: Shader Compiler"); break;
+                case GL_DEBUG_SOURCE_THIRD_PARTY:     SDL_Log("Source: Third Party"); break;
+                case GL_DEBUG_SOURCE_APPLICATION:     SDL_Log("Source: Application"); break;
+                case GL_DEBUG_SOURCE_OTHER:           SDL_Log("Source: Other"); break;
+            }
+            switch (type){
+                case GL_DEBUG_TYPE_ERROR:               SDL_Log("Type: Error"); break;
+                case GL_DEBUG_TYPE_DEPRECATED_BEHAVIOR: SDL_Log("Type: Deprecated Behaviour"); break;
+                case GL_DEBUG_TYPE_UNDEFINED_BEHAVIOR:  SDL_Log("Type: Undefined Behaviour"); break;
+                case GL_DEBUG_TYPE_PORTABILITY:         SDL_Log("Type: Portability"); break;
+                case GL_DEBUG_TYPE_PERFORMANCE:         SDL_Log("Type: Performance"); break;
+                case GL_DEBUG_TYPE_MARKER:              SDL_Log("Type: Marker"); break;
+                case GL_DEBUG_TYPE_PUSH_GROUP:          SDL_Log("Type: Push Group"); break;
+                case GL_DEBUG_TYPE_POP_GROUP:           SDL_Log("Type: Pop Group"); break;
+                case GL_DEBUG_TYPE_OTHER:               SDL_Log("Type: Other"); break;
+            }
+            switch (severity){
+                case GL_DEBUG_SEVERITY_HIGH:         SDL_Log("Severity: high"); break;
+                case GL_DEBUG_SEVERITY_MEDIUM:       SDL_Log("Severity: medium"); break;
+                case GL_DEBUG_SEVERITY_LOW:          SDL_Log("Severity: low"); break;
+                case GL_DEBUG_SEVERITY_NOTIFICATION: SDL_Log("Severity: notification"); break;
+            }
+            SDL_LogSetPriority(SDL_LOG_CATEGORY_APPLICATION,prioPrior);
+        }
+
+
         /**
         * This should Initialise a window and make it usable with OpenGL
         * @return true, if Initialisation succeeded
          */
-
         [[nodiscard]]
         bool init() {
             // returns zero on success else non-zero
@@ -63,6 +115,8 @@ namespace Renderer {
             SDL_GL_SetAttribute(SDL_GL_ALPHA_SIZE, 8);
             SDL_GL_SetAttribute(SDL_GL_DEPTH_SIZE,8);
 
+            SDL_GL_SetAttribute(SDL_GL_CONTEXT_FLAGS,SDL_GL_CONTEXT_DEBUG_FLAG);
+
             win = SDL_CreateWindow("GAME", // creates a window
                                    SDL_WINDOWPOS_CENTERED,
                                    SDL_WINDOWPOS_CENTERED,
@@ -86,6 +140,16 @@ namespace Renderer {
             glDepthFunc(GL_LESS);
 
             glEnable(GL_CULL_FACE);
+
+            int flags; glGetIntegerv(GL_CONTEXT_FLAGS, &flags);
+            if (flags & GL_CONTEXT_FLAG_DEBUG_BIT)
+            {
+                glEnable(GL_DEBUG_OUTPUT);
+                glEnable(GL_DEBUG_OUTPUT_SYNCHRONOUS);
+                glDebugMessageCallback(glDebugOutput, nullptr);
+                glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
+            }
+
 
             return true;
         }
@@ -127,6 +191,7 @@ namespace Renderer {
 
         void Render() {
             for(Face* mesh:meshes){
+                shader->Activate();
                 mesh->Draw();
             }
         }
@@ -187,10 +252,10 @@ namespace Renderer {
                     meshes[0]->moveY(-0.1f);
                 }
                 if (keyboard_state_array[SDL_SCANCODE_A] || keyboard_state_array[SDL_SCANCODE_LEFT]) {
-                    meshes[0]->moveX(-0.1f);
+                    meshes[0]->moveX(0.1f);
                 }
                 if (keyboard_state_array[SDL_SCANCODE_D] || keyboard_state_array[SDL_SCANCODE_RIGHT]) {
-                    meshes[0]->moveX(0.1f);
+                    meshes[0]->moveX(-0.1f);
                 }
 
                 meshes[0]->rotate(rotate);
