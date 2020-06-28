@@ -11,7 +11,9 @@ public:
     ~Shader();
 
     bool IsGood();
-    void Activate();
+
+    void Activate() const{glUseProgram(program);};
+    static void Deactivate(){glUseProgram(0);};
 
     void applyMVP(glm::mat4 model) const;
 private:

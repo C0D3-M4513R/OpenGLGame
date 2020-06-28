@@ -3,6 +3,7 @@
 #include <sstream>
 #include "Shader.h"
 #include "Renderer.h"
+#include <glm/gtc/type_ptr.hpp>
 
 
 GLuint Shader::LoadAndCompileShaderFromFile(const char* filePath, GLuint shaderType)
@@ -125,15 +126,22 @@ bool Shader::IsGood()
     return !error;
 }
 
-void Shader::Activate()
-{
-    glUseProgram(program);
-}
-
 void Shader::applyMVP(glm::mat4 model) const {
     //TODO::Projection Matrix
-    glm::mat4 mvp = Renderer::getCamera()->view() * model;
+//    glm::mat4 mvp = Renderer::getCamera()->view() * model;
+    glm::mat4 mvp = model;
+    const float* mvpPointer = glm::value_ptr(mvp);
 
+#ifndef DEBUG
+    for(unsigned int i = 0; i < 16; i++){
+        SDL_LogVerbose(SDL_LOG_CATEGORY_SYSTEM,"MVP Matrix[%u]: %f",i,mvpPointer[i]);
+    }
+#endif
+
+
+    glUseProgram(program);
     GLuint MatrixID = glGetUniformLocation(program, "mvp");
-    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, &mvp[0][0]);
+    glUniformMatrix4fv(MatrixID, 1, GL_FALSE, mvpPointer);
+
+    glUseProgram(0);
 }

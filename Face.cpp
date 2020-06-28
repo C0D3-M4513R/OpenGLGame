@@ -2,6 +2,7 @@
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <SDL2/SDL_log.h>
+#include <glm/gtc/type_ptr.hpp>
 #include "Face.h"
 #include "Renderer.h"
 #include "STLParser/parse_stl.h"
@@ -155,27 +156,9 @@ Face::~Face(){
 }
 
 
-void Face::updateVA(int mode) {
-    switch (mode) {
-        case 1:
-            //vertexArray->updateData(getColorData(), size * 3 * sizeof(float), size * 3 * sizeof(float));
-            break;
-        case 0:
-            [[fallthrough]];
-        default:
-            vertexArray->updateData(getVertData(), size * 3 * sizeof(float), 0);
-            break;
-    }
-}
-
 void Face::Draw() {
-    //i'm gonna update the vertices here, if the object is dynamic
-    updateVA();
-    Renderer::getShader()->applyMVP(
-            glm::translate(//move
-                    glm::identity<glm::mat4>(),
-                    origin
-            )*rotation
-    );
+    //todo: reapply rotation
+    //removed rotation, to make an issue more apparent.
+    Renderer::getShader()->applyMVP(glm::translate(glm::identity<glm::mat4>() ,origin));
     vertexArray->Draw(drawMode);
 }

@@ -45,7 +45,6 @@ class Face{
         float* getNormalData();
 
         VertexArray* vertexArray;
-        void updateVA(int mode=0);
 
         unsigned int size;
         glm::vec3* vertexData;

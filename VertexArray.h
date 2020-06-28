@@ -15,7 +15,6 @@ public:
     void addColor(const float* colorPositions,unsigned int colorPosCount){addComponent(1,colorPositions,colorPosCount);};
 
     void Draw(GLenum mode = GL_TRIANGLES);
-    void updateData(const float* data, int size, int offset = 0);
 
     [[nodiscard]] unsigned int getVertexCount() const;
 private:

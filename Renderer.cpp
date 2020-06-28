@@ -114,7 +114,7 @@ namespace Renderer {
             color[3] = {1.f, 1.f, 1.0f};
 
             meshes.resize(2);
-            meshes[0] = new Face("resources/cube.stl",FILE_TYPE::STL,GL_STREAM_DRAW);
+            meshes[0] = new Face("resources/cube.stl",FILE_TYPE::STL,GL_STATIC_DRAW);
             meshes[1] = new Face("resources/cube.stl",FILE_TYPE::STL,GL_STATIC_DRAW);
 
             // Init succeeded!
@@ -127,7 +127,6 @@ namespace Renderer {
 
         void Render() {
             for(Face* mesh:meshes){
-                shader->Activate();
                 mesh->Draw();
             }
         }
@@ -188,10 +187,10 @@ namespace Renderer {
                     meshes[0]->moveY(-0.1f);
                 }
                 if (keyboard_state_array[SDL_SCANCODE_A] || keyboard_state_array[SDL_SCANCODE_LEFT]) {
-                    meshes[0]->moveX(0.1f);
+                    meshes[0]->moveX(-0.1f);
                 }
                 if (keyboard_state_array[SDL_SCANCODE_D] || keyboard_state_array[SDL_SCANCODE_RIGHT]) {
-                    meshes[0]->moveX(-0.1f);
+                    meshes[0]->moveX(0.1f);
                 }
 
                 meshes[0]->rotate(rotate);
