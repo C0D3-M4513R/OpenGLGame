@@ -162,8 +162,6 @@ Face::~Face(){
 
 
 void Face::Draw() {
-    //todo: reapply rotation
-    //removed rotation, to make an issue more apparent.
-    Renderer::getShader().applyMVP(glm::translate(glm::identity<glm::mat4>() ,origin));
+    Renderer::getShader().applyMVP(glm::translate(glm::identity<glm::mat4>() ,origin)*rotation);
     vertexArray->Draw(drawMode);
 }
