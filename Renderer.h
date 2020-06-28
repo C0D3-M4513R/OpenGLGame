@@ -8,11 +8,11 @@
 
 namespace Renderer{
     bool run();
-    [[nodiscard]] const Shader*const getShader();
-    [[nodiscard]] const Camera *const getCamera();
+    [[nodiscard]] const Shader& getShader();
+    [[nodiscard]] const Camera& getCamera();
     const std::pair<unsigned int,unsigned int>& getResolution();
-    const unsigned int getResolutionX();
-    const unsigned int getResolutionY();
+    unsigned int getResolutionX();
+    unsigned int getResolutionY();
 
 };
 #endif //GAME_RENDERER_H

@@ -1,7 +1,8 @@
 #include "VertexArray.h"
 #include "Renderer.h"
 
-VertexArray::VertexArray(const float* vertPositions, unsigned int vertPositionsCount ,GLenum type):type(type),indecies(vertPositionsCount/3)
+VertexArray::VertexArray(const float* vertPositions, unsigned int vertPositionsCount ,GLenum type)
+:indecies(vertPositionsCount/3),type(type)
 {
     // Generate and bind our VAO.
     glGenVertexArrays(1, &mVAO);
@@ -54,7 +55,7 @@ void VertexArray::addComponent(unsigned int attrib, const float *positions, unsi
 }
 void VertexArray::Draw(GLenum mode)
 {
-    Renderer::getShader()->Activate();
+    Renderer::getShader().Activate();
     glBindVertexArray(mVAO);
     glDrawArrays(mode, 0, indecies);
     glBindVertexArray(0);

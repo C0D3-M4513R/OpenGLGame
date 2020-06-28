@@ -7,6 +7,7 @@
 #include <SDL2/SDL.h>
 #include <GL/glew.h>
 #include <cstdlib>
+#include <iostream>
 
 namespace Renderer {
     namespace {
@@ -177,9 +178,10 @@ namespace Renderer {
             color[2] = {1.f, 0.f, 0.0f};
             color[3] = {1.f, 1.f, 1.0f};
 
-            meshes.resize(2);
-            meshes[0] = new Face("resources/cube.stl",FILE_TYPE::STL,GL_STATIC_DRAW);
+            meshes.resize(3);
+            meshes[0] = new Face("resources/cube.stl",FILE_TYPE::STL,GL_STREAM_DRAW);
             meshes[1] = new Face("resources/cube.stl",FILE_TYPE::STL,GL_STATIC_DRAW);
+            meshes[2] = new Face(vertices,n,color);
 
             // Init succeeded!
             return true;
@@ -290,19 +292,19 @@ namespace Renderer {
         }
         return false;
     }
-    const Shader*const getShader(){
-        return shader;
+    const Shader& getShader(){
+        return *shader;
     }
-    const Camera*const getCamera(){
-        return cam;
+    const Camera& getCamera(){
+        return *cam;
     }
     const std::pair<unsigned int,unsigned int>& getResolution(){
         return resolution;
     }
-    const unsigned int getResolutionX(){
+    unsigned int getResolutionX(){
         return resolution.first;
     }
-    const unsigned int getResolutionY(){
+    unsigned int getResolutionY(){
         return resolution.second;
     }
 }

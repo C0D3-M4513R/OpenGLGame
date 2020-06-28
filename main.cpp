@@ -34,7 +34,7 @@ uint8_t verbose = 0; //verbosity level
  */
 
  [[maybe_unused]]
- int main(int argc, char *argv[]) {
+ int main([[maybe_unused]] int argc, [[maybe_unused]] char *argv[]) {
 //    arginit(argc, argv);
     Renderer::run();
     return 0;

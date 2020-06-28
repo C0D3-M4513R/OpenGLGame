@@ -99,7 +99,11 @@ void Face::recalculateOffset() {
 
 
 Face::Face(glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, GLenum modeParam,GLenum type,glm::vec3 origin)
-:vertexData(vertexData), size(size), hasColor(colorData!= nullptr), colorData(colorData), hasNormal(false), drawMode(modeParam), origin(origin)
+:drawMode(modeParam),
+size(size),vertexData(vertexData),
+hasNormal(false), normalData(nullptr),
+hasColor(colorData!= nullptr), colorData(colorData),
+rotation(glm::identity<glm::mat4>()),origin(origin),scaleVec({1,1,1})
 {
     recalculateOffset();
     SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",hasColor?"yes":"no");
@@ -111,7 +115,8 @@ Face::Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modeParam,GLen
 :Face(vertexData,vertexSize, nullptr,modeParam,type,origin)
 {}
 
-Face::Face(const char *filePath, FILE_TYPE fileType,GLenum drawType) {
+Face::Face(const char *filePath, FILE_TYPE fileType,GLenum drawType)
+:rotation(glm::identity<glm::mat4>()),origin({0,0,0}),scaleVec({1,1,1}) {
     switch (fileType) {
         case STL:
             stl::stl_data data = stl::parse_stl(filePath);
@@ -159,6 +164,6 @@ Face::~Face(){
 void Face::Draw() {
     //todo: reapply rotation
     //removed rotation, to make an issue more apparent.
-    Renderer::getShader()->applyMVP(glm::translate(glm::identity<glm::mat4>() ,origin));
+    Renderer::getShader().applyMVP(glm::translate(glm::identity<glm::mat4>() ,origin));
     vertexArray->Draw(drawMode);
 }
