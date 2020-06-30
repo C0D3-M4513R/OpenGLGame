@@ -211,9 +211,9 @@ namespace Renderer {
             }
 
             // Use double buffering.
-            GLint doublebuffer;
+            GLint doublebuffer=GL_FALSE;
             glGetIntegerv(GLFW_DOUBLEBUFFER, &doublebuffer);
-            if (doublebuffer != 1) {
+            if (doublebuffer != GLFW_TRUE) {
                 std::cerr << "DoubleBuffering is NOT supported." << newline;
             }
 
