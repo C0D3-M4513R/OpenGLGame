@@ -2,6 +2,8 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "Face.h"
+#include "HID/Keyboard.h"
+#include "Player.h"
 
 
 #include <GL/glew.h>
@@ -111,54 +113,6 @@ namespace Renderer {
             std::cerr << "            Description:" << description << std::endl;
         }
 
-        void keyCallback(GLFWwindow *window, int key, int scancode, int action, int mods) {
-            switch (action) {
-                default:
-                    [[fallthrough]];
-                case GLFW_PRESS:
-                    [[fallthrough]];
-                case GLFW_REPEAT:
-                    switch (key) {
-                        case GLFW_KEY_ESCAPE:
-                            glfwSetWindowShouldClose(window, true);
-                            break;
-                        case GLFW_KEY_W:
-                            [[fallthrough]];
-                        case GLFW_KEY_UP:
-                            meshes[0]->moveY(0.1f);
-                            break;
-                        case GLFW_KEY_S:
-                            [[fallthrough]];
-                        case GLFW_KEY_DOWN:
-                            meshes[0]->moveY(-0.1f);
-                            break;
-                        case GLFW_KEY_A:
-                            [[fallthrough]];
-                        case GLFW_KEY_LEFT:
-#if defined(__MINGW32__) || defined(__MINGW64__)
-                            meshes[0]->moveX(0.1f);
-#else
-                            meshes[0]->moveX(-0.1f);
-#endif
-                            break;
-                        case GLFW_KEY_D:
-                            [[fallthrough]];
-                        case GLFW_KEY_RIGHT:
-#if defined(__MINGW32__) || defined(__MINGW64__)
-                            meshes[0]->moveX(-0.1f);
-#else
-                            meshes[0]->moveX(0.1f);
-#endif
-                            break;
-                    }
-                    break;
-                case GLFW_RELEASE:
-                    break;
-            }
-
-        }
-
-
         /**
         * This should Initialise a window and make it usable with OpenGL
         * @return true, if Initialisation succeeded
@@ -190,7 +144,7 @@ namespace Renderer {
             glfwMakeContextCurrent(win);
 
             //Define callbacks:
-            glfwSetKeyCallback(win, keyCallback);
+            glfwSetKeyCallback(win, HID::keyCallback);
 
             // Initialize GLEW.
             glewExperimental = GL_TRUE;
@@ -290,10 +244,12 @@ namespace Renderer {
             color[2] = {1.f, 0.f, 0.0f};
             color[3] = {1.f, 1.f, 1.0f};
 
-            meshes.resize(3);
-            meshes[0] = new Face("resources/cube.stl", FILE_TYPE::STL, GL_STREAM_DRAW);
-            meshes[1] = new Face("resources/cube.stl", FILE_TYPE::STL, GL_STATIC_DRAW);
-            meshes[2] = new Face(vertices, n, color);
+            //Init objects
+            meshes.resize(2);
+            meshes[0] = new Face("resources/cube.stl", FILE_TYPE::STL, GL_STATIC_DRAW);
+            meshes[1] = new Face(vertices, n, color);
+
+            Player::getPlayer(new Face("resources/cube.stl", FILE_TYPE::STL, GL_STATIC_DRAW));
 
             // Init succeeded!
             return true;
@@ -304,10 +260,11 @@ namespace Renderer {
         }
 
         void Render() {
+            Player::getPlayer()->Draw();
             for (Face *mesh:meshes) {
-                shader->Activate();
                 mesh->Draw();
             }
+
         }
 
         void Present() {
