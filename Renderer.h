@@ -1,10 +1,11 @@
 #ifndef GAME_RENDERER_H
 #define GAME_RENDERER_H
 
-#include <SDL2/SDL.h>
 #include <utility>
 #include "Shader.h"
 #include "Camera.h"
+
+constexpr char const * const newline = "\n";
 
 namespace Renderer{
     bool run();

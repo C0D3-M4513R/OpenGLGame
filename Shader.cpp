@@ -133,8 +133,10 @@ void Shader::applyMVP(glm::mat4 model) const {
     const float* mvpPointer = glm::value_ptr(mvp);
 
 #ifdef DEBUG
-    for(unsigned int i = 0; i < 16; i++){
-        SDL_LogVerbose(SDL_LOG_CATEGORY_SYSTEM,"MVP Matrix[%u]: %f",i,mvpPointer[i]);
+    std::cout<<"MVP Matrix:"<<newline;
+    for(unsigned int i = 0; i < 4; i++){
+        const glm::vec4& vec = mvp[i];
+        std::cout<<"{"<<vec.x<<","<<vec.y<<","<<vec.z<<","<<vec.w<<"}"<<newline;
     }
 #endif
 

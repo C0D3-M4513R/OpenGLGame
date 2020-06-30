@@ -1,8 +1,8 @@
 #include <string>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/gtc/matrix_transform.hpp>
-#include <SDL2/SDL_log.h>
 #include <glm/gtc/type_ptr.hpp>
+#include <iostream>
 #include "Face.h"
 #include "Renderer.h"
 #include "STLParser/parse_stl.h"
@@ -19,7 +19,7 @@ float* Face::getVertData() {
     return outData;
 }
 float* Face::getColorData() {
-    if(!hasColor) SDL_LogError(SDL_LOG_CATEGORY_SYSTEM,"Color data was requested, but there is reportedly none. I'm gonna return all white, to prevent illegal memory-access. hasColor:%s",hasColor?"true":"false");
+    if(!hasColor) std::cerr<<"Color data was requested, but there is reportedly none. I'm gonna return all white, to prevent illegal memory-access. hasColor:"<<(hasColor?"true":"false")<<newline;
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
     float* outData=new float[size*3];
     for (unsigned int i=0; i < size; i++) {
@@ -38,7 +38,7 @@ float* Face::getColorData() {
 }
 float* Face::getNormalData() {
     if(!hasNormal) {
-        SDL_LogCritical(SDL_LOG_CATEGORY_SYSTEM,"Normal data was requested, but there is reportedly none. I'm gonna just return a nullptr, to prevent illegal memory-access. hasNormal:%s",hasNormal?"true":"false");
+        std::cerr<<"Normal data was requested, but there is reportedly none. I'm gonna just return a nullptr, to prevent illegal memory-access. hasNormal:"<<(hasNormal?"true":"false")<<newline;
         return nullptr;
     }
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
@@ -54,11 +54,11 @@ float* Face::getNormalData() {
 
 
 void Face::move(const uint8_t direction,float amount) {
-    SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Moving from %s by probably %s in direction %u, where 0=x,1=y,2=z",std::to_string(origin[direction]).c_str(),std::to_string(amount).c_str(),direction);
+    std::cout<<"Moving from "<<origin[direction]<<" by probably "<<amount<<" in direction "<<direction<<", where 0=x,1=y,2=z"<<newline;
     if (amount>0) amount = fminf(amount,offset[direction*2]-origin[direction]);
     else amount = fmaxf(amount,offset[direction*2+1]-origin[direction]);
     origin[direction]+=amount;
-    SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Moved to %s by a total of %s in direction %u, where 0=x,1=y,2=z",std::to_string(origin[direction]).c_str(),std::to_string(amount).c_str(),direction);
+    std::cout<<"Moved from "<<origin[direction]<<" by "<<amount<<" in direction "<<direction<<", where 0=x,1=y,2=z"<<newline;
 }
 
 
@@ -75,7 +75,7 @@ void Face::scale(glm::vec3 amount) {
 
 
 void Face::recalculateOffset() {
-    SDL_LogDebug(SDL_LOG_CATEGORY_SYSTEM,"Recalculating Offsets");
+    std::cout<<"Recalculating Offsets"<<newline;
     for(unsigned int i =0;i < 3;i++){
         float min=origin[i];
         float max=origin[i];
@@ -87,7 +87,9 @@ void Face::recalculateOffset() {
         offset[i*2]=max;
         offset[i*2+1]=min;
     }
-    SDL_LogVerbose(SDL_LOG_CATEGORY_SYSTEM,"Offsets are: x:%f,-x: %f y:%f,-y:%f z:%f,-z:%f",offset[0],offset[1],offset[2],offset[3],offset[4],offset[5]);
+    std::cout<<"Offsets are: x:"<<offset[0]<<"-x:"<<offset[1]<<newline
+            <<"y:"<<offset[2]<<"-y: "<<offset[3]<<newline
+            <<"z:"<<offset[4]<<"-z: "<<offset[5]<<newline;
 }
 
 /**
@@ -106,7 +108,7 @@ hasColor(colorData!= nullptr), colorData(colorData),
 rotation(glm::identity<glm::mat4>()),origin(origin),scaleVec({1,1,1})
 {
     recalculateOffset();
-    SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",hasColor?"yes":"no");
+    std::cout<<"Face: color enabled? "<<(hasColor?"yes":"no")<<newline;
     vertexArray=new VertexArray(getVertData(), size * 3,type);
     if(hasColor) vertexArray->addColor(getColorData(),size*3);
 }
@@ -122,7 +124,7 @@ Face::Face(const char *filePath, FILE_TYPE fileType,GLenum drawType)
             stl::stl_data data = stl::parse_stl(filePath);
 
             size = data.triangles.size()*3;//3 verts in a triangle
-            SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"vertex size %u",size);
+            std::cout<<"vertex size"<<size<<newline;
             //create arrays
             vertexData = new glm::vec3[size];
             hasNormal=true;
@@ -145,7 +147,7 @@ Face::Face(const char *filePath, FILE_TYPE fileType,GLenum drawType)
             drawMode=GL_TRIANGLES;
             recalculateOffset();
 
-            SDL_LogInfo(SDL_LOG_CATEGORY_SYSTEM,"Face: color enabled? %s",hasColor?"yes":"no");
+            std::cout<<"Face: color enabled? "<<(hasColor?"yes":"no")<<newline;
             vertexArray=new VertexArray(getVertData(), size * 3, drawType);
             vertexArray->addColor(getVertData(),size*3);
             vertexArray->addNormals(getNormalData(),size*3);
