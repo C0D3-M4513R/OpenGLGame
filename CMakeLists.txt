@@ -19,12 +19,19 @@ add_compile_definitions(GLEW_NO_GLU GLFW_INCLUDE_NONE)
 set(THREADS_PREFER_PTHREAD_FLAG ON)
 find_package(Threads REQUIRED)
 target_link_libraries(game Threads::Threads)
+
 pkg_check_modules(GL REQUIRED IMPORTED_TARGET glew)
 include_directories(${GL_INCLUDE_DIRS})
 target_link_libraries(game ${GL_STATIC_LIBRARIES})
+
 pkg_check_modules(GL REQUIRED IMPORTED_TARGET glfw3)
 include_directories(${GL_INCLUDE_DIRS})
 target_link_libraries(game ${GL_STATIC_LIBRARIES})
+
+ADD_SUBDIRECTORY(glfreetype)
+include_directories(glfreetype/include)
+target_link_libraries(game glfreetype)
+
 
 #copy resources during build
 #TODO: symlink would be better, but is not supported on windows

@@ -8,6 +8,7 @@ I currently have no idea, about, what this is Game is going to be.
 
 I do know these things:
 - [x] I want 3D support
+- [x] I want Text support
 - [x] Rotation in x,y and z
 - [ ] Movement should be allowed in all 3 Dimensions
 - [ ] maybe 5 depending on the Game?

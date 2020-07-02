@@ -7,6 +7,7 @@
 
 
 #include <GL/glew.h>
+#include <glfreetype/TextRenderer.hpp>
 #include <GLFW/glfw3.h>
 #include <cstdlib>
 #include <iostream>
@@ -271,26 +272,34 @@ namespace Renderer {
             glfwSwapBuffers(win);
         }
 
-        void nextFrame() {
-            Clear();
-            Render();
-            Present();
-        }
-
         /**
          * Animation loop
          */
         void loop() {
+            
+            glfreetype::font_data our_font;
+            our_font.init("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 25 /* size */);
 
             glm::vec3 rotate = {0.1f, 0.f, 0.f};
 
             // annimation loop
             while (!glfwWindowShouldClose(win)) {
+                Clear();
+
+
                 glfwPollEvents();
                 meshes[0]->rotate(rotate);
                 rotate += glm::vec3(0.f, 0.f, 0.01f);
+                Render();
 
-                nextFrame();
+                glPushMatrix();
+                glLoadIdentity();
+
+                glfreetype::print(our_font,0,resolution.second-27,"This is a TEST! äöüß");
+
+                glPopMatrix();
+
+                Present();
             }
         }
 

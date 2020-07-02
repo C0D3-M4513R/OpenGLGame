@@ -1,3 +1,6 @@
 [submodule "STLParser"]
 	path = STLParser
 	url = https://github.com/dillonhuff/stl_parser.git
+[submodule "glfreetype"]
+	path = glfreetype
+	url = https://github.com/C0D3-M4513R/glfreetype.git
