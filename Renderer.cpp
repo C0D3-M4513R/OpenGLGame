@@ -167,7 +167,7 @@ namespace Renderer {
 
             // Use double buffering.
             GLint doublebuffer=GL_FALSE;
-            glGetIntegerv(GLFW_DOUBLEBUFFER, &doublebuffer);
+            glGetIntegerv(GL_DOUBLEBUFFER, &doublebuffer);
             if (doublebuffer != GLFW_TRUE) {
                 std::cerr << "DoubleBuffering is NOT supported." << newline;
             }
@@ -245,7 +245,7 @@ namespace Renderer {
             color[2] = {1.f, 0.f, 0.0f};
             color[3] = {1.f, 1.f, 1.0f};
 
-            //Init objects
+//            //Init objects
             meshes.resize(2);
             meshes[0] = new Face("resources/cube.stl", FILE_TYPE::STL, GL_STATIC_DRAW);
             meshes[1] = new Face(vertices, n, color);
@@ -272,15 +272,43 @@ namespace Renderer {
             glfwSwapBuffers(win);
         }
 
+        void destruct() {
+            //Follow with undoing everything inn init
+            //destroy window
+            glfwDestroyWindow(win);
+            glfwTerminate();
+
+            for (Face *mesh : meshes) {
+                delete mesh;
+            }
+            delete cam;
+            delete shader;
+        }
+
         /**
          * Animation loop
          */
         void loop() {
-            
+
             glfreetype::font_data our_font;
             our_font.init("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 25 /* size */);
 
             glm::vec3 rotate = {0.1f, 0.f, 0.f};
+
+            glfwSetFramebufferSizeCallback(win,
+                                           [](GLFWwindow* window, int width, int height){
+#ifdef NDEBUG
+                                               if(width<=1 || height<=1){
+                                                   throw std::runtime_error("Either Width or Height is 0. This is NOT valid. EXITING!");
+                                               }
+#else
+                                               assert(width>1);
+                                                assert(height>1);
+#endif
+                                               glViewport(0,0,width,height);
+                                               resolution.first=width;
+                                               resolution.second=height;
+                                           });
 
             // annimation loop
             while (!glfwWindowShouldClose(win)) {
@@ -303,18 +331,6 @@ namespace Renderer {
             }
         }
 
-        void destruct() {
-            //Follow with undoing everything inn init
-            //destroy window
-            glfwDestroyWindow(win);
-            glfwTerminate();
-
-            for (Face *mesh : meshes) {
-                delete mesh;
-            }
-            delete cam;
-            delete shader;
-        }
     };
 
     bool run() {
