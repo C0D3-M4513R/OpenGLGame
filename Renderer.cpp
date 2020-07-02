@@ -4,6 +4,7 @@
 #include "Face.h"
 #include "HID/Keyboard.h"
 #include "Player.h"
+#include "HID/Window.h"
 
 
 #include <GL/glew.h>
@@ -295,28 +296,9 @@ namespace Renderer {
 
             glm::vec3 rotate = {0.1f, 0.f, 0.f};
 
-            glfwSetFramebufferSizeCallback(win,
-                                           [](GLFWwindow* window, int width, int height){
-#ifdef NDEBUG
-                                               if(width<=1 || height<=1){
-                                                   throw std::runtime_error("Either Width or Height is 0. This is NOT valid. EXITING!");
-                                               }
-#else
-                                               assert(width>1);
-                                                assert(height>1);
-#endif
-                                               glViewport(0,0,width,height);
-                                               resolution.first=width;
-                                               resolution.second=height;
-                                           });
+            glfwSetFramebufferSizeCallback(win,HID::framebufferSizeCallback);
 
-            glfwSetWindowMaximizeCallback(win,[](GLFWwindow* window, int maximized){
-                GLFWmonitor* primary = glfwGetPrimaryMonitor();
-                const GLFWvidmode* mode = glfwGetVideoMode(primary);
-                if(maximized==GLFW_TRUE){
-                    glfwSetWindowMonitor(window,primary,0,0,mode->width,mode->height,mode->refreshRate);
-                }
-            });
+            glfwSetWindowMaximizeCallback(win,HID::maximiseCallback);
 
             // annimation loop
             while (!glfwWindowShouldClose(win)) {
@@ -328,12 +310,7 @@ namespace Renderer {
                 rotate += glm::vec3(0.f, 0.f, 0.01f);
                 Render();
 
-                glPushMatrix();
-                glLoadIdentity();
-
                 glfreetype::print(our_font,0,resolution.second-27,"This is a TEST! äöüß");
-
-                glPopMatrix();
 
                 Present();
             }
@@ -361,15 +338,8 @@ namespace Renderer {
         return *cam;
     }
 
-    const std::pair<unsigned int, unsigned int> &getResolution() {
-        return resolution;
-    }
-
-    unsigned int getResolutionX() {
-        return resolution.first;
-    }
-
-    unsigned int getResolutionY() {
-        return resolution.second;
-    }
+    unsigned int getResolutionX() {return resolution.first;}
+    unsigned int getResolutionY() {return resolution.second;}
+    void setResolutionX(unsigned int x){resolution.first=x;};
+    void setResolutionY(unsigned int y){resolution.second=y;};
 }
