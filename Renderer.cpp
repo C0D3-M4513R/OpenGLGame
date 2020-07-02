@@ -28,7 +28,7 @@ namespace Renderer {
         std::vector<Face *> meshes;
 
 
-        void GLAPIENTRY glDebugOutput(
+        void glDebugOutput(
                 [[maybe_unused]] GLenum source,
                 [[maybe_unused]] GLenum type,
                 [[maybe_unused]] unsigned int id,
@@ -309,6 +309,14 @@ namespace Renderer {
                                                resolution.first=width;
                                                resolution.second=height;
                                            });
+
+            glfwSetWindowMaximizeCallback(win,[](GLFWwindow* window, int maximized){
+                GLFWmonitor* primary = glfwGetPrimaryMonitor();
+                const GLFWvidmode* mode = glfwGetVideoMode(primary);
+                if(maximized==GLFW_TRUE){
+                    glfwSetWindowMonitor(window,primary,0,0,mode->width,mode->height,mode->refreshRate);
+                }
+            });
 
             // annimation loop
             while (!glfwWindowShouldClose(win)) {

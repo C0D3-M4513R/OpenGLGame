@@ -1,5 +1,6 @@
 #include "Keyboard.h"
 #include "../Player.h"
+#include "../Renderer.h"
 #include <GLFW/glfw3.h>
 
 void HID::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
@@ -11,7 +12,13 @@ void HID::keyCallback(GLFWwindow* window, int key, int scancode, int action, int
         case GLFW_REPEAT:
             switch (key) {
                 case GLFW_KEY_ESCAPE:
-                    glfwSetWindowShouldClose(window, true);
+                    if(glfwGetWindowMonitor(window) != nullptr) {
+                        const GLFWvidmode* mode = glfwGetVideoMode(glfwGetWindowMonitor(window));
+                        //Note: The height and width 1 are imaginary. They just can't be <1. Else the Window resize fails.
+                        //Note: The width and height will be applied if I called glfwRestoreWindow.
+                        glfwSetWindowMonitor(window, nullptr,0,0,1,1,mode->refreshRate);
+                    }
+                    else glfwSetWindowShouldClose(window, true);
                     break;
                 case GLFW_KEY_W:
                     [[fallthrough]];
@@ -46,5 +53,4 @@ void HID::keyCallback(GLFWwindow* window, int key, int scancode, int action, int
         case GLFW_RELEASE:
             break;
     }
-
 }
