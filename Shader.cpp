@@ -132,7 +132,7 @@ void Shader::applyMVP(glm::mat4 model) const {
     glm::mat4 mvp = model;
     const float* mvpPointer = glm::value_ptr(mvp);
 
-#ifdef DEBUG
+#ifndef NDEBUG
     std::cout<<"MVP Matrix:"<<newline;
     for(unsigned int i = 0; i < 4; i++){
         const glm::vec4& vec = mvp[i];
