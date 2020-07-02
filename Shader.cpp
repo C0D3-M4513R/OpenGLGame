@@ -128,8 +128,7 @@ bool Shader::IsGood()
 
 void Shader::applyMVP(glm::mat4 model) const {
     //TODO::Projection Matrix
-//    glm::mat4 mvp = Renderer::getCamera()->view() * model;
-    glm::mat4 mvp = model;
+    glm::mat4 mvp = Renderer::getCamera().view() * model;
     const float* mvpPointer = glm::value_ptr(mvp);
 
 #ifndef NDEBUG

@@ -140,7 +140,7 @@ namespace Renderer {
          */
         bool setup() {
             // Load shader.
-            cam = new Camera({0, 0, 0}, {0, 0, 1});
+            cam = new Camera({0, 0, 1}, {0, 0, 0});
             std::cout<<"Good Cam\n";
             shader = new Shader("resources/Simple.vert", "resources/Simple.frag");
             if (!shader->IsGood()) { return false; }
