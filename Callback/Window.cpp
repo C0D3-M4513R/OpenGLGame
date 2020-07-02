@@ -8,14 +8,7 @@
 
 namespace Callback {
     void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
-#ifdef NDEBUG
-        if (width <= 1 || height <= 1) {
-            throw std::runtime_error("Either Width or Height is 0. This is NOT valid. EXITING!");
-        }
-#else
-        assert(width>1);
-        assert(height>1);
-#endif
+        std::cout<<"Resized Window. Telling OpenGL"<<newline;
         glViewport(0, 0, width, height);
         Renderer::setResolutionX(width);
         Renderer::setResolutionY(height);

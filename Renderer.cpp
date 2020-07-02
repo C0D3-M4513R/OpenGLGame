@@ -142,6 +142,7 @@ namespace Renderer {
             glfwWindowHint(GLFW_DECORATED, GLFW_TRUE);
             glfwWindowHint(GLFW_MAXIMIZED, GLFW_FALSE);
             glfwWindowHint(GLFW_FOCUSED, GLFW_TRUE);
+            glfwSetWindowSizeLimits(win,10,10,GLFW_DONT_CARE,GLFW_DONT_CARE);
 
             glfwMakeContextCurrent(win);
 
