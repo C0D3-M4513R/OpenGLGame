@@ -2,9 +2,9 @@
 #include "Camera.h"
 #include "Shader.h"
 #include "Face.h"
-#include "HID/Keyboard.h"
+#include "Callback/Keyboard.h"
 #include "Player.h"
-#include "HID/Window.h"
+#include "Callback/Window.h"
 
 
 #include <GL/glew.h>
@@ -146,7 +146,7 @@ namespace Renderer {
             glfwMakeContextCurrent(win);
 
             //Define callbacks:
-            glfwSetKeyCallback(win, HID::keyCallback);
+            glfwSetKeyCallback(win, Callback::keyCallback);
 
             // Initialize GLEW.
             glewExperimental = GL_TRUE;
@@ -229,8 +229,10 @@ namespace Renderer {
         bool setup() {
             // Load shader.
             cam = new Camera({0, 0, 0}, {0, 0, 1});
+            std::cout<<"Good Cam"<<newline;
             shader = new Shader("resources/Simple.vert", "resources/Simple.frag");
             if (!shader->IsGood()) { return false; }
+            std::cout<<"Good Shader"<<newline;
 
 
             //Those arrays should be deleted by Face!
@@ -296,9 +298,9 @@ namespace Renderer {
 
             glm::vec3 rotate = {0.1f, 0.f, 0.f};
 
-            glfwSetFramebufferSizeCallback(win,HID::framebufferSizeCallback);
+            glfwSetFramebufferSizeCallback(win,Callback::framebufferSizeCallback);
 
-            glfwSetWindowMaximizeCallback(win,HID::maximiseCallback);
+            glfwSetWindowMaximizeCallback(win,Callback::maximiseCallback);
 
             // annimation loop
             while (!glfwWindowShouldClose(win)) {

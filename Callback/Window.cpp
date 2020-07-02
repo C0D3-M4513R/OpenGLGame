@@ -1,10 +1,12 @@
 #include <GL/glew.h>
 #include <cassert>
 #include <stdexcept>
+#include <z3.h>
+#include <iostream>
 #include "Window.h"
 #include "../Renderer.h"
 
-namespace HID {
+namespace Callback {
     void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
 #ifdef NDEBUG
         if (width <= 1 || height <= 1) {

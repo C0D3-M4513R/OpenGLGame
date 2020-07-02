@@ -3,7 +3,7 @@
 
 #include <GLFW/glfw3.h>
 
-namespace HID {
+namespace Callback {
     void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
 };
 

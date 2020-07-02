@@ -3,7 +3,7 @@
 #include "../Renderer.h"
 #include <GLFW/glfw3.h>
 
-void HID::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void Callback::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
     switch (action) {
         default:
             [[fallthrough]];

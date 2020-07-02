@@ -4,7 +4,7 @@
 
 #include <GLFW/glfw3.h>
 
-namespace HID {
+namespace Callback {
     void framebufferSizeCallback(GLFWwindow*,int,int);
     void maximiseCallback(GLFWwindow*,int);
 };
