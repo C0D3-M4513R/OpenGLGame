@@ -44,7 +44,7 @@ namespace Renderer {
             }
             glfwSetErrorCallback(Callback::errorCallback);
 
-            std::cout << "Hello World!" << newline;
+            std::cout << "Hello World!\n";
 
 
             //Create a Window on a monitor
@@ -74,18 +74,15 @@ namespace Renderer {
             glGetIntegerv(GL_MAJOR_VERSION, &major);
             glGetIntegerv(GL_MINOR_VERSION, &minor);
             if (major < 3 || (major = 3 && minor < 3)) {
-                std::cerr << "Minimum Requirements not met! OpenGL version should be at least 3.3, but is " << major
-                          << "." << minor << newline;
-                std::cerr
-                        << "This might lead to the Program not starting, so don't bother posting an issue, unless this is resolved!"
-                        << newline;
+                std::cerr << "Minimum Requirements not met! OpenGL version should be at least 3.3, but is " << major<< "." << minor << "\n";
+                std::cerr<<"This might lead to the Program not starting, so don't bother posting an issue, unless this is resolved!\n";
             }
 
             // Use double buffering.
             GLint doublebuffer=GL_FALSE;
             glGetIntegerv(GL_DOUBLEBUFFER, &doublebuffer);
             if (doublebuffer != GLFW_TRUE) {
-                std::cerr << "DoubleBuffering is NOT supported." << newline;
+                std::cerr << "DoubleBuffering is NOT supported.\n";
             }
 
             // We request from OpenGL at least 8-bits per channel for the color buffer and depth buffer
@@ -118,7 +115,7 @@ namespace Renderer {
             //confirm
             int nrAttributes;
             glGetIntegerv(GL_MAX_VERTEX_ATTRIBS, &nrAttributes);
-            std::cout << "Maximum nr of vertex attributes supported:" << nrAttributes << newline;
+            std::cout << "Maximum nr of vertex attributes supported:" << nrAttributes << "\n";
 
             glEnable(GL_DEPTH_TEST);
             glDepthFunc(GL_LESS);
@@ -144,10 +141,10 @@ namespace Renderer {
         bool setup() {
             // Load shader.
             cam = new Camera({0, 0, 0}, {0, 0, 1});
-            std::cout<<"Good Cam"<<newline;
+            std::cout<<"Good Cam\n";
             shader = new Shader("resources/Simple.vert", "resources/Simple.frag");
             if (!shader->IsGood()) { return false; }
-            std::cout<<"Good Shader"<<newline;
+            std::cout<<"Good Shader\n";
 
 
             //Those arrays should be deleted by Face!

@@ -8,7 +8,7 @@
 
 namespace Callback {
     void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
-        std::cout<<"Resized Window. Telling OpenGL"<<newline;
+        std::cout<<"Resized Window. Telling OpenGL\n";
         glViewport(0, 0, width, height);
         Renderer::setResolutionX(width);
         Renderer::setResolutionY(height);

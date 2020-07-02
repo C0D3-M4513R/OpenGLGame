@@ -4,9 +4,6 @@
 #include <utility>
 #include "Shader.h"
 #include "Camera.h"
-
-constexpr char const * const newline = "\n";
-
 namespace Renderer{
     bool run();
     [[nodiscard]] const Shader& getShader();

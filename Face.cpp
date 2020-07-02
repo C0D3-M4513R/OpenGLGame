@@ -19,7 +19,7 @@ float* Face::getVertData() {
     return outData;
 }
 float* Face::getColorData() {
-    if(!hasColor) std::cerr<<"Color data was requested, but there is reportedly none. I'm gonna return all white, to prevent illegal memory-access. hasColor:"<<(hasColor?"true":"false")<<newline;
+    if(!hasColor) std::cerr<<"Color data was requested, but there is reportedly none. I'm gonna return all white, to prevent illegal memory-access. hasColor:"<<(hasColor?"true":"false")<<"\n";
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
     float* outData=new float[size*3];
     for (unsigned int i=0; i < size; i++) {
@@ -38,7 +38,7 @@ float* Face::getColorData() {
 }
 float* Face::getNormalData() {
     if(!hasNormal) {
-        std::cerr<<"Normal data was requested, but there is reportedly none. I'm gonna just return a nullptr, to prevent illegal memory-access. hasNormal:"<<(hasNormal?"true":"false")<<newline;
+        std::cerr<<"Normal data was requested, but there is reportedly none. I'm gonna just return a nullptr, to prevent illegal memory-access. hasNormal:"<<(hasNormal?"true":"false")<<"\n";
         return nullptr;
     }
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
@@ -54,11 +54,11 @@ float* Face::getNormalData() {
 
 
 void Face::move(const uint8_t direction,float amount) {
-    std::cout<<"Moving from "<<origin[direction]<<" by probably "<<amount<<" in direction "<<direction<<", where 0=x,1=y,2=z"<<newline;
+    std::cout<<"Moving from "<<origin[direction]<<" by probably "<<amount<<" in direction "<<direction<<", where 0=x,1=y,2=z\n";
     if (amount>0) amount = fminf(amount,offset[direction*2]-origin[direction]);
     else amount = fmaxf(amount,offset[direction*2+1]-origin[direction]);
     origin[direction]+=amount;
-    std::cout<<"Moved from "<<origin[direction]<<" by "<<amount<<" in direction "<<direction<<", where 0=x,1=y,2=z"<<newline;
+    std::cout<<"Moved from "<<origin[direction]<<" by "<<amount<<" in direction "<<direction<<", where 0=x,1=y,2=z\n";
 }
 
 
@@ -75,7 +75,7 @@ void Face::scale(glm::vec3 amount) {
 
 
 void Face::recalculateOffset() {
-    std::cout<<"Recalculating Offsets"<<newline;
+    std::cout<<"Recalculating Offsets\n";
     for(unsigned int i =0;i < 3;i++){
         float min=origin[i];
         float max=origin[i];
@@ -87,9 +87,9 @@ void Face::recalculateOffset() {
         offset[i*2]=max;
         offset[i*2+1]=min;
     }
-    std::cout<<"Offsets are: x:"<<offset[0]<<"-x:"<<offset[1]<<newline
-            <<"y:"<<offset[2]<<"-y: "<<offset[3]<<newline
-            <<"z:"<<offset[4]<<"-z: "<<offset[5]<<newline;
+    std::cout<<"Offsets are: x:"<<offset[0]<<"-x:"<<offset[1]<<"\n"
+            <<"y:"<<offset[2]<<"-y: "<<offset[3]<<"\n"
+            <<"z:"<<offset[4]<<"-z: "<<offset[5]<<"\n";
 }
 
 /**
@@ -108,7 +108,7 @@ hasColor(colorData!= nullptr), colorData(colorData),
 rotation(glm::identity<glm::mat4>()),origin(origin),scaleVec({1,1,1})
 {
     recalculateOffset();
-    std::cout<<"Face: color enabled? "<<(hasColor?"yes":"no")<<newline;
+    std::cout<<"Face: color enabled? "<<(hasColor?"yes":"no")<<"\n";
     vertexArray=new VertexArray(getVertData(), size * 3,type);
     if(hasColor) vertexArray->addColor(getColorData(),size*3);
 }
@@ -124,7 +124,7 @@ Face::Face(const char *filePath, FILE_TYPE fileType,GLenum drawType)
             stl::stl_data data = stl::parse_stl(filePath);
 
             size = data.triangles.size()*3;//3 verts in a triangle
-            std::cout<<"vertex size"<<size<<newline;
+            std::cout<<"vertex size"<<size<<"\n";
             //create arrays
             vertexData = new glm::vec3[size];
             hasNormal=true;
@@ -147,7 +147,7 @@ Face::Face(const char *filePath, FILE_TYPE fileType,GLenum drawType)
             drawMode=GL_TRIANGLES;
             recalculateOffset();
 
-            std::cout<<"Face: color enabled? "<<(hasColor?"yes":"no")<<newline;
+            std::cout<<"Face: color enabled? "<<(hasColor?"yes":"no")<<"\n";
             vertexArray=new VertexArray(getVertData(), size * 3, drawType);
             vertexArray->addColor(getVertData(),size*3);
             vertexArray->addNormals(getNormalData(),size*3);
