@@ -15,7 +15,7 @@ I do know these things:
 - [x] There should be different objects
 - [ ] There should be a way to color Objects in ANY way (using Texture maps)
 - [ ] There should be collision between Objects
-- [ ] There should be multiple Coordinate Systems (not just the OpenGL one)
+- [x] There should be multiple Coordinate Systems (not just the OpenGL one)
 
 ## License
 This Project is Licensed under the GNU GPL v3.0 Licence. For more Information look at the LICENSE file.
