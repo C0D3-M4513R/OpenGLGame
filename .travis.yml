@@ -10,7 +10,7 @@ addons:
       - gcc
       - g++
       - libglew-dev
-      - lebglfw3-dev
+      - libglfw3-dev
       - libglm-dev
       - cmake
 before_install:
