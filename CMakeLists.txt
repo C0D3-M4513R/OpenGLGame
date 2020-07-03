@@ -26,6 +26,8 @@ pkg_check_modules(GL REQUIRED IMPORTED_TARGET glfw3)
 include_directories(${GL_INCLUDE_DIRS})
 target_link_libraries(game ${GL_STATIC_LIBRARIES})
 
+add_definitions(GLM_ENABLE_EXPERIMENTAL)
+
 #copy resources during build
 #TODO: symlink would be better, but is not supported on windows
 set (source "${CMAKE_SOURCE_DIR}/resources")
