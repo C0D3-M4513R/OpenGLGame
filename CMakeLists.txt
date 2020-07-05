@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 3.16)
+cmake_minimum_required(VERSION 3.10)
 project(game)
 
 if(NOT CMAKE_BUILD_TYPE)
@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g -Wall -Wextra -D_GLIBCXX_DEBUG")
 
-add_executable(game main.cpp Renderer.cpp VertexArray.cpp Shader.cpp Face.cpp Camera.cpp STLParser/parse_stl.cpp Callback/Keyboard.cpp Player.cpp Callback/Window.cpp Callback/Debug.cpp)
+add_executable(game main.cpp Renderer.cpp VertexArray.cpp Shader.cpp Face.cpp Camera.cpp STLParser/parse_stl.cpp Callback/Keyboard.cpp Player.cpp Callback/Window.cpp Callback/Debug.cpp Scene.cpp)
 #Add Libraries
 find_package(PkgConfig REQUIRED)
 

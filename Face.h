@@ -16,7 +16,7 @@ class Face{
         //TODO: scaling, apply move/rotate/scale
         Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modePar=defaultMode,GLenum type = GL_STATIC_DRAW, glm::vec3 origin = {0, 0, 0});
         Face(glm::vec3* vertexData, unsigned int size,glm::vec3* colorData, GLenum modePar=defaultMode,GLenum type = GL_STATIC_DRAW, glm::vec3 origin = {0, 0, 0});
-        Face(const char* filePath,FILE_TYPE=STL,GLenum drawType = GL_STATIC_DRAW);
+        Face(const char* filePath,FILE_TYPE=STL,GLenum drawType = GL_STATIC_DRAW, glm::vec3 origin = {0, 0, 0});
         ~Face();
 
         void moveX(float amount) {move(0,amount);};
@@ -27,15 +27,13 @@ class Face{
         void rotate(glm::vec3 amount);
         void scale(glm::vec3 amount);
 
-        void Draw();
+        void Draw() const;
+        inline static void DrawAll() {for(Face* face: faces) if(face->draw) face->Draw();};
+        void setDraw(bool drawPar=true){draw=drawPar;}
         GLenum drawMode;
     private:
-        //you shouldn't need those methods
-
         //all directions accessible from public methods
         void move(uint8_t direction,float amount);
-
-
 
         //why manually request a Offset recalculation
         void recalculateOffset();
@@ -52,7 +50,12 @@ class Face{
         glm::vec3* normalData;
         bool hasColor;
         glm::vec3* colorData;
+protected:
+        [[maybe_unused]] virtual void positionUpdateCallback(){};
 
+        inline static std::vector<Face*> faces = std::vector<Face*>();
+        const unsigned long id=faces.size();
+        bool draw;
         //Max value in a direction
         //Direction is in the following order x,-x,y,-y,z,-z
         float offset[6];

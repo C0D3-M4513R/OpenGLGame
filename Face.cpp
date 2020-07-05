@@ -1,11 +1,11 @@
 #include <string>
 #include <glm/gtx/euler_angles.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
+#include <glm/ext/matrix_transform.hpp>
 #include <iostream>
 #include "Face.h"
 #include "Renderer.h"
 #include "STLParser/parse_stl.h"
+#include "Scene.h"
 
 float* Face::getVertData() {
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)
@@ -59,6 +59,7 @@ void Face::move(const uint8_t direction,float amount) {
     else amount = fmaxf(amount,offset[direction*2+1]-origin[direction]);
     origin[direction]+=amount;
     std::cout<<"Moved from "<<origin[direction]<<" by "<<amount<<" in direction "<<direction<<", where 0=x,1=y,2=z\n";
+    positionUpdateCallback();
 }
 
 
@@ -101,12 +102,14 @@ void Face::recalculateOffset() {
 
 
 Face::Face(glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, GLenum modeParam,GLenum type,glm::vec3 origin)
-:drawMode(modeParam),
+:drawMode(modeParam),draw(true),
 size(size),vertexData(vertexData),
 hasNormal(false), normalData(nullptr),
 hasColor(colorData!= nullptr), colorData(colorData),
 rotation(glm::identity<glm::mat4>()),origin(origin),scaleVec({1,1,1})
 {
+    faces.resize(id+1);
+    faces[id]=this;
     recalculateOffset();
     std::cout<<"Face: color enabled? "<<(hasColor?"yes":"no")<<"\n";
     vertexArray=new VertexArray(getVertData(), size * 3,type);
@@ -117,8 +120,10 @@ Face::Face(glm::vec3* vertexData, unsigned int vertexSize, GLenum modeParam,GLen
 :Face(vertexData,vertexSize, nullptr,modeParam,type,origin)
 {}
 
-Face::Face(const char *filePath, FILE_TYPE fileType,GLenum drawType)
-:rotation(glm::identity<glm::mat4>()),origin({0,0,0}),scaleVec({1,1,1}) {
+Face::Face(const char *filePath, FILE_TYPE fileType,GLenum drawType,glm::vec3 origin)
+:draw(true),rotation(glm::identity<glm::mat4>()),origin(origin),scaleVec({1,1,1}) {
+    faces.resize(id+1);
+    faces[id]=this;
     switch (fileType) {
         case STL:
             stl::stl_data data = stl::parse_stl(filePath);
@@ -163,7 +168,7 @@ Face::~Face(){
 }
 
 
-void Face::Draw() {
-    Renderer::getShader().applyMVP(glm::translate(glm::identity<glm::mat4>() ,origin)*rotation);
+void Face::Draw() const {
+    Scene::getScene().getShader().applyMVP(glm::translate(glm::identity<glm::mat4>() ,origin)*rotation);
     vertexArray->Draw(drawMode);
 }

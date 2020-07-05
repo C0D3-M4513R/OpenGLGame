@@ -3,8 +3,10 @@
 #include <sstream>
 #include "Shader.h"
 #include "Renderer.h"
+#include "Player.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
+#include <GL/glew.h>
 
 
 GLuint Shader::LoadAndCompileShaderFromFile(const char* filePath, GLuint shaderType)
@@ -130,8 +132,8 @@ bool Shader::IsGood()
 void Shader::applyMVP(glm::mat4 model) const {
     //TODO::Projection Matrix
     glm::mat4 p = glm::perspective(glm::radians(90.f),((float)Renderer::getResolutionX()/(float)Renderer::getResolutionY()),.1f,2.f);
-    glm::mat4 v = Renderer::getCamera().view();
-    glm::mat4 mvp = p*v*model;
+    glm::mat4 v = Player::getPlayer()->getCamera().view();
+    glm::mat4 mvp = v*model;
     const float* mvpPointer = glm::value_ptr(mvp);
 
 #ifndef NDEBUG

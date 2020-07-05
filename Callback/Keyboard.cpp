@@ -34,18 +34,18 @@ void Callback::keyCallback(GLFWwindow* window, int key, int scancode, int action
                     [[fallthrough]];
                 case GLFW_KEY_LEFT:
 #if defined(__MINGW32__) || defined(__MINGW64__)
-                    Player::getPlayer()->moveX(0.1f);
-#else
                     Player::getPlayer()->moveX(-0.1f);
+#else
+                    Player::getPlayer()->moveX(0.1f);
 #endif
                     break;
                 case GLFW_KEY_D:
                     [[fallthrough]];
                 case GLFW_KEY_RIGHT:
 #if defined(__MINGW32__) || defined(__MINGW64__)
-                    Player::getPlayer()->moveX(-0.1f);
-#else
                     Player::getPlayer()->moveX(0.1f);
+#else
+                    Player::getPlayer()->moveX(-0.1f);
 #endif
                     break;
             }
