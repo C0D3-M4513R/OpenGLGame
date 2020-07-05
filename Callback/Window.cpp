@@ -4,7 +4,7 @@
 #include <z3.h>
 #include <iostream>
 #include "Window.h"
-#include "../Renderer.h"
+#include "../World/Renderer.h"
 
 namespace Callback {
     void framebufferSizeCallback(GLFWwindow *window, int width, int height) {

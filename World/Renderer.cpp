@@ -1,6 +1,6 @@
 #include "Renderer.h"
-#include "Callback/Keyboard.h"
-#include "Callback/Debug.h"
+#include "../Callback/Keyboard.h"
+#include "../Callback/Debug.h"
 #include "Scene.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>

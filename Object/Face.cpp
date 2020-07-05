@@ -3,9 +3,9 @@
 #include <glm/ext/matrix_transform.hpp>
 #include <iostream>
 #include "Face.h"
-#include "Renderer.h"
-#include "STLParser/parse_stl.h"
-#include "Scene.h"
+#include "../World/Renderer.h"
+#include "../STLParser/parse_stl.h"
+#include "../World/Scene.h"
 
 float* Face::getVertData() {
     //vertexSize of the array is vertexSize*3, because each vertexSize object holds 3 Values(x,y,z)

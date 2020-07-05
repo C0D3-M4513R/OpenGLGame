@@ -1,6 +1,6 @@
 #include "VertexArray.h"
-#include "Renderer.h"
-#include "Scene.h"
+#include "../World/Renderer.h"
+#include "../World/Scene.h"
 
 VertexArray::VertexArray(const float* vertPositions, unsigned int vertPositionsCount ,GLenum type)
 :indecies(vertPositionsCount/3),type(type)

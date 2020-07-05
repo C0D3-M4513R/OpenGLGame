@@ -1,6 +1,6 @@
 #include "Keyboard.h"
-#include "../Player.h"
-#include "../Renderer.h"
+#include "../Object/Player.h"
+#include "../World/Renderer.h"
 #include <GLFW/glfw3.h>
 
 void Callback::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {

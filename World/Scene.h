@@ -3,9 +3,9 @@
 #define GAME_SCENE_H
 
 #include <GLFW/glfw3.h>
-#include "Shader.h"
-#include "Camera.h"
-#include "Player.h"
+#include "../OpenGL/Shader.h"
+#include "../Object/Camera.h"
+#include "../Object/Player.h"
 
 class Scene{
     public:

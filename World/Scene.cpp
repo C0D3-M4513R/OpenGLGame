@@ -1,12 +1,12 @@
 #include <iostream>
 #include <GLFW/glfw3.h>
-#include "Player.h"
-#include "Shader.h"
-#include "Camera.h"
+#include "../Object/Player.h"
+#include "../OpenGL/Shader.h"
+#include "../Object/Camera.h"
 #include "Renderer.h"
 #include "Scene.h"
 #include <glfreetype/TextRenderer.hpp>
-#include "Callback/Window.h"
+#include "../Callback/Window.h"
 
 void Scene::Activate(){
     if(activeScene!=nullptr){

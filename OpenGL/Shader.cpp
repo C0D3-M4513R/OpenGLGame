@@ -2,8 +2,8 @@
 #include <iostream>
 #include <sstream>
 #include "Shader.h"
-#include "Renderer.h"
-#include "Player.h"
+#include "../World/Renderer.h"
+#include "../Object/Player.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <GL/glew.h>

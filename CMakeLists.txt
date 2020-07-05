@@ -10,7 +10,7 @@ set(CMAKE_CXX_STANDARD 20)
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g -Wall -Wextra -D_GLIBCXX_DEBUG")
 
-add_executable(game main.cpp Renderer.cpp VertexArray.cpp Shader.cpp Face.cpp Camera.cpp STLParser/parse_stl.cpp Callback/Keyboard.cpp Player.cpp Callback/Window.cpp Callback/Debug.cpp Scene.cpp)
+add_executable(game main.cpp World/Renderer.cpp OpenGL/VertexArray.cpp OpenGL/Shader.cpp Object/Face.cpp Object/Camera.cpp STLParser/parse_stl.cpp Callback/Keyboard.cpp Object/Player.cpp Callback/Window.cpp Callback/Debug.cpp World/Scene.cpp)
 #Add Libraries
 find_package(PkgConfig REQUIRED)
 

@@ -5,7 +5,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtx/euler_angles.hpp>
 #include <glm/detail/qualifier.hpp>
-#include "VertexArray.h"
+#include "../OpenGL/VertexArray.h"
 enum FILE_TYPE{
     STL
 };

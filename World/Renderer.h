@@ -2,8 +2,8 @@
 #define GAME_RENDERER_H
 
 #include <utility>
-#include "Shader.h"
-#include "Camera.h"
+#include "../OpenGL/Shader.h"
+#include "../Object/Camera.h"
 namespace Renderer{
     bool run();
     unsigned int getResolutionX();
