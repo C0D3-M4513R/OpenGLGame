@@ -10,7 +10,7 @@ I do know these things:
 - [x] I want 3D support
 - [x] I want Text support
 - [x] Rotation in x,y and z
-- [ ] Movement should be allowed in all 3 Dimensions
+- [x] Movement should be allowed in all 3 Dimensions
 - [ ] maybe 5 depending on the Game?
 - [x] There should be different objects
 - [ ] There should be a way to color Objects in ANY way (using Texture maps)
