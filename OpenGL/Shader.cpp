@@ -4,6 +4,7 @@
 #include "Shader.h"
 #include "../World/Renderer.h"
 #include "../Object/Player.h"
+#include "../Utility.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 #include <GL/glew.h>
@@ -11,19 +12,12 @@
 
 GLuint Shader::LoadAndCompileShaderFromFile(const char* filePath, GLuint shaderType)
 {
-    // Open the file, but freak out if not valid.
-    std::ifstream file(filePath);
-    if(!file.good())
-    {
-        std::cout << "Couldn't open shader file for loading: " << filePath << std::endl;
-        return GL_NONE;
-    }
 
-    // Read the file contents into a char buffer.
-    std::stringstream buffer;
-    buffer << file.rdbuf();
-    std::string fileContentsStr = buffer.str();
-    const char* fileContents = fileContentsStr.c_str();
+    char* fileContents;
+    fileContents=Utility::readFile(filePath,fileContents);
+#ifndef NDEBUG
+    std::cout<<fileContents<<"\n";
+#endif
 
     // Create shader, load file contents into it, and compile it.
     GLuint shader = glCreateShader(shaderType);
@@ -66,7 +60,7 @@ Shader::Shader(const char* vertShaderPath, const char* fragShaderPath)
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         error = true;
-        return;
+        abort();
     }
 
     // Assemble shader program.
@@ -84,7 +78,7 @@ Shader::Shader(const char* vertShaderPath, const char* fragShaderPath)
         glDeleteShader(vertexShader);
         glDeleteShader(fragmentShader);
         error = true;
-        return;
+        abort();
     }
 
     // Detach shaders after a successful link.
