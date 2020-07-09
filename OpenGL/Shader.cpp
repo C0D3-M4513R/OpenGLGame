@@ -133,7 +133,7 @@ void Shader::applyMVP(glm::mat4 model) const {
     //TODO::Projection Matrix
     glm::mat4 p = glm::perspective(glm::radians(90.f),((float)Renderer::getResolutionX()/(float)Renderer::getResolutionY()),.1f,2.f);
     glm::mat4 v = Player::getPlayer()->getCamera().view();
-    glm::mat4 mvp = v*model;
+    glm::mat4 mvp = p*v*model;
     const float* mvpPointer = glm::value_ptr(mvp);
 
 #ifndef NDEBUG

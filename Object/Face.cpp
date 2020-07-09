@@ -25,7 +25,7 @@ float* Face::getColorData() {
     for (unsigned int i=0; i < size; i++) {
         if(hasColor) {
             glm::vec3 src = colorData[i];
-            outData[i * 3] = src[0];
+            outData[i * 3 + 0] = src[0];
             outData[i * 3 + 1] = src[1];
             outData[i * 3 + 2] = src[2];
         } else{
@@ -102,10 +102,10 @@ void Face::recalculateOffset() {
 
 
 Face::Face(glm::vec3* vertexData, unsigned int size,glm::vec3 *colorData, GLenum modeParam,GLenum type,glm::vec3 origin)
-:drawMode(modeParam),draw(true),
+:drawMode(modeParam),
 size(size),vertexData(vertexData),
 hasNormal(false), normalData(nullptr),
-hasColor(colorData!= nullptr), colorData(colorData),
+hasColor(colorData!= nullptr), colorData(colorData),draw(true),
 rotation(glm::identity<glm::mat4>()),origin(origin),scaleVec({1,1,1})
 {
     faces.resize(id+1);

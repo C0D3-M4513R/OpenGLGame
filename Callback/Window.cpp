@@ -7,7 +7,7 @@
 #include "../World/Renderer.h"
 
 namespace Callback {
-    void framebufferSizeCallback(GLFWwindow *window, int width, int height) {
+    void framebufferSizeCallback([[maybe_unused]]GLFWwindow *window, [[maybe_unused]]int width, [[maybe_unused]]int height) {
         std::cout<<"Resized Window. Telling OpenGL\n";
         glViewport(0, 0, width, height);
         Renderer::setResolutionX(width);

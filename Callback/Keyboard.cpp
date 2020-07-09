@@ -3,7 +3,7 @@
 #include "../World/Renderer.h"
 #include <GLFW/glfw3.h>
 
-void Callback::keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods) {
+void Callback::keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unused]]int key, [[maybe_unused]] int scancode, [[maybe_unused]]int action, [[maybe_unused]] int mods) {
     switch (action) {
         default:
             [[fallthrough]];
