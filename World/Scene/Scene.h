@@ -7,6 +7,7 @@
 #include "../../Object/Camera.h"
 #include "../../Object/Player.h"
 #include <glfreetype/TextRenderer.hpp>
+#include <queue>
 
 class Scene{
     public:
@@ -19,8 +20,8 @@ class Scene{
 
         inline static bool terminate = false;
     protected:
-        static Scene* getActiveScene() {return activeScene;}
-        bool isActiveScene() {return this==activeScene;}
+        static Scene* getActiveScene() {return activeScene.front();}
+        bool isActiveScene() {return activeScene.front()==this;}
 
         GLFWwindow* win;
 
@@ -28,8 +29,6 @@ class Scene{
         Player* player;
 
         std::vector<Face*> meshes;
-
-        glfreetype::font_data our_font;
 
         virtual void setup();
         virtual void loop();
@@ -40,9 +39,12 @@ class Scene{
 
 
     private:
-        inline static Scene* activeScene = nullptr;
+        inline static std::queue<Scene*> activeScene;
 
         void Clear();
         void Present();
+
+        //Used with debug implementation
+        glfreetype::font_data our_font;
 };
 #endif //GAME_SCENE_H

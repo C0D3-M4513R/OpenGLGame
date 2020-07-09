@@ -10,10 +10,7 @@
 #include "../../Callback/Keyboard.h"
 
 void Scene::Activate(){
-    if(activeScene!=nullptr){
-        throw std::runtime_error("There is still a Scene active! Not Activating this one, as it may lead to funny results.");
-    }
-    activeScene=this;
+    activeScene.push(this);
     setup();
     glfwSetWindowShouldClose(win,false);
     // annimation loop
@@ -25,11 +22,11 @@ void Scene::Activate(){
 
         Present();
     }
-    activeScene=nullptr;
+    activeScene.pop();
     delete this;
 }
 Scene const& Scene::getScene(){
-    return *activeScene;
+    return *activeScene.front();
 }
 /**
 * This should prepare everything, for displaying stuff
