@@ -1,7 +1,6 @@
 #include "Renderer.h"
-#include "../Callback/Keyboard.h"
 #include "../Callback/Debug.h"
-#include "Scene.h"
+#include "Scene/Scene.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -44,9 +43,6 @@ namespace Renderer {
             glfwSetWindowSizeLimits(win,10,10,GLFW_DONT_CARE,GLFW_DONT_CARE);
 
             glfwMakeContextCurrent(win);
-
-            //Define callbacks:
-            glfwSetKeyCallback(win, Callback::keyCallback);
 
             // Initialize GLEW.
             glewExperimental = GL_TRUE;
