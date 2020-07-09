@@ -18,9 +18,9 @@ char * Utility::readFile(const char* path,char* out){
     // Read the file contents into a char buffer.
     std::stringstream buffer;buffer << file.rdbuf();
     std::string fileContentsStr = buffer.str();
-#ifndef NDEBUG
-    std::cout<<fileContentsStr.c_str()<<"\n";
-#endif
+//#ifndef NDEBUG
+//    std::cout<<fileContentsStr.c_str()<<"\n";
+//#endif
     out = new char[fileContentsStr.size()];
     strcpy(out,fileContentsStr.c_str());
     return out;

@@ -1,6 +1,7 @@
 #include "Renderer.h"
 #include "../Callback/Debug.h"
 #include "Scene/Scene.h"
+#include "Scene/StartScene.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -112,6 +113,7 @@ namespace Renderer {
                 glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
             }
 
+            (new StartScene(win))->Activate();
             (new Scene(win))->Activate();
 
 
