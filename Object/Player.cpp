@@ -8,7 +8,10 @@ Player::Player(glm::vec3* vertexData, unsigned int vertexSize,glm::vec3 origin,g
 
 Player::Player(glm::vec3* vertexData, unsigned int size,glm::vec3* colorData,glm::vec3 origin,glm::vec3 camOffset, GLenum modePar,GLenum type)
 :Face(vertexData,size,colorData,modePar,type,origin),camOffset(camOffset){
-
+    instance = this;
+    draw=false;
+    cam = new Camera(origin+camOffset+glm::vec3(0, 0, 1), origin+camOffset);
+    positionUpdateCallback();
 };
 Player::Player(const char* filePath,FILE_TYPE type,GLenum drawType,glm::vec3 origin,glm::vec3 camOffset)
 :Face(filePath,type,drawType,origin),camOffset(camOffset){
@@ -19,7 +22,7 @@ Player::Player(const char* filePath,FILE_TYPE type,GLenum drawType,glm::vec3 ori
 };
 Player::Player():Face(nullptr,0){
     instance = this;
-    setDraw(false);
+    draw=false;
     cam = new Camera({0, 0, 1}, origin);
 }
 void Player::setActivePlayer(){

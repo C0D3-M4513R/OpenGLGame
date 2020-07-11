@@ -31,7 +31,7 @@ void LicenseScene::loop(){
                               Renderer::getResolutionY() - (float) Renderer::getResolutionY() / 3 - i * 70, arr[i]);
             glColor3ub(0xff,0xff,0xff);
         }
-    } else if(selected>=0&&selected<n) {
+    } else if(selected>=0&&selected<(int)n) {
         //Get License text
         char* license;
         license=Utility::readFile(((std::string)"resources/Licences/").append(arr[selected]).append(".txt").c_str(),license);
