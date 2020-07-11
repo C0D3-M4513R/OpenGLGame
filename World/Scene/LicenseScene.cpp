@@ -64,6 +64,7 @@ void LicenseScene::keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unuse
 #endif
                     if(selected!=-1) {
                         selected=-1;
+                        scroll=0;
                         break;
                     }
 
@@ -106,6 +107,6 @@ void LicenseScene::keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unuse
     }
 }
 void LicenseScene::scrollCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unused]]double x, [[maybe_unused]]double y){
-    if(y==-1||scroll>5)scroll-=y*50;
+    if((y==-1||scroll>5)&&selected!=-1)scroll-=y*50;
     std::cout<<y<<"\n";
 }
