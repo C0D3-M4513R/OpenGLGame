@@ -113,8 +113,8 @@ namespace Renderer {
                 glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
             }
 
-            (new StartScene(win))->Activate();
-            (new Scene(win))->Activate();
+            (new StartScene())->Activate();
+            Scene::run(win);
 
 
             return true;

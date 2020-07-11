@@ -4,7 +4,7 @@
 
 class StartScene:public Scene {
 public:
-    StartScene(GLFWwindow* win):Scene(win){};
+    StartScene():Scene(){};
 protected:
     void setup() override;
     void loop() override;
@@ -14,7 +14,6 @@ protected:
     void down() override;
     void left() override{};
     void right() override{};
-    void exit() override;
     void enter() override;
 
 private:

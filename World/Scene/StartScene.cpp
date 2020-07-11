@@ -27,8 +27,9 @@ void StartScene::loop(){
         default:
             [[fallthrough]];
         case 0:
-            //terminate this instance
-            glfwSetWindowShouldClose(win, true);
+            //Switch to the game
+            (new Scene())->Activate();
+            selected=-1;//Prevent an accidental loop from happening
             break;
         case 1:
             //TODO: Replace with actual options!
@@ -44,7 +45,8 @@ void StartScene::loop(){
             }
         case 3:
             {
-                (new LicenseScene(win))->Activate();
+                (new LicenseScene())->Activate();
+                selected=-1;//Prevent an accidental loop from happening
                 break;
             }
         case 4:
@@ -55,15 +57,6 @@ void StartScene::loop(){
     glColor3ub(0xff,0xff,0xff);
 }
 
-//Keyboard overrides
-void StartScene::exit(){
-    if(selected!=-1) {
-        selected=-1;
-        return;
-    }
-    if(glfwGetWindowMonitor(win) == nullptr) terminate = true;//Totally exit, if asked
-    Scene::exit();
-}
 void StartScene::up(){
     if(active>0&&selected==-1)active--;
 #ifndef NDEBUG

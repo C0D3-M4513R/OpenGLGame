@@ -9,7 +9,7 @@
 
 class LicenseScene: public StartScene {
 public:
-    LicenseScene(GLFWwindow* win):StartScene(win){};
+    LicenseScene():StartScene(){};
 
     void up() override;
     void down() override;

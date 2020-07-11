@@ -1,42 +1,64 @@
+#include "Scene.h"
 #include <iostream>
 #include <GLFW/glfw3.h>
 #include "../../Object/Player.h"
 #include "../../OpenGL/Shader.h"
-#include "../../Object/Camera.h"
 #include "../Renderer.h"
-#include "Scene.h"
 #include <glfreetype/TextRenderer.hpp>
 #include "../../Callback/Window.h"
 #include "../../Callback/Keyboard.h"
 
 void Scene::Activate(){
     activeScene.push(this);//set this as the now active scene
-    bool terminateOld = terminate; //save state for later!
+}
+void Scene::run(GLFWwindow* win){
+    Scene::win=win;
+
+    auto exitHandler = [](){
+        while (!activeScene.empty()){
+            std::cerr<<"This should only print once on exiting!\n";
+            delete activeScene.top();
+            activeScene.pop();
+        }
+    };
+    atexit(exitHandler);
+    at_quick_exit(exitHandler);
 
     //Define callbacks:
     glfwSetKeyCallback(win,Callback::keyCallback);
     glfwSetFramebufferSizeCallback(win,Callback::framebufferSizeCallback);
     glfwSetWindowMaximizeCallback(win,Callback::maximiseCallback);
 
-    if(!terminate) setup();
-    glfwSetWindowShouldClose(win,false);
-    // annimation loop
-    while (!(glfwWindowShouldClose(win)||terminate)) {
+    unsigned int size = activeScene.size();
+    if(size==0) throw std::runtime_error("No Scene to display!");
+    activeScene.top()->setup();
+    while (!terminate){
+        Scene* scene = activeScene.top();
+        if(size<activeScene.size()){
+            scene->setup();
+            size=activeScene.size();
+        } else if (size>activeScene.size()){
+            size=activeScene.size();
+        }
+
         Clear();
-
         glfwPollEvents();
-        loop();
-
+        scene->loop();
         Present();
+
+        if(glfwWindowShouldClose(win)){
+            delete scene;
+            activeScene.pop();
+            glfwSetWindowShouldClose(win,false);
+        }
     }
-    activeScene.pop();
-    if(!terminateOld) delete this;
+    exitHandler();
 }
 Scene& Scene::getScene(){
 #ifndef NDEBUG
     if(activeScene.empty()) std::cerr<<"No more Scenes in queue! This will in a function call on NULLPTR. That may or may not be fatal!"<<std::endl;
 #endif
-    return *activeScene.front();
+    return *activeScene.top();
 }
 /**
 * This should prepare everything, for displaying stuff
@@ -89,6 +111,7 @@ void Scene::loop() {
 }
 Scene::~Scene(){
     delete shader;
+    delete player;
 }
 
 const Shader& Scene::getShader() const {

@@ -4,16 +4,16 @@
 
 #include <GLFW/glfw3.h>
 #include "../../OpenGL/Shader.h"
-#include "../../Object/Camera.h"
 #include "../../Object/Player.h"
 #include <glfreetype/TextRenderer.hpp>
-#include <queue>
+#include <stack>
 
 class Scene{
     public:
         virtual ~Scene();
-        Scene(GLFWwindow* window):win(window),player(nullptr){};
+        Scene():player(nullptr){};
         void Activate();
+        static void run(GLFWwindow* win);
 
         [[nodiscard]] const Shader& getShader()const;
         [[nodiscard]] static Scene& getScene();
@@ -28,12 +28,12 @@ class Scene{
         virtual void exit();
         inline virtual void enter() {};
     protected:
-        static Scene* getActiveScene() {return activeScene.front();}
-        bool isActiveScene() {return activeScene.front()==this;}
+        static Scene* getActiveScene() {return activeScene.top();}
+        bool isActiveScene() {return activeScene.top()==this;}
 
-        GLFWwindow* win;
+        inline static GLFWwindow* win = nullptr;
 
-        Shader *shader;
+        Shader* shader;
         Player* player;
 
         std::vector<Face*> meshes;
@@ -43,10 +43,10 @@ class Scene{
 
         virtual void Render();
     private:
-        inline static std::queue<Scene*> activeScene;
+        inline static std::stack<Scene*> activeScene;
 
-        void Clear();
-        void Present();
+        static void  Clear();
+        static void Present();
 
         //Used with debug implementation
         glfreetype::font_data our_font;
