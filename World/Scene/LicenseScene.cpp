@@ -80,6 +80,7 @@ void LicenseScene::keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unuse
                     [[fallthrough]];
                 case GLFW_KEY_UP:
                     if(active>0&&selected==-1)active--;
+                    else if(scroll>5&&selected!=-1) scroll-=50;
 #ifndef NDEBUG
                     std::cout<<"UP active="<<active<<".\n";
 #endif
@@ -88,6 +89,7 @@ void LicenseScene::keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unuse
                     [[fallthrough]];
                 case GLFW_KEY_DOWN:
                     if(active<n-1&&selected==-1)active++;
+                    else if(selected!=-1) scroll+=50;
 #ifndef NDEBUG
                     std::cout<<"DOWN active="<<active<<".\n";
 #endif
