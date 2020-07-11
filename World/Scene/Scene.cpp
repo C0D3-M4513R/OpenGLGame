@@ -11,7 +11,8 @@
 
 void Scene::Activate(){
     activeScene.push(this);
-    setup();
+    bool terminateOld = terminate;
+    if(!terminate) setup();
     glfwSetWindowShouldClose(win,false);
     // annimation loop
     while (!(glfwWindowShouldClose(win)||terminate)) {
@@ -23,7 +24,7 @@ void Scene::Activate(){
         Present();
     }
     activeScene.pop();
-    delete this;
+    if(!terminateOld) delete this;
 }
 Scene const& Scene::getScene(){
     return *activeScene.front();
@@ -46,7 +47,6 @@ void Scene::setup() {
 
     player = new Player("resources/cube.stl", FILE_TYPE::STL, GL_STATIC_DRAW);
     player->moveZ(-0.6f);
-    player->setActivePlayer();
 
     //Define callbacks:
     glfwSetKeyCallback(win,keyCallback);
