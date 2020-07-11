@@ -10,11 +10,15 @@
 class LicenseScene: public StartScene {
 public:
     LicenseScene(GLFWwindow* win):StartScene(win){};
+
+    void up() override;
+    void down() override;
+    void exit() override;
+    void enter() override;
 protected:
     void setup() override;
     void loop() override;
 
-    static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
     static void scrollCallback(GLFWwindow* window, double x, double y);
 private:
     inline static constexpr unsigned const int n = 4;

@@ -12,13 +12,21 @@
 class Scene{
     public:
         virtual ~Scene();
-        Scene(GLFWwindow* window):win(window){};
+        Scene(GLFWwindow* window):win(window),player(nullptr){};
         void Activate();
 
         [[nodiscard]] const Shader& getShader()const;
-        [[nodiscard]] static Scene const& getScene();
+        [[nodiscard]] static Scene& getScene();
 
         inline static bool terminate = false;
+
+        //keyboard callbacks
+        virtual void up();
+        virtual void down();
+        virtual void left();
+        virtual void right();
+        virtual void exit();
+        inline virtual void enter() {};
     protected:
         static Scene* getActiveScene() {return activeScene.front();}
         bool isActiveScene() {return activeScene.front()==this;}
@@ -33,11 +41,7 @@ class Scene{
         virtual void setup();
         virtual void loop();
 
-        static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
-
         virtual void Render();
-
-
     private:
         inline static std::queue<Scene*> activeScene;
 

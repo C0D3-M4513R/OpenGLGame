@@ -14,13 +14,6 @@ void StartScene::setup(){
     fonts.resize(2);
     fonts[0].init("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 50 /* size */);
     fonts[1].init("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 20 /* size */);
-    //Define callbacks:
-    glfwSetKeyCallback(win,StartScene::keyCallback);
-    glfwSetFramebufferSizeCallback(win,Callback::framebufferSizeCallback);
-    glfwSetWindowMaximizeCallback(win,Callback::maximiseCallback);
-    //Actually exit in this window!
-    glfwSetWindowCloseCallback(win,[]([[maybe_unused]] GLFWwindow* window){terminate=true;});
-
 }
 void StartScene::loop(){
     switch (selected){
@@ -62,59 +55,30 @@ void StartScene::loop(){
     glColor3ub(0xff,0xff,0xff);
 }
 
-void StartScene::keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unused]]int key, [[maybe_unused]] int scancode, [[maybe_unused]]int action, [[maybe_unused]] int mods) {
-    switch (action) {
-        default:
-            [[fallthrough]];
-        case GLFW_PRESS:
-            [[fallthrough]];
-        case GLFW_REPEAT:
-            switch (key) {
-                case GLFW_KEY_ESCAPE: {
-                    bool isFullscreen = glfwGetWindowMonitor(window) != nullptr;
-#ifndef NDEBUG
-                    std::cout << "Escape pressed! Exiting " << (isFullscreen ? "Fullscreen" : "Scene") << ".\n";
-#endif
-                    if(selected!=-1) {
-                        selected=-1;
-                        break;
-                    }
-
-                    if (isFullscreen) {
-                        const GLFWvidmode *mode = glfwGetVideoMode(glfwGetWindowMonitor(window));
-                        //Note: The height and width 1 are imaginary. They just can't be <1. Else the Window resize fails.
-                        //Note: The width and height would be applied if I called glfwRestoreWindow.
-                        glfwSetWindowMonitor(window, nullptr, 0, 0, 1, 1, mode->refreshRate);
-                    } else glfwSetWindowShouldClose(window, terminate = true);
-                    break;
-                }
-                case GLFW_KEY_W:
-                    [[fallthrough]];
-                case GLFW_KEY_UP:
-#ifndef NDEBUG
-                    std::cout<<"UP active="<<active<<".\n";
-#endif
-                    if(active>0)[[likely]]active--;
-                    break;
-                case GLFW_KEY_S:
-                    [[fallthrough]];
-                case GLFW_KEY_DOWN:
-#ifndef NDEBUG
-                    std::cout<<"DOWN active="<<active<<".\n";
-#endif
-                    if(active<n-1)[[likely]]active++;
-                    break;
-                case GLFW_KEY_KP_ENTER:
-                    [[fallthrough]];
-                case GLFW_KEY_ENTER:
-#ifndef NDEBUG
-                    std::cout<<"Selected active="<<active<<".\n";
-#endif
-                    selected=(int)active;
-                    break;
-            }
-            break;
-        case GLFW_RELEASE:
-            break;
+//Keyboard overrides
+void StartScene::exit(){
+    if(selected!=-1) {
+        selected=-1;
+        return;
     }
+    if(glfwGetWindowMonitor(win) == nullptr) terminate = true;//Totally exit, if asked
+    Scene::exit();
+}
+void StartScene::up(){
+    if(active>0&&selected==-1)active--;
+#ifndef NDEBUG
+    std::cout<<"UP active="<<active<<".\n";
+#endif
+}
+void StartScene::down(){
+    if(active<n-1&&selected==-1)active++;
+#ifndef NDEBUG
+    std::cout<<"DOWN active="<<active<<".\n";
+#endif
+}
+void StartScene::enter() {
+#ifndef NDEBUG
+    std::cout<<"Selected active="<<active<<".\n";
+#endif
+    if(selected==-1)selected=(int)active;
 }

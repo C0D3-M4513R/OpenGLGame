@@ -13,10 +13,6 @@ void LicenseScene::setup(){
     fonts.resize(2);
     fonts[0].init("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 50 /* size */);
     fonts[1].init("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 10 /* size */);
-    //Define callbacks:
-    glfwSetKeyCallback(win,LicenseScene::keyCallback);
-    glfwSetFramebufferSizeCallback(win,Callback::framebufferSizeCallback);
-    glfwSetWindowMaximizeCallback(win,Callback::maximiseCallback);
     //Actually exit in this window!
     glfwSetWindowCloseCallback(win,[]([[maybe_unused]] GLFWwindow* window){terminate=true;});
     glfwSetScrollCallback(win,LicenseScene::scrollCallback);
@@ -48,66 +44,36 @@ void LicenseScene::loop(){
         delete [] license;
     }
 }
-
-void LicenseScene::keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unused]]int key, [[maybe_unused]] int scancode, [[maybe_unused]]int action, [[maybe_unused]] int mods) {
-    switch (action) {
-        default:
-            [[fallthrough]];
-        case GLFW_PRESS:
-            [[fallthrough]];
-        case GLFW_REPEAT:
-            switch (key) {
-                case GLFW_KEY_ESCAPE: {
-                    bool isFullscreen = glfwGetWindowMonitor(window) != nullptr;
-#ifndef NDEBUG
-                    std::cout << "Escape pressed! Exiting " << (isFullscreen ? "Fullscreen" : "Scene") << ".\n";
-#endif
-                    if(selected!=-1) {
-                        selected=-1;
-                        scroll=0;
-                        break;
-                    }
-
-                    if (isFullscreen) {
-                        const GLFWvidmode *mode = glfwGetVideoMode(glfwGetWindowMonitor(window));
-                        //Note: The height and width 1 are imaginary. They just can't be <1. Else the Window resize fails.
-                        //Note: The width and height would be applied if I called glfwRestoreWindow.
-                        glfwSetWindowMonitor(window, nullptr, 0, 0, 1, 1, mode->refreshRate);
-                    } else glfwSetWindowShouldClose(window, terminate = true);
-                    break;
-                }
-                case GLFW_KEY_W:
-                    [[fallthrough]];
-                case GLFW_KEY_UP:
-                    if(active>0&&selected==-1)active--;
-                    else if(scroll>5&&selected!=-1) scroll-=50;
-#ifndef NDEBUG
-                    std::cout<<"UP active="<<active<<".\n";
-#endif
-                    break;
-                case GLFW_KEY_S:
-                    [[fallthrough]];
-                case GLFW_KEY_DOWN:
-                    if(active<n-1&&selected==-1)active++;
-                    else if(selected!=-1) scroll+=50;
-#ifndef NDEBUG
-                    std::cout<<"DOWN active="<<active<<".\n";
-#endif
-                    break;
-                case GLFW_KEY_KP_ENTER:
-                    [[fallthrough]];
-                case GLFW_KEY_ENTER:
-#ifndef NDEBUG
-                    std::cout<<"Selected active="<<active<<".\n";
-#endif
-                    if(selected==-1)selected=(int)active;
-                    break;
-            }
-            break;
-        case GLFW_RELEASE:
-            break;
+void LicenseScene::exit(){
+    if(selected!=-1) {
+        selected=-1;
+        scroll=0;
+        return;
     }
+    Scene::exit();
 }
+
+void LicenseScene::up(){
+    if(active>0&&selected==-1)active--;
+    else if(scroll>5&&selected!=-1) scroll-=50;
+#ifndef NDEBUG
+    std::cout<<"UP active="<<active<<".\n";
+#endif
+}
+void LicenseScene::down(){
+    if(active<n-1&&selected==-1)active++;
+    else if(selected!=-1) scroll+=50;
+#ifndef NDEBUG
+    std::cout<<"DOWN active="<<active<<".\n";
+#endif
+}
+void LicenseScene::enter(){
+#ifndef NDEBUG
+    std::cout<<"Selected active="<<active<<".\n";
+#endif
+    if(selected==-1)selected=(int)active;
+}
+
 void LicenseScene::scrollCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unused]]double x, [[maybe_unused]]double y){
     if((y==-1||scroll>5)&&selected!=-1)scroll-=y*50;
     std::cout<<y<<"\n";

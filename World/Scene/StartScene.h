@@ -9,7 +9,13 @@ protected:
     void setup() override;
     void loop() override;
 
-    static void keyCallback(GLFWwindow* window, int key, int scancode, int action, int mods);
+    //Keyboard inputs!
+    void up() override;
+    void down() override;
+    void left() override{};
+    void right() override{};
+    void exit() override;
+    void enter() override;
 
 private:
     inline static constexpr unsigned const int n = 5;
