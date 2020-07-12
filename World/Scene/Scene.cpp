@@ -35,13 +35,15 @@ void Scene::run(GLFWwindow* win){
     if(size==0) throw std::runtime_error("No Scene to display!");
     activeScene.top()->setup();
     while (!terminate){
-        Scene* scene = activeScene.top();
-        if(size<activeScene.size()){
-            scene->setup();
+        if (activeScene.empty()){
+            break;
+        }else if(size<activeScene.size()){
+            activeScene.top()->setup();
             size=activeScene.size();
         } else if (size>activeScene.size()){
             size=activeScene.size();
         }
+        Scene* scene = activeScene.top();
 
         Clear();
         glfwPollEvents();
