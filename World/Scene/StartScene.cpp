@@ -6,11 +6,6 @@
 #include <glfreetype/TextRenderer.hpp>
 
 void StartScene::setup(){
-    // Load shader.
-    shader = new Shader("resources/Simple.vert", "resources/Simple.frag");
-    if (!shader->IsGood()) { return ; }
-    std::cout<<"Good Shader\n";
-
     fonts.resize(2);
     fonts[0].init("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 50 /* size */);
     fonts[1].init("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 20 /* size */);

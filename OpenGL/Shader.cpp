@@ -1,13 +1,11 @@
-#include <fstream>
 #include <iostream>
-#include <sstream>
+#include <GL/glew.h>
 #include "Shader.h"
 #include "../World/Renderer.h"
 #include "../Object/Player.h"
 #include "../Utility.h"
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
-#include <GL/glew.h>
 
 
 GLuint Shader::LoadAndCompileShaderFromFile(const char* filePath, GLuint shaderType)

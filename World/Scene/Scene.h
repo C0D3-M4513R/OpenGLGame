@@ -15,7 +15,7 @@ class Scene{
         void Activate();
         static void run(GLFWwindow* win);
 
-        [[nodiscard]] const Shader& getShader()const;
+        [[nodiscard]] static Shader& getShader();
         [[nodiscard]] static Scene& getScene();
 
         inline static bool terminate = false;
@@ -31,10 +31,12 @@ class Scene{
         static Scene* getActiveScene() {return activeScene.top();}
         bool isActiveScene() {return activeScene.top()==this;}
 
-        inline static GLFWwindow* win = nullptr;
 
-        Shader* shader;
-        Player* player;
+        inline static GLFWwindow* win = nullptr;//init to nullptr to prevent undefined reference. Initialised in Scene::run
+
+        inline static Shader* shader= nullptr;//init to nullptr to prevent undefined reference. Initialised in Scene::run
+        Player* player;//Initialization is Implementation defined!
+                       //Maybe make this a std::optional?
 
         std::vector<Face*> meshes;
 

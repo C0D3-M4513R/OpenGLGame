@@ -13,6 +13,7 @@ void Scene::Activate(){
 }
 void Scene::run(GLFWwindow* win){
     Scene::win=win;
+    shader=new Shader("resources/Simple.vert", "resources/Simple.frag");
 
     auto exitHandler = [](){
         while (!activeScene.empty()){
@@ -20,6 +21,7 @@ void Scene::run(GLFWwindow* win){
             delete activeScene.top();
             activeScene.pop();
         }
+        delete shader;
     };
     atexit(exitHandler);
     at_quick_exit(exitHandler);
@@ -64,11 +66,6 @@ Scene& Scene::getScene(){
 * This should prepare everything, for displaying stuff
 */
 void Scene::setup() {
-    // Load shader.
-    shader = new Shader("resources/Simple.vert", "resources/Simple.frag");
-    if (!shader->IsGood()) { return ; }
-    std::cout<<"Good Shader\n";
-
     //Init objects
     meshes.resize(2);
     meshes[0]=new Face("resources/cube.stl", FILE_TYPE::STL, GL_STATIC_DRAW);
@@ -110,12 +107,11 @@ void Scene::loop() {
     glfreetype::print(our_font,0,Renderer::getResolutionY()-27,"This is a TEST! äöüß");
 }
 Scene::~Scene(){
-    delete shader;
     delete player;
 }
 
-const Shader& Scene::getShader() const {
-return *shader;
+Shader& Scene::getShader() {
+    return *shader;
 }
 
 //Keyboard Callbacks
