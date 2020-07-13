@@ -7,6 +7,7 @@
 #include <glfreetype/TextRenderer.hpp>
 #include "../../Callback/Window.h"
 #include "../../Callback/Keyboard.h"
+#include "MenuScene.h"
 
 void Scene::Activate(){
     activeScene.push(this);//set this as the now active scene
@@ -51,7 +52,7 @@ void Scene::run(GLFWwindow* win){
         Present();
 
         if(glfwWindowShouldClose(win)){
-            delete scene;
+            if(scene->deleteOnExit) delete scene;
             activeScene.pop();
             glfwSetWindowShouldClose(win,false);
         }

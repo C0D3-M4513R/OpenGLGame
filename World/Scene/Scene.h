@@ -3,12 +3,13 @@
 #define GAME_SCENE_H
 
 #include <GLFW/glfw3.h>
+#include "SceneDeleteOnExit.h"
 #include "../../OpenGL/Shader.h"
 #include "../../Object/Player.h"
 #include <glfreetype/TextRenderer.hpp>
 #include <stack>
 
-class Scene{
+class Scene : public SceneDeleteOnExit{
     public:
         virtual ~Scene();
         Scene():player(nullptr){};

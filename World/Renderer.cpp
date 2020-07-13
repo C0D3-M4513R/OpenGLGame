@@ -1,7 +1,8 @@
 #include "Renderer.h"
 #include "../Callback/Debug.h"
 #include "Scene/Scene.h"
-#include "Scene/StartScene.h"
+#include "Scene/MenuScene.h"
+#include "Scene/FileScene.h"
 #include <GL/glew.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
@@ -113,7 +114,16 @@ namespace Renderer {
                 glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
             }
 
-            (new StartScene())->Activate();
+            constexpr unsigned const int n = 5;
+            char const** arr = new char const*[n]{"Start","Options","Credits","Legal","Quit"};
+            Scene** display = new Scene*[n];
+            display[0]=new Scene();
+            display[1]=nullptr;
+            display[2]=new FileScene("resources/Credits.txt");
+            display[3]=new FileScene("resources/Credits.txt","Menu:");
+            display[4]=nullptr;
+            (new MenuScene(n,arr,display))->Activate();
+
             Scene::run(win);
 
 

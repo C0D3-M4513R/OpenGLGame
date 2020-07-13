@@ -2,15 +2,28 @@ cmake_minimum_required(VERSION 3.10)
 project(game)
 
 if(NOT CMAKE_BUILD_TYPE)
+    message(STATUS "No Build Type found. Using Release as default")
     set(CMAKE_BUILD_TYPE Release)
+endif()
+
+if(WIN32)
+    message("Using windows or a Compiler for Windows. Adding -std=c++20")
+    add_compile_options(-std=c++20)
 endif()
 
 set(CMAKE_CXX_STANDARD 20)
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
-set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g -Wall -Wextra -D_GLIBCXX_DEBUG")
+set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g3 -frecord-gcc-switches -Wall -Wextra -fno-inline")
+add_compile_definitions(_GLIBCXX_DEBUG)
 
-add_executable(game main.cpp World/Renderer.cpp World/Scene/Scene.cpp World/Scene/StartScene.cpp World/Scene/LicenseScene.cpp OpenGL/VertexArray.cpp OpenGL/Shader.cpp Object/Face.cpp Object/Player.cpp Object/Camera.cpp STLParser/parse_stl.cpp Callback/Keyboard.cpp Callback/Window.cpp Callback/Debug.cpp Utility.cpp)
+add_executable(game main.cpp
+        World/Renderer.cpp World/Scene/SceneDeleteOnExit.h World/Scene/Scene.cpp World/Scene/MenuScene.cpp World/Scene/FileScene.cpp
+        OpenGL/VertexArray.cpp OpenGL/Shader.cpp
+        Object/Face.cpp Object/Player.cpp Object/Camera.cpp
+        STLParser/parse_stl.cpp
+        Callback/Keyboard.cpp Callback/Window.cpp Callback/Debug.cpp
+        Utility.cpp)
 #Add Libraries
 find_package(PkgConfig REQUIRED)
 
