@@ -5,7 +5,7 @@
 
 class MenuScene : public Scene {
 public:
-    MenuScene(unsigned const int n,char const*const * arr,Scene** display,unsigned int fontSize=50,char const* fontFile="/usr/share/fonts/truetype/freefont/FreeSans.ttf")
+    MenuScene(unsigned const int n,char const*const * arr,Scene** display,unsigned int fontSize=50,char const* fontFile="resources/FreeSans.ttf")
     :Scene(),n(n),arr(arr),active(0),selected(-1),display(display){font=new glfreetype::font_data();font->init(fontFile,fontSize);};
     ~MenuScene() override;
 
