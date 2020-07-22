@@ -27,7 +27,7 @@ class Scene : public SceneDeleteOnExit{
         virtual void left(int mods=0);
         virtual void right(int mods=0);
         virtual void exit(int mods=0);
-        inline virtual void enter(int mods=0) {};
+        inline virtual void enter([[maybe_unused]]int mods=0) {};
     protected:
         static Scene* getActiveScene() {return activeScene.top();}
         bool isActiveScene() {return activeScene.top()==this;}

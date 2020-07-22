@@ -12,8 +12,8 @@ public:
     //Keyboard inputs!
     void up(int mods=0) override;
     void down(int mods=0) override;
-    void left(int mods=0) override{};
-    void right(int mods=0) override{};
+    void left([[maybe_unused]]int mods=0) override{};
+    void right([[maybe_unused]]int mods=0) override{};
     void exit(int mods=0) override;
     void enter(int mods=0) override;
 

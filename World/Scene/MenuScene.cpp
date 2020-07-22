@@ -53,7 +53,7 @@ void MenuScene::loop(){
             glfreetype::print(*font,(float)Renderer::getResolutionX()/3,Renderer::getResolutionY()-(float)Renderer::getResolutionY()/3-i*70,arr[i]);
             glColor3ub(0xff,0xff,0xff);
         }
-    } else if(selected>-1&&selected<n){
+    } else if(selected>-1&&(unsigned int)selected<n){
         Scene* scene = display[selected];
         selected=-1;
         if(scene==nullptr)exit();

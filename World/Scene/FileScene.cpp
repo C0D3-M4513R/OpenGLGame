@@ -11,10 +11,10 @@ void FileScene::down(int mods){
     if(mods!=0&&mods&GLFW_MOD_SHIFT) left();
     scroll[0]+=scrollAmount;
 }
-void FileScene::left(int mods){
+void FileScene::left([[maybe_unused]]int mods){
     scroll[1]=std::min(scroll[1]+(int)scrollAmount,0);
 }
-void FileScene::right(int mods){
+void FileScene::right([[maybe_unused]]int mods){
     scroll[1]-=scrollAmount;
 }
 void FileScene::setup() {
@@ -44,7 +44,7 @@ void FileScene::loop(){
 }
 
 FileScene::FileScene(char const*const file,char const*const titleAddition)
-:Scene(),fonts(nullptr),fileContents(Utility::readFile(file)),titleAddition(titleAddition){
+:Scene(),fileContents(Utility::readFile(file)),titleAddition(titleAddition),fonts(nullptr){
 
     std::string string = file;
     unsigned int slash = string.find_last_of('/')+1;
