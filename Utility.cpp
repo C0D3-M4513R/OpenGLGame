@@ -1,27 +1,23 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
+#include <string>
 #include <cstring>
+#include <cassert>
 #include "Utility.h"
-char * Utility::readFile(const char* path,char* out){
+std::string Utility::readFile(const char* path){
 #ifndef NDEBUG
     std::cout<<"Getting file: "<<path<<"\n";
 #endif
     // Open the file, but freak out if not valid.
-    std::ifstream file(path);
+    std::ifstream file=std::ifstream(path);
+    assert(file.good());
     if(!file.good())
     {
-        std::cerr << "Couldn't open file for loading: " << path << std::endl;
-
+        throw std::runtime_error((std::string)"Couldn't open file for loading: "+path);
     }
 
     // Read the file contents into a char buffer.
     std::stringstream buffer;buffer << file.rdbuf();
-    std::string fileContentsStr = buffer.str();
-//#ifndef NDEBUG
-//    std::cout<<fileContentsStr.c_str()<<"\n";
-//#endif
-    out = new char[fileContentsStr.size()];
-    strcpy(out,fileContentsStr.c_str());
-    return out;
+    return buffer.str();
 }

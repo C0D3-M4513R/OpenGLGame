@@ -7,15 +7,10 @@
 #include <glm/gtc/type_ptr.hpp>
 #include <glm/ext/matrix_clip_space.hpp>
 
-
 GLuint Shader::LoadAndCompileShaderFromFile(const char* filePath, GLuint shaderType)
 {
-
-    char* fileContents;
-    fileContents=Utility::readFile(filePath,fileContents);
-#ifndef NDEBUG
-    std::cout<<fileContents<<"\n";
-#endif
+    std::string contentsStr = Utility::readFile(filePath);
+    char const* fileContents = contentsStr.c_str();
 
     // Create shader, load file contents into it, and compile it.
     GLuint shader = glCreateShader(shaderType);

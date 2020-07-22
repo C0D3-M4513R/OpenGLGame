@@ -39,8 +39,8 @@ void FileScene::loop(){
     glfreetype::print(fonts[1],scroll[1],Renderer::getResolutionY()-(float)Renderer::getResolutionY()/3+scroll[0],fileContents);
 }
 
-FileScene::FileScene(char const*const file,char const*const titleAddition):Scene(),fonts(nullptr),titleAddition(titleAddition){
-    fileContents=Utility::readFile(file,fileContents);
+FileScene::FileScene(char const*const file,char const*const titleAddition)
+:Scene(),fonts(nullptr),fileContents(Utility::readFile(file)),titleAddition(titleAddition){
 
     std::string string = file;
     unsigned int slash = string.find_last_of('/')+1;
@@ -58,6 +58,5 @@ FileScene::~FileScene() {
         fonts[1].clean();
         delete [] fonts;
     }
-    delete [] fileContents;
     delete [] title;
 }

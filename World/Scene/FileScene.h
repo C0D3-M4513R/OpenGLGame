@@ -1,5 +1,6 @@
 #ifndef GAME_FILESCENE_H
 #define GAME_FILESCENE_H
+#include <string>
 #include "Scene.h"
 
 constexpr inline static unsigned int const scrollAmount=50;
@@ -18,7 +19,7 @@ class FileScene : public Scene {
         void left() override;
         void right() override;
     private:
-        char* fileContents=nullptr;
+        std::string fileContents=nullptr;
         char* title=nullptr;
         char const*const titleAddition;
         int scroll[2]={0,0};//Y=0,X=1

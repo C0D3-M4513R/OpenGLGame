@@ -4,10 +4,11 @@
 #include "../../Object/Player.h"
 #include "../../OpenGL/Shader.h"
 #include "../Renderer.h"
-#include <glfreetype/TextRenderer.hpp>
 #include "../../Callback/Window.h"
 #include "../../Callback/Keyboard.h"
 #include "MenuScene.h"
+#include <glfreetype/TextRenderer.hpp>
+#include <cstdlib>
 
 void Scene::Activate(){
     activeScene.push(this);//set this as the now active scene
@@ -24,8 +25,8 @@ void Scene::run(GLFWwindow* win){
         }
         delete shader;
     };
-    atexit(exitHandler);
-    at_quick_exit(exitHandler);
+    std::atexit(exitHandler);
+    std::at_quick_exit(exitHandler);
 
     //Define callbacks:
     glfwSetKeyCallback(win,Callback::keyCallback);
@@ -57,7 +58,8 @@ void Scene::run(GLFWwindow* win){
             glfwSetWindowShouldClose(win,false);
         }
     }
-    exitHandler();
+    //unnecessary, because the function will run at exit!
+//    exitHandler();
 }
 Scene& Scene::getScene(){
 #ifndef NDEBUG
@@ -80,7 +82,7 @@ void Scene::setup() {
     player->moveZ(-0.6f);
 
     //Init Font
-    our_font.init("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 25 /* size */);
+    our_font.init("resources/FreeSans.ttf", 25 /* size */);
     //Set Time to right before loop start!
     glfwSetTime(0);
 }
