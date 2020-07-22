@@ -14,10 +14,10 @@ class FileScene : public Scene {
         void setup() override;
         void loop() override;
 
-        void up() override;
-        void down() override;
-        void left() override;
-        void right() override;
+        void up(int mods=0) override;
+        void down(int mods=0) override;
+        void left(int mods=0) override;
+        void right(int mods=0) override;
     private:
         std::string fileContents=nullptr;
         char* title=nullptr;

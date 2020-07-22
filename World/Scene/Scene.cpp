@@ -1,8 +1,6 @@
 #include "Scene.h"
 #include <iostream>
 #include <GLFW/glfw3.h>
-#include "../../Object/Player.h"
-#include "../../OpenGL/Shader.h"
 #include "../Renderer.h"
 #include "../../Callback/Window.h"
 #include "../../Callback/Keyboard.h"
@@ -120,7 +118,7 @@ Shader& Scene::getShader() {
 }
 
 //Keyboard Callbacks
-void Scene::exit() {
+void Scene::exit([[maybe_unused]]int mods) {
     bool isFullscreen = glfwGetWindowMonitor(win) != nullptr;
 #ifndef NDEBUG
     std::cout << "Escape pressed! Exiting " << (isFullscreen ? "Fullscreen" : "Scene") << ".\n";
@@ -133,15 +131,15 @@ void Scene::exit() {
     }
     else glfwSetWindowShouldClose(win, true);
 }
-void Scene::up(){
+void Scene::up([[maybe_unused]]int mods){
     if(player!=nullptr)player->moveY(0.1f);
 }
-void Scene::down(){
+void Scene::down([[maybe_unused]]int mods){
     if(player!=nullptr)player->moveY(-0.1f);
 }
-void Scene::left(){
+void Scene::left([[maybe_unused]]int mods){
     if(player!=nullptr)player->moveX(0.1f);
 }
-void Scene::right(){
+void Scene::right([[maybe_unused]]int mods){
     if(player!=nullptr)player->moveX(-0.1f);
 }

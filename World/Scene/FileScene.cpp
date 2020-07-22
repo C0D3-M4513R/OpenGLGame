@@ -1,25 +1,29 @@
 #include "FileScene.h"
 #include "../../Utility.h"
 #include "../Renderer.h"
-#include <algorithm>
 #include <cstring>
 
-void FileScene::up(){
+void FileScene::up(int mods){
+    if(mods!=0&&mods&GLFW_MOD_SHIFT) right();
     scroll[0]=std::max(scroll[0]-(int)scrollAmount,0);
 }
-void FileScene::down(){
+void FileScene::down(int mods){
+    if(mods!=0&&mods&GLFW_MOD_SHIFT) left();
     scroll[0]+=scrollAmount;
 }
-void FileScene::left(){
+void FileScene::left(int mods){
     scroll[1]=std::min(scroll[1]+(int)scrollAmount,0);
 }
-void FileScene::right(){
+void FileScene::right(int mods){
     scroll[1]-=scrollAmount;
 }
 void FileScene::setup() {
     glfwSetScrollCallback(win,[](GLFWwindow* win,double x,double  y){
-        if(y==-1)Scene::getScene().up();
-        else if(y==1)Scene::getScene().down();
+        bool shift = glfwGetKey(win,GLFW_KEY_LEFT_SHIFT)|glfwGetKey(win,GLFW_KEY_RIGHT_SHIFT);
+        if(y==-1&&!shift)Scene::getScene().up();
+        else if(y==-1&&shift)Scene::getScene().left();
+        else if(y==1&&!shift)Scene::getScene().down();
+        else if(y==1&&shift)Scene::getScene().right();
         if(x==-1)Scene::getScene().left();
         else if(x==1)Scene::getScene().right();
     });

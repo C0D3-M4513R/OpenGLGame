@@ -10,12 +10,12 @@ public:
     ~MenuScene() override;
 
     //Keyboard inputs!
-    void up() override;
-    void down() override;
-    void left() override{};
-    void right() override{};
-    void exit() override;
-    void enter() override;
+    void up(int mods=0) override;
+    void down(int mods=0) override;
+    void left(int mods=0) override{};
+    void right(int mods=0) override{};
+    void exit(int mods=0) override;
+    void enter(int mods=0) override;
 
 protected:
     void setup() override;

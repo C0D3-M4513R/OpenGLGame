@@ -12,26 +12,26 @@ MenuScene::~MenuScene() {
 }
 
 //Keyboard overrides
-void MenuScene::exit(){
+void MenuScene::exit([[maybe_unused]]int mods){
     if(selected!=-1) {
         selected=-1;
         return;
     }
     Scene::exit();
 }
-void MenuScene::up(){
+void MenuScene::up([[maybe_unused]]int mods){
     if(active>0&&selected==-1)active--;
 #ifndef NDEBUG
     std::cout<<"UP active="<<active<<".\n";
 #endif
 }
-void MenuScene::down(){
+void MenuScene::down([[maybe_unused]]int mods){
     if(active<n-1&&selected==-1)active++;
 #ifndef NDEBUG
     std::cout<<"DOWN active="<<active<<".\n";
 #endif
 }
-void MenuScene::enter() {
+void MenuScene::enter([[maybe_unused]]int mods) {
 #ifndef NDEBUG
     std::cout<<"Selected active="<<active<<".\n";
 #endif

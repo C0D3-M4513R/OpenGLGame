@@ -16,27 +16,27 @@ void Callback::keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unused]]i
                 case GLFW_KEY_W:
                     [[fallthrough]];
                 case GLFW_KEY_UP:
-                    Scene::getScene().up();
+                    Scene::getScene().up(mods);
                     break;
                 case GLFW_KEY_S:
                     [[fallthrough]];
                 case GLFW_KEY_DOWN:
-                    Scene::getScene().down();
+                    Scene::getScene().down(mods);
                     break;
                 case GLFW_KEY_A:
                     [[fallthrough]];
                 case GLFW_KEY_LEFT:
-                    Scene::getScene().left();
+                    Scene::getScene().left(mods);
                     break;
                 case GLFW_KEY_D:
                     [[fallthrough]];
                 case GLFW_KEY_RIGHT:
-                    Scene::getScene().right();
+                    Scene::getScene().right(mods);
                     break;
                 case GLFW_KEY_KP_ENTER:
                     [[fallthrough]];
                 case GLFW_KEY_ENTER:
-                    Scene::getScene().enter();
+                    Scene::getScene().enter(mods);
                     break;
             }
             break;
