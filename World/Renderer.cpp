@@ -114,15 +114,32 @@ namespace Renderer {
                 glDebugMessageControl(GL_DONT_CARE, GL_DONT_CARE, GL_DONT_CARE, 0, nullptr, GL_TRUE);
             }
 
-            constexpr unsigned const int n = 5;
-            char const** arr = new char const*[n]{"Start","Options","Credits","Legal","Quit"};
-            Scene** display = new Scene*[n];
-            display[0]=new Scene();
-            display[1]=nullptr;
-            display[2]=new FileScene("resources/Credits.txt");
-            display[3]=new FileScene("resources/Credits.txt","Menu:");
-            display[4]=nullptr;
-            (new MenuScene(n,arr,display))->Activate();
+
+            Scene* menuStart;
+            {
+                Scene* menuLegal;
+                {
+                    constexpr unsigned const int n = 4;
+                    char const** arr = new char const*[n]{"glew","glfw","glm","STLParser"};
+                    Scene** display = new Scene*[n];
+                    display[0]=new FileScene("resources/Licences/glew.txt");
+                    display[1]=new FileScene("resources/Licences/glfw.txt");
+                    display[2]=new FileScene("resources/Licences/glm.txt");
+                    display[3]=new FileScene("resources/Licences/STLParser.txt");
+                    menuLegal=new MenuScene(n,arr,display);
+                }
+                constexpr unsigned const int n = 5;
+                char const** arr = new char const*[n]{"Start","Options","Credits","Legal","Quit"};
+                Scene** display = new Scene*[n];
+                display[0]=new Scene();
+                display[1]=nullptr;
+                display[2]=new FileScene("resources/Credits.txt");
+                display[3]=menuLegal;
+                display[4]=nullptr;
+
+                menuStart=new MenuScene(n,arr,display);
+            }
+            (menuStart)->Activate();
 
             Scene::run(win);
 
