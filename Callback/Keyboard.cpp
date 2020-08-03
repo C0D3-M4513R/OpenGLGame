@@ -10,8 +10,11 @@ void Callback::keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unused]]i
             [[fallthrough]];
         case GLFW_REPEAT:
             switch (key) {
+                case GLFW_KEY_F4:
+                    if(mods&GLFW_MOD_ALT) std::exit(0);//terminate the entire game with alt+f4
+                    break;
                 case GLFW_KEY_ESCAPE:
-                    Scene::getScene().exit();
+                    Scene::getScene().exit(); //only exit the current scene. To exit the programm use alt+f4
                     break;
                 case GLFW_KEY_W:
                     [[fallthrough]];
