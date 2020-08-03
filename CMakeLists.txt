@@ -15,7 +15,7 @@ set(CMAKE_CXX_STANDARD 20)
 
 set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} -O3")
 set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} -Og -g3 -frecord-gcc-switches -Wall -Wextra -fno-inline")
-add_compile_definitions(_GLIBCXX_DEBUG)
+#add_compile_definitions(_GLIBCXX_DEBUG)
 
 add_executable(game main.cpp
         World/Renderer.cpp World/Scene/SceneDeleteOnExit.h World/Scene/Scene.cpp World/Scene/MenuScene.cpp World/Scene/FileScene.cpp

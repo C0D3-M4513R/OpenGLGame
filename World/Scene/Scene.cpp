@@ -24,8 +24,9 @@ void Scene::run(GLFWwindow* win){
         delete shader;
     };
     std::atexit(exitHandler);
+#if defined(_GLIBCXX_HAVE_QUICK_EXIT)||defined(__linux__)
     std::at_quick_exit(exitHandler);
-
+#endif
     //Define callbacks:
     glfwSetKeyCallback(win,Callback::keyCallback);
     glfwSetFramebufferSizeCallback(win,Callback::framebufferSizeCallback);
