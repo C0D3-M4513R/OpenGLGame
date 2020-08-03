@@ -25,7 +25,7 @@ class Player:public Face {
 
         [[nodiscard]] const Camera& getCamera() const;
     private:
-        void positionUpdateCallback();
+        void positionUpdateCallback() override;
         Player();
         inline static Player* instance=nullptr;
         Camera* cam = nullptr;
