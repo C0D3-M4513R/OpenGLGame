@@ -4,11 +4,11 @@
 #include <cstring>
 
 void FileScene::up(int mods){
-    if(mods!=0&&mods&GLFW_MOD_SHIFT) right();
+    if(mods!=0&&mods&GLFW_MOD_SHIFT) return right();
     scroll[0]=std::max(scroll[0]-(int)scrollAmount,0);
 }
 void FileScene::down(int mods){
-    if(mods!=0&&mods&GLFW_MOD_SHIFT) left();
+    if(mods!=0&&mods&GLFW_MOD_SHIFT) return left();
     scroll[0]+=scrollAmount;
 }
 void FileScene::left([[maybe_unused]]int mods){
@@ -29,8 +29,8 @@ void FileScene::setup() {
     });
     if(fonts == nullptr){
         fonts=new glfreetype::font_data[2]{glfreetype::font_data(),glfreetype::font_data()};
-        fonts[0].init("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 50 /* size */);
-        fonts[1].init("/usr/share/fonts/truetype/freefont/FreeSans.ttf", 10 /* size */);
+        fonts[0].init("resources/FreeSans.ttf", 50 /* size */);
+        fonts[1].init("resources/FreeSans.ttf", 10 /* size */);
     }
 }
 
