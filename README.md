@@ -1,3 +1,12 @@
+Update as of 1.3.2021: This project is stale. I won't be continuing developing this project. Some things to consider:
+
+- The Class Layout is not optimal, and this barely works.
+- OpenGL is deeply tied into the Code. It should be more contained, so that support for other backends can be added, such as Vulkan, or even DirectX12
+- Overall the coordinate system is not implemented right in this. Maybe using a child/parent system would be better?
+- There should be a 2d overlay
+- There should be settings
+- There should be an easy mechanism to flag a variable as a setting, and add it to the settings menu.
+
 # OpenGLGame
 This Repository is an attempt at making a Game using largely my own Code.
 
