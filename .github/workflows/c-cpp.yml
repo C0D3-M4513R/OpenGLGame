@@ -94,6 +94,7 @@ jobs:
             mingw-w64-x86_64-glfw
             mingw-w64-x86_64-glm
             mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-freetype
             
       - name: Update Msys
         if: steps.chache-msys.outputs.cache-hit == 'true'
