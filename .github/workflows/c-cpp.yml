@@ -72,16 +72,8 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
-      - name: Cache
-        id: cache-msys
-        uses: actions/cache@v2
-        with:
-          path: "D:/a/_temp/msys"
-          key: msys
-          
       - uses: msys2/setup-msys2@v2
         name: Install required dependencies
-        if: steps.chache-msys.outputs.cache-hit != 'true'
         with:
           update: true
           msystem: MINGW64
@@ -94,10 +86,6 @@ jobs:
             mingw-w64-x86_64-gcc
             mingw-w64-x86_64-freetype
             
-      - name: Update Msys
-        if: steps.chache-msys.outputs.cache-hit == 'true'
-        run: pacman --noconfirm -Syuu --overwrite *
-        
       - uses: actions/checkout@v2
         with:
           submodules: true
@@ -113,7 +101,3 @@ jobs:
         with:
           name: game-${{runner.os}}-${{runner.target}}
           path: game.exe
- 
-#      - name: Test Binary
-#        timeout-minutes: 1
-#        run: ./game.exe
