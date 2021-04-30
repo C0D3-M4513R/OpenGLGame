@@ -91,7 +91,10 @@ jobs:
             mingw-w64-x86_64-freetype
       - name: Update Msys
         if: steps.chache-msys.outputs.cache-hit == 'true'
-        run: pacman --noconfirm -Syuu --overwrite *
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          
       - name: Put MSYS2_MinGW64 on PATH
         # there is not yet an environment variable for this path from msys2/setup-msys2
         run: echo "D:/a/_temp/msys/msys64/mingw64/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
@@ -102,9 +105,9 @@ jobs:
         name: Checkout source code
       
       - name: cmake
-        run: cmake -G "MSYS Makefiles" .
+        run: msys2 -c 'cmake -G "MSYS Makefiles" .'
       - name: make
-        run: make
+        run: msys2 -c 'make'
       - name: Upload exec
         uses: actions/upload-artifact@v2.2.3
         with:
