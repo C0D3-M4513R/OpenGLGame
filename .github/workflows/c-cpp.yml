@@ -74,10 +74,16 @@ jobs:
       run:
         shell: msys2 {0}
     steps:
+      - name: Cache
+        id: cache-msys
+        uses: actions/cache@v2
+        with:
+          path: "D:/a/_temp/msys"
+          key: msys
       - uses: msys2/setup-msys2@v2
         name: Install required dependencies
+        if: steps.chache-msys.outputs.cache-hit != 'true'
         with:
-          update: true
           msystem: MINGW64
           install: >-
             mingw-w64-x86_64-cmake
@@ -85,7 +91,11 @@ jobs:
             mingw-w64-x86_64-glew
             mingw-w64-x86_64-glfw
             mingw-w64-x86_64-glm
-
+            mingw-w64-x86_64-gcc
+      - name: Update Msys
+        uses: msys2/setup-msys2@v2
+        with:
+          update: true
       - uses: actions/checkout@v2
         with:
           submodules: true
