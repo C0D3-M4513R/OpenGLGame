@@ -94,7 +94,7 @@ void StartScene::keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unused]
 #ifndef NDEBUG
                     std::cout<<"UP active="<<active<<".\n";
 #endif
-                    if(active>0)[[likely]]active--;
+                    if(active>0)active--;
                     break;
                 case GLFW_KEY_S:
                     [[fallthrough]];
@@ -102,7 +102,7 @@ void StartScene::keyCallback([[maybe_unused]]GLFWwindow* window, [[maybe_unused]
 #ifndef NDEBUG
                     std::cout<<"DOWN active="<<active<<".\n";
 #endif
-                    if(active<n-1)[[likely]]active++;
+                    if(active<n-1)active++;
                     break;
                 case GLFW_KEY_KP_ENTER:
                     [[fallthrough]];
