@@ -38,7 +38,7 @@ jobs:
     - name: Installing Dependencies  
       run: sudo apt-get install libglew-dev libglfw3-dev>=3.3 libglm-dev -y
     - name: cmake
-      run: cmake .
+      run: cmake -G "MinGW Makefiles" .
     - name: make
       run: make
     - name: Upload exec
