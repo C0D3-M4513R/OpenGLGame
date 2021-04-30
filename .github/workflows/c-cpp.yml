@@ -88,7 +88,6 @@ jobs:
             mingw-w64-x86_64-glew
             mingw-w64-x86_64-glfw
             mingw-w64-x86_64-glm
-            mingw-w64-x86_64-z3
       - name: Update Msys
         if: steps.chache-msys.outputs.cache-hit == 'true'
         run: pacman --noconfirm -Syuu --overwrite *
@@ -102,7 +101,7 @@ jobs:
         name: Checkout source code
       
       - name: cmake
-        run: cmake -G "Unix Makefiles" .
+        run: cmake .
       - name: make
         run: make
       - name: Upload exec
