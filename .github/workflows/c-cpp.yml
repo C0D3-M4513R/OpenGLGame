@@ -84,6 +84,7 @@ jobs:
           update: true
           install: >-
             mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-make
             mingw-w64-x86_64-glew
             mingw-w64-x86_64-glfw
             mingw-w64-x86_64-glm
@@ -103,7 +104,7 @@ jobs:
       - name: cmake
         run: cmake -G "MinGW Makefiles" .
       - name: make
-        run: make
+        run: mingw32-make
       - name: Upload exec
         uses: actions/upload-artifact@v2.2.3
         with:
