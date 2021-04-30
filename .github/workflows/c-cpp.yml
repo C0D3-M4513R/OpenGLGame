@@ -40,7 +40,7 @@ jobs:
     - name: cmake
       run: cmake .
     - name: make
-      run: make
+      run: cmake --build .
     - name: Upload exec
       uses: actions/upload-artifact@v2.2.3
       with:
@@ -75,7 +75,7 @@ jobs:
         shell: msys2 {0}
     steps:
       - uses: msys2/setup-msys2@v2
-        name: Install required dependencie
+        name: Install required dependencies
         with:
           update: true
           msystem: MINGW64
@@ -85,8 +85,6 @@ jobs:
             mingw-w64-x86_64-glew
             mingw-w64-x86_64-glfw
             mingw-w64-x86_64-glm
-            mingw-w64-x86_64-gcc
-            mingw-w64-x86_64-freetype
 
       - uses: actions/checkout@v2
         with:
