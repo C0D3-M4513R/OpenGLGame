@@ -82,11 +82,11 @@ jobs:
         with:
           update: true
           install: >-
-            mingw-w64-cmake
-            mingw-w64-glew
-            mingw-w64-glfw
-            mingw-w64-glm
-            mingw-w64-z3
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-glew
+            mingw-w64-x86_64-glfw
+            mingw-w64-x86_64-glm
+            mingw-w64-x86_64-z3
       - name: Put MSYS2_MinGW64 on PATH
         # there is not yet an environment variable for this path from msys2/setup-msys2
         run: echo "D:/a/_temp/msys/msys64/mingw64/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
