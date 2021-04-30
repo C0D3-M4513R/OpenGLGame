@@ -102,7 +102,7 @@ jobs:
         name: Checkout source code
       
       - name: cmake
-        run: cmake .
+        run: cmake -G "MSYS Makefiles" .
       - name: make
         run: make
       - name: Upload exec
