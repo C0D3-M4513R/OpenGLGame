@@ -1,3 +1,4 @@
+[![C/C++ Build](https://github.com/C0D3-M4513R/OpenGLGame/actions/workflows/c-cpp.yml/badge.svg)](https://github.com/C0D3-M4513R/OpenGLGame/actions/workflows/c-cpp.yml)
 Update as of 1.3.2021: This project is stale. I won't be continuing developing this project. Some things to consider:
 
 - The Class Layout is not optimal, and this barely works.
