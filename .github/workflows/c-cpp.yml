@@ -102,7 +102,7 @@ jobs:
         name: Checkout source code
       
       - name: cmake
-        run: cmake -G "MinGW Makefiles" .
+        run: cmake -G "MSYS Makefiles" .
       - name: make
         run: mingw32-make
       - name: Upload exec
