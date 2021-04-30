@@ -84,7 +84,7 @@ jobs:
           update: true
           install: >-
             mingw-w64-x86_64-cmake
-            mingw-w64-x86_64-make
+            mingw-w64-x86_64-ninja
             mingw-w64-x86_64-glew
             mingw-w64-x86_64-glfw
             mingw-w64-x86_64-glm
@@ -101,9 +101,9 @@ jobs:
         name: Checkout source code
       
       - name: cmake
-        run: cmake .
+        run: cmake -GNinja .
       - name: make
-        run: make
+        run: ninja
       - name: Upload exec
         uses: actions/upload-artifact@v2.2.3
         with:
