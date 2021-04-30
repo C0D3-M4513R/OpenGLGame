@@ -1,7 +1,6 @@
 #include <GL/glew.h>
 #include <cassert>
 #include <stdexcept>
-#include <z3.h>
 #include <iostream>
 #include "Window.h"
 #include "../World/Renderer.h"

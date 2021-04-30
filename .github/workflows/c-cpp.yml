@@ -1,0 +1,103 @@
+name: C/C++ CI
+
+on:
+  push:
+    branches: 
+      - master
+      - development
+  pull_request:
+    branches: 
+      - master
+      - development
+  release:
+    types: # This configuration does not affect the page_build event above
+      - created
+
+jobs:
+  build-linux:
+    timeout-minutes: 10
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+        - os: ubuntu-latest
+          TARGET: armv7
+          COMPILER: gcc
+          LINKER: gcc
+
+        - os: ubuntu-latest
+          TARGET: x86_64
+          COMPILER: gcc
+          LINKER: gcc
+
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+    - name: Update apt
+      run: sudo apt-get update
+    - name: Installing Dependencies  
+      run: sudo apt-get install libglew-dev libglfw3-dev>=3.3 libglm-dev -y
+    - name: cmake
+      run: cmake .
+    - name: make
+      run: cmake --build .
+    - name: Upload exec
+      uses: actions/upload-artifact@v2.2.3
+      with:
+        name: game-${{runner.os}}-${{matrix.target}}
+        path: game
+
+#  build-mac:
+#    runs-on: macos-latest
+#
+#    steps:
+#    - uses: actions/checkout@v2
+#      with:
+#        submodules: true
+#    - name: Installing Dependencies
+#      run: brew install glew glfw glm pkg-config
+#    - name: cmake
+#      run: cmake .
+#    - name: make
+#      run: make
+#    - name: Test Binary
+#      timeout-minutes: 1
+#      run: ./game    
+      
+  build-win:
+    timeout-minutes: 20
+    runs-on: windows-latest
+    defaults:
+      run:
+        shell: msys2 {0}
+    steps:
+      - uses: msys2/setup-msys2@v2
+        name: Install required dependencies
+        with:
+          update: true
+          msystem: MINGW64
+          install: >-
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-ninja
+            mingw-w64-x86_64-glew
+            mingw-w64-x86_64-glfw
+            mingw-w64-x86_64-glm
+            mingw-w64-x86_64-gcc
+            mingw-w64-x86_64-freetype
+            
+      - uses: actions/checkout@v2
+        with:
+          submodules: true
+        name: Checkout source code
+      
+      - name: cmake
+        run: cmake -GNinja .
+      - name: make
+        run: cmake --build .
+        
+      - name: Upload exec
+        uses: actions/upload-artifact@v2.2.3
+        with:
+          name: game-${{runner.os}}-${{runner.target}}
+          path: game.exe
