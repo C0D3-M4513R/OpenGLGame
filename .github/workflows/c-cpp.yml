@@ -44,7 +44,7 @@ jobs:
     - name: Upload exec
       uses: actions/upload-artifact@v2.2.3
       with:
-        name: game-${{runner-os}}-${{runner.target}}
+        name: game-${{runner.os}}-${{runner.target}}
         path: game
       
 #    - name: Test Binary
@@ -104,7 +104,7 @@ jobs:
       - name: Upload exec
         uses: actions/upload-artifact@v2.2.3
         with:
-          name: game-${{runner-os}}-${{runner.target}}
+          name: game-${{runner.os}}-${{runner.target}}
           path: game.exe
  
 #      - name: Test Binary
