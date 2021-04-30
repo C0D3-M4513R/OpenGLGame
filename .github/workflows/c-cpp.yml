@@ -102,9 +102,9 @@ jobs:
         name: Checkout source code
       
       - name: cmake
-        run: cmake -G "MSYS Makefiles" .
+        run: cmake -G "Unix Makefiles" .
       - name: make
-        run: mingw32-make
+        run: make
       - name: Upload exec
         uses: actions/upload-artifact@v2.2.3
         with:
