@@ -42,9 +42,11 @@ jobs:
       run: cmake .
     - name: make
       run: make
-    - name: Test Binary
-      timeout-minutes: 1
-      run: ./game
+      
+#    - name: Test Binary
+#      timeout-minutes: 1
+#      run: ./game
+
 #  build-mac:
 #    runs-on: macos-latest
 #
@@ -64,21 +66,29 @@ jobs:
       
   build-win:
     runs-on: windows-latest
-
     steps:
-    - uses: actions/checkout@v2
-      with:
-        submodules: true
-    - name: Adding MSYS2 to path
-      run: echo "::add-path::C:\msys64\usr\bin;C:\msys64\usr\local\bin;"
-    - name: Installing Dependencies
-      shell: cmd
-      run: pacman -S mingw-w64-x86_64-glew mingw-w64-x86_64-glfw mingw-w64-x86_64-glm --noconfirm
-    - name: cmake
-      shell: cmd
-      run: C:/msys64/mingw64/bin/cmake.exe -G "MinGW Makefiles" .
-    - name: make
-      run: make
-    - name: Test Binary
-      timeout-minutes: 1
-      run: ./game.exe
+      - uses: msys2/setup-msys2@v2
+        with:
+          update: true
+          install: >-
+            git
+            mingw-w64-x86_64-cmake
+            mingw-w64-x86_64-glew
+            mingw-w64-x86_64-glfw
+            mingw-w64-x86_64-glm
+      - name: Put MSYS2_MinGW64 on PATH
+        # there is not yet an environment variable for this path from msys2/setup-msys2
+        run: echo "D:/a/_temp/msys/msys64/mingw64/bin" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+
+      - uses: actions/checkout@v2
+        name: Checkout source code
+      
+      - name: cmake
+        shell: cmd
+        run: cmake -G "MinGW Makefiles" .
+      - name: make
+        run: make
+ 
+#      - name: Test Binary
+#        timeout-minutes: 1
+#        run: ./game.exe
